@@ -19,6 +19,7 @@ export type OverlayContextValue = {
   closeAll: () => void;
   exitAll: () => void;
   delayedExit: (options: { id: string; ms?: number }) => void;
+  delayedExitAll: (ms?: number) => void;
 };
 
 export const [OverlayContextProvider, useOverlayContext] =

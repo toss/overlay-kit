@@ -44,10 +44,17 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     },
     [close, exit]
   );
+  const delayedExitAll: OverlayContextValue['delayedExitAll'] = useCallback(
+    (ms?: number) => {
+      closeAll();
+      setTimeout(() => exitAll(), ms ?? 100);
+    },
+    [closeAll, exitAll]
+  );
   /**
    * @description customEvent 함수를 실행시켰을 때 위 함수가 실행되도록 매핑합니다.
    */
-  useOverlayEvent({ open, close, exit, closeAll, exitAll, delayedExit });
+  useOverlayEvent({ open, close, exit, closeAll, exitAll, delayedExit, delayedExitAll });
 
   const contextValue: OverlayContextValue = {
     overlayList: overlayState.overlayOrderList,
@@ -57,6 +64,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     closeAll,
     exitAll,
     delayedExit,
+    delayedExitAll,
   };
 
   return (

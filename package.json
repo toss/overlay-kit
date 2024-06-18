@@ -1,0 +1,26 @@
+{
+  "name": "root",
+  "packageManager": "yarn@4.2.2",
+  "workspaces": [
+    ".",
+    "packages",
+    "docs",
+    "examples/**"
+  ],
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@types/eslint__js": "^8.42.3",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-unicorn": "^53.0.0",
+    "eslint-plugin-unused-imports": "^3.1.0",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.12.0"
+  }
+}

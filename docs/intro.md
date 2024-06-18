@@ -27,7 +27,3 @@ es-overlay handles the boring stuff like overlay management.
 ### Robust types
 
 es-overlay provides simple but robust types for all functions.
-
-### Battle tested
-
-es-overlay has 100% test coverage, to provide maximized robustness.

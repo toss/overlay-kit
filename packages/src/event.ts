@@ -11,5 +11,6 @@ const exit = createEvent('exit');
 const closeAll = createEvent('closeAll');
 const exitAll = createEvent('exitAll');
 const delayedExit = createEvent('delayedExit');
+const delayedExitAll = createEvent('delayedExitAll');
 
-export const overlays = { open, close, exit, closeAll, exitAll, delayedExit };
+export const overlays = { open, close, exit, closeAll, exitAll, delayedExit, delayedExitAll };

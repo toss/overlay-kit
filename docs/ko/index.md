@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: 'es-overlay'
-  text: 'Tools for managing overlays declaratively.'
+  text: '선언형으로 오버레이를 관리하기 위한 도구.'
   # tagline:
   actions:
     - theme: brand
@@ -16,9 +16,11 @@ hero:
 
 features:
   - title: Co-location
-    details: es-overlay achieve co-location by putting the place where we declare the overlay and the place where we call it closer together.
+    details: es-overlay는 오버레이를 선언하는 위치와 호출하는 위치를 서로 가깝게 배치하여 co-location을 달성합니다.
   - title: Comfortable
     details: es-overlay handles the boring stuff like overlay management.
   - title: Robust types
     details: es-overlay provides simple but robust types for all functions.
+  - title: Battle tested
+    details: es-overlay has 100% test coverage, to provide maximized robustness.
 ---

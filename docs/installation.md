@@ -1,7 +1,7 @@
 ---
-description: How to install es-overlay
+description: Installation
 prev:
-  text: Introduction to es
+  text: Introduction
   link: ./intro.md
 next:
   text: API

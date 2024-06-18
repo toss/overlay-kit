@@ -1,11 +1,11 @@
 ---
-description: es-overlay를 설치하는 방법
+description: es-overlay 설치
 prev:
-  text: Introduction to es
-  link: ./intro.md
+  text: es-overlay 소개
+  link: /ko/intro.md
 next:
   text: API
-  link: ./api/overlay/intro.md
+  link: /ko/api/overlay/intro.md
 ---
 
 # 설치

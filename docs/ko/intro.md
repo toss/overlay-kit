@@ -1,7 +1,7 @@
 ---
 next:
-  text: Installation
-  link: ./install.md
+  text: es-overlay 설치
+  link: /ko/installation.md
 ---
 
 # es-overlay 소개

@@ -23,7 +23,11 @@ export const ko = defineConfig({
         items: [
           {
             text: 'overlay',
-            items: [{ text: 'Introduction', link: '/ko/api/overlay/intro' }],
+            items: [
+              { text: 'Introduction', link: '/ko/api/overlay/intro' },
+              { text: 'open', link: '/ko/api/overlay/open' },
+              { text: 'close', link: '/ko/api/overlay/close' },
+            ],
           },
         ],
       },

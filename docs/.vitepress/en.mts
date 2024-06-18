@@ -23,7 +23,11 @@ export const en = defineConfig({
         items: [
           {
             text: 'overlay',
-            items: [{ text: 'Introduction', link: '/api/overlay/intro' }],
+            items: [
+              { text: 'Introduction', link: '/api/overlay/intro' },
+              { text: 'open', link: '/api/overlay/open' },
+              { text: 'close', link: '/api/overlay/close' },
+            ],
           },
         ],
       },

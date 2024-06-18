@@ -5,7 +5,7 @@ prev:
   link: ./intro.md
 next:
   text: API
-  link: ./api/overlay/open.md
+  link: ./api/overlay/intro.md
 ---
 
 # Installation

@@ -9,6 +9,7 @@ next:
 es-overlay is a tools for managing overlays declaratively.
 
 As you develop your product, you'll often need to manage overlays, like Modal, Drawer, and more.
+
 Managing overlays can be more complicated than you think.
 
 es-overlay helps you manage overlays more easily and quickly, using declarative language.

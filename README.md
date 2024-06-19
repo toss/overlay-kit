@@ -2,7 +2,7 @@
 
 English | [한국어](https://github.com/toss/es-overlay/blob/main/README-ko_kr.md)
 
-es-toolkit is a tools for managing overlays declaratively.
+es-overlay is a tools for managing overlays declaratively.
 
 As you develop your product, you'll often need to manage overlays, like Modal, Drawer, and more.
 

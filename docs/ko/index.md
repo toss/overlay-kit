@@ -12,7 +12,7 @@ hero:
       link: /ko/intro
     - theme: alt
       text: API
-      link: /ko/api/intro
+      link: /ko/overlay/intro
 
 features:
   - title: Co-location

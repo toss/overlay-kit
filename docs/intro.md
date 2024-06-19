@@ -1,7 +1,7 @@
 ---
 next:
   text: Installation
-  link: ./install.md
+  link: ./installation.md
 ---
 
 # About es-overlay

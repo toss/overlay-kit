@@ -25,14 +25,14 @@ function Demo() {
   const overlayList = useOverlayList();
 
   const openModal = () => {
-    overlay.open(({ isOpen, overlayId, onClose }) => {
+    overlay.open(({ isOpen, overlayId, close }) => {
       // You can get the overlayId when the overlay is opened.
       console.log(overlayId);
 
       return (
-        <Modal opened={isOpen} onClose={onClose}>
+        <Modal opened={isOpen} onClose={close}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });
@@ -44,7 +44,7 @@ function Demo() {
 
 ## overlay.close
 
-The overlay.close function takes the overlay's id value as an argument and passes the onClose event to that overlay.
+The overlay.close function takes the overlay's id value as an argument and passes the close event to that overlay.
 
 ```ts
 import { overlay } from 'es-overlay';
@@ -55,7 +55,7 @@ overlay.close('1234');
 
 ## overlay.exit
 
-The overlay.exit function takes the overlay's id value as an argument and passes the onExit event to that overlay.
+The overlay.exit function takes the overlay's id value as an argument and passes the exit event to that overlay.
 
 ```ts
 import { overlay } from 'es-overlay';
@@ -121,11 +121,11 @@ function Demo() {
   useRemoveAllOnUnmount(150);
 
   const openModal = () => {
-    overlay.open(({ isOpen, onClose, onExit }) => {
+    overlay.open(({ isOpen, close, exit }) => {
       return (
-        <Modal opened={isOpen} onExit={onExit}>
+        <Modal opened={isOpen} onExit={exit}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });

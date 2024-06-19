@@ -25,14 +25,14 @@ function Demo() {
   const overlayList = useOverlayList();
 
   const openModal = () => {
-    overlay.open(({ isOpen, overlayId, onClose }) => {
+    overlay.open(({ isOpen, overlayId, close }) => {
       // 오버레이가 열릴 때 overlayId를 가져올 수 있습니다.
       console.log(overlayId);
 
       return (
-        <Modal opened={isOpen} onClose={onClose}>
+        <Modal opened={isOpen} onClose={close}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });
@@ -44,7 +44,7 @@ function Demo() {
 
 ## overlay.close
 
-overlay.close 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 onClose 이벤트를 전달합니다.
+overlay.close 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 close 이벤트를 전달합니다.
 
 ```ts
 import { overlay } from 'es-overlay';
@@ -55,7 +55,7 @@ overlay.close('1234');
 
 ## overlay.exit
 
-overlay.exit 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 onExit 이벤트를 전달합니다.
+overlay.exit 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 exit 이벤트를 전달합니다.
 
 ```ts
 import { overlay } from 'es-overlay';
@@ -121,11 +121,11 @@ function Demo() {
   useRemoveAllOnUnmount(150);
 
   const openModal = () => {
-    overlay.open(({ isOpen, onClose, onExit }) => {
+    overlay.open(({ isOpen, close, exit }) => {
       return (
-        <Modal opened={isOpen} onExit={onExit}>
+        <Modal opened={isOpen} onExit={exit}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });

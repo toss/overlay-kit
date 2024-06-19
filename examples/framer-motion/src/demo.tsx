@@ -34,14 +34,14 @@ function DemoWithEsOverlay() {
       <p>Demo with es-overlay</p>
       <button
         onClick={() => {
-          overlay.open(({ isOpen, onClose, onExit }) => {
+          overlay.open(({ isOpen, close, exit }) => {
             return (
-              <Modal isOpen={isOpen} onExit={onExit}>
+              <Modal isOpen={isOpen} onExit={exit}>
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
                 >
                   <p>MODAL CONTENT</p>
-                  <button onClick={() => onClose()}>close modal</button>
+                  <button onClick={close}>close modal</button>
                 </div>
               </Modal>
             );

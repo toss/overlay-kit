@@ -123,9 +123,9 @@ function ContentOverlayController({
     <Controller
       overlayId={overlayId}
       isOpen={isOpen}
-      onClose={onCloseModal}
-      onExit={onExitModal}
-      onDelayedExit={onDelayedExit}
+      close={onCloseModal}
+      exit={onExitModal}
+      delayedExit={onDelayedExit}
     />
   );
 }

@@ -17,7 +17,7 @@ next:
 오버레이의 id는 `useOverlayList()` 훅을 통해서 전체 오버레이의 id 목록을 가져오거나, modal이 열릴 때 overlayId를 state에 저장하는 방법을 이용할 수 있습니다.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -25,7 +25,7 @@ function Demo() {
   const overlayList = useOverlayList();
 
   const openModal = () => {
-    overlays.open(({ isOpen, overlayId, onClose }) => {
+    overlay.open(({ isOpen, overlayId, onClose }) => {
       // 오버레이가 열릴 때 overlayId를 가져올 수 있습니다.
       console.log(overlayId);
 
@@ -47,7 +47,7 @@ function Demo() {
 overlay.close 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 onClose 이벤트를 전달합니다.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 
 // 1234 라는 id를 가진 overlay를 화면에서 제거합니다.
 overlay.close('1234');
@@ -58,7 +58,7 @@ overlay.close('1234');
 overlay.exit 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 onExit 이벤트를 전달합니다.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 
 // 1234 라는 id를 가진 overlay를 메모리에서 제거합니다.
 overlay.exit('1234');
@@ -69,7 +69,7 @@ overlay.exit('1234');
 overlay.delayedExit 함수는 오버레이의 id 값을 인자로 받고 해당 overlay에 onDelayedExit 이벤트를 전달합니다.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 
 // 1234 라는 id를 가진 overlay를 화면에서 제거한 후, 150ms 이후 메모리에서 제거합니다.
 overlay.delayedExit({ id: '1234', ms: 150 });
@@ -80,7 +80,7 @@ overlay.delayedExit({ id: '1234', ms: 150 });
 overlay.closeAll 함수는 현재 열려있는 모든 오버레이를 화면에서 제거합니다.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 
 // 1234 라는 id를 가진 overlay를 화면에서 제거합니다.
 overlay.closeAll();
@@ -91,7 +91,7 @@ overlay.closeAll();
 overlay.exitAll 함수는 현재 열려있는 모든 오버레이를 메모리에서 제거합니다.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 
 // 1234 라는 id를 가진 overlay를 메모리에서 제거합니다.
 overlay.exitAll();
@@ -102,7 +102,7 @@ overlay.exitAll();
 overlay.exitAll 함수는 현재 열려있는 모든 오버레이를 화면에서 제거한 이후, 메모리에서 제거합니다.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 
 // 모든 오버레이를 화면에서 제거한 후, 150ms 이후 메모리에서 제거합니다.
 overlay.delayedExitAll(150);
@@ -113,7 +113,7 @@ overlay.delayedExitAll(150);
 useRemoveAllOnUnmount 훅이 호출된 컴포넌트는 언마운트될 때 현재 열려있는 모든 오버레이를 제거합니다.
 
 ```tsx
-import { overlays, useRemoveAllOnUnmount } from 'es-overlay';
+import { overlay, useRemoveAllOnUnmount } from 'es-overlay';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -121,7 +121,7 @@ function Demo() {
   useRemoveAllOnUnmount(150);
 
   const openModal = () => {
-    overlays.open(({ isOpen, onClose, onExit }) => {
+    overlay.open(({ isOpen, onClose, onExit }) => {
       return (
         <Modal opened={isOpen} onExit={onExit}>
           <p>MODAL CONTENT</p>

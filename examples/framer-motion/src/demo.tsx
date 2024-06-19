@@ -1,4 +1,4 @@
-import { overlays } from 'es-overlay';
+import { overlay } from 'es-overlay';
 import { useState } from 'react';
 import { Modal } from './components/modal';
 
@@ -34,7 +34,7 @@ function DemoWithEsOverlay() {
       <p>Demo with es-overlay</p>
       <button
         onClick={() => {
-          overlays.open(({ isOpen, onClose, onExit }) => {
+          overlay.open(({ isOpen, onClose, onExit }) => {
             return (
               <Modal isOpen={isOpen} onExit={onExit}>
                 <div

@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: 'es-overlay'
+  name: 'overlay-kit'
   text: '선언형으로 오버레이를 관리하기 위한 도구.'
   # tagline:
   actions:

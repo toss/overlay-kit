@@ -15,7 +15,7 @@ es-overlay는 open 함수를 사용하여 오버레이를 화면에 띄울 수 �
 callback 함수는 isOpen, close, exit 등의 함수를 제공함으로서 모달의 동작을 제어할 수 있습니다.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -41,7 +41,7 @@ close 함수는 오버레이의 isOpen 상태를 false로 변경하고 화면에
 - animation 등을 표시하기 위해서 돔에서 즉시 제거하면 안 될 때 close를 사용할 수 있습니다.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -67,7 +67,7 @@ exit 함수는 오버레이의 정보를 메모리에서 제거합니다. exit�
 **모달에서 닫기 애니메이션이 끝난 이후 실행되는 props를 제공하는 경우**
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -90,7 +90,7 @@ function Demo() {
 **모달에서 닫기 애니메이션이 끝난 이후 실행되는 props를 제공하지 않는 경우**
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -118,7 +118,7 @@ function Demo() {
 **닫기 애니메이션이 없는 모달의 경우**
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -145,7 +145,7 @@ function Demo() {
 close를 실행한 후 일정 시간 동안 기다렸다가 exit를 실행하는 onDelayedExit 함수를 제공합니다. 모달과 같은 오버레이에 종료 애니메이션이 있고 돔을 즉시 비울 필요가 없는 경우에 유용할 수 있습니다.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {

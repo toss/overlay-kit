@@ -10,12 +10,12 @@ next:
 
 # Open overlay
 
-es-overlay uses the open function to bring an overlay to the screen.
+overlay-kit uses the open function to bring an overlay to the screen.
 
 The callback function provides the open state of the modal along with a function to close the overlay.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -41,7 +41,7 @@ The close function changes the overlay's isOpen state to false and clears the ov
 - You can use close when you don't want to immediately remove it from the dome to show an animation, etc.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -67,7 +67,7 @@ The exit function removes the overlay's information from memory. If you don't ru
 **If the modal provides props that are executed after the close animation ends.**
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -90,7 +90,7 @@ function Demo() {
 **if the modal does not provide any props to be executed after the close animation ends**.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -118,7 +118,7 @@ function Demo() {
 **For modals without a closing animation**.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -145,7 +145,7 @@ It can be tedious to run close and exit together every time.
 We provide an onDelayedExit function that waits a certain amount of time after running close before running exit. This can be useful when an overlay, such as a modal, has an exit animation and the dome doesn't need to be emptied immediately.
 
 ```tsx
-import { overlay } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {

@@ -1,3 +1,3 @@
 export function randomId() {
-  return `es-overlay-${Math.random().toString(36).slice(2, 11)}`;
+  return `overlay-kit-${Math.random().toString(36).slice(2, 11)}`;
 }

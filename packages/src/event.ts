@@ -3,7 +3,7 @@ import { createUseExternalEvents } from './utils/create-use-external-events';
 
 type OverlayEvent = Omit<OverlayContextValue, 'overlayList'>;
 
-export const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>('es-overlay');
+export const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>('overlay-kit');
 
 const open = createEvent('open');
 const close = createEvent('close');

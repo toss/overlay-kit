@@ -522,22 +522,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@es-overlay/playground@workspace:examples/framer-motion":
-  version: 0.0.0-use.local
-  resolution: "@es-overlay/playground@workspace:examples/framer-motion"
-  dependencies:
-    "@types/react": "npm:^18.2.0"
-    "@types/react-dom": "npm:^18.2.0"
-    "@vitejs/plugin-react": "npm:^4.3.0"
-    es-overlay: "workspace:^"
-    framer-motion: "npm:^11.2.10"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-    typescript: "npm:^5.4.5"
-    vite: "npm:^5.2.13"
-  languageName: unknown
-  linkType: soft
-
 "@esbuild/aix-ppc64@npm:0.20.2":
   version: 0.20.2
   resolution: "@esbuild/aix-ppc64@npm:0.20.2"
@@ -1064,6 +1048,22 @@ __metadata:
   checksum: 10c0/c37a5b4842bfdece3d14dfdb054f73fe15ed2d3da61b34ff76629fb5b1731647c49166fd2a8bf8b56fcfa51200382385ea8909a3cbecdad612310c114d3f6c99
   languageName: node
   linkType: hard
+
+"@overlay-kit/playground@workspace:examples/framer-motion":
+  version: 0.0.0-use.local
+  resolution: "@overlay-kit/playground@workspace:examples/framer-motion"
+  dependencies:
+    "@types/react": "npm:^18.2.0"
+    "@types/react-dom": "npm:^18.2.0"
+    "@vitejs/plugin-react": "npm:^4.3.0"
+    framer-motion: "npm:^11.2.10"
+    overlay-kit: "workspace:^"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    typescript: "npm:^5.4.5"
+    vite: "npm:^5.2.13"
+  languageName: unknown
+  linkType: soft
 
 "@pkgjs/parseargs@npm:^0.11.0":
   version: 0.11.0
@@ -2787,28 +2787,6 @@ __metadata:
   checksum: 10c0/1fed3d102eb27ab8d983337bb7c8b159dd2a1e63ff833ec54eea1311c96d5b08223b433060ba240541ca8adba9eee6b0a60cdbf2f80634b784febc9cc8b687b4
   languageName: node
   linkType: hard
-
-"es-overlay@workspace:^, es-overlay@workspace:packages":
-  version: 0.0.0-use.local
-  resolution: "es-overlay@workspace:packages"
-  dependencies:
-    "@testing-library/jest-dom": "npm:^6.4.2"
-    "@testing-library/react": "npm:^15.0.5"
-    "@types/react": "npm:^18.2.0"
-    "@types/react-dom": "npm:^18.2.0"
-    "@vitejs/plugin-react": "npm:^4.3.0"
-    jsdom: "npm:^24.0.0"
-    react: "npm:^18.2.0"
-    react-dom: "npm:^18.2.0"
-    tsup: "npm:^8.1.0"
-    typescript: "npm:^5.4.5"
-    vite: "npm:^5.2.13"
-    vitest: "npm:^1.6.0"
-  peerDependencies:
-    react: ^18.2.0
-    react-dom: ^18.2.0
-  languageName: unknown
-  linkType: soft
 
 "es-set-tostringtag@npm:^2.0.3":
   version: 2.0.3
@@ -4960,6 +4938,28 @@ __metadata:
   checksum: 10c0/4afb687a059ee65b61df74dfe87d8d6815cd6883cb8b3d5883a910df72d0f5d029821f37025e4bccf4048873dbdb09acc6d303d27b8f76b1a80dd5a7d5334675
   languageName: node
   linkType: hard
+
+"overlay-kit@workspace:^, overlay-kit@workspace:packages":
+  version: 0.0.0-use.local
+  resolution: "overlay-kit@workspace:packages"
+  dependencies:
+    "@testing-library/jest-dom": "npm:^6.4.2"
+    "@testing-library/react": "npm:^15.0.5"
+    "@types/react": "npm:^18.2.0"
+    "@types/react-dom": "npm:^18.2.0"
+    "@vitejs/plugin-react": "npm:^4.3.0"
+    jsdom: "npm:^24.0.0"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    tsup: "npm:^8.1.0"
+    typescript: "npm:^5.4.5"
+    vite: "npm:^5.2.13"
+    vitest: "npm:^1.6.0"
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  languageName: unknown
+  linkType: soft
 
 "p-limit@npm:^2.2.0":
   version: 2.3.0

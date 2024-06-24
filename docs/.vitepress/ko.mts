@@ -32,9 +32,9 @@ export const ko = defineConfig({
         ],
       },
     ],
-    socialLinks: [{ icon: 'github', link: 'https://github.com/toss/es-overlay' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/toss/overlay-kit' }],
     editLink: {
-      pattern: 'https://github.com/toss/es-overlay/edit/main/docs/:path',
+      pattern: 'https://github.com/toss/overlay-kit/edit/main/docs/:path',
       text: '깃허브에서 수정하기',
     },
     footer: {

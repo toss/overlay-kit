@@ -23,7 +23,7 @@ export type OverlayContextValue = {
 };
 
 export const [OverlayContextProvider, useOverlayContext] =
-  createSafeContext<OverlayContextValue>('es-overlay/OverlayContext');
+  createSafeContext<OverlayContextValue>('overlay-kit/OverlayContext');
 
 export function useOverlayList() {
   return useOverlayContext().overlayList;

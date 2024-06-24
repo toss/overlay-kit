@@ -8,7 +8,7 @@ const require = createRequire(import.meta.url);
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'es-overlay',
+  title: 'overlay-kit',
   vite: {
     resolve: {
       alias: {

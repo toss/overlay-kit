@@ -1,18 +1,20 @@
-# es-overlay
+![](./docs/public/og.png)
 
-English | [한국어](https://github.com/toss/es-overlay/blob/main/README-ko_kr.md)
+# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE)
 
-es-overlay is a tools for managing overlays declaratively.
+English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
+
+overlay-kit is a tools for managing overlays declaratively.
 
 As you develop your product, you'll often need to manage overlays, like Modal, Drawer, and more.
 
 Managing overlays can be more complicated than you think.
 
-es-overlay helps you manage overlays more easily and quickly, using declarative language.
+overlay-kit helps you manage overlays more easily and quickly, using declarative language.
 
 ## License
 
-MIT © Viva Republica, Inc. See [LICENSE](https://github.com/toss/es-overlay/blob/main/LICENSE) for details.
+MIT © Viva Republica, Inc. See [LICENSE](https://github.com/toss/overlay-kit/blob/main/LICENSE) for details.
 
 <a title="Toss" href="https://toss.im">
   <picture>

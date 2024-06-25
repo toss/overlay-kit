@@ -10,22 +10,22 @@ next:
 
 # Installation
 
-es-overlay is available on [npm](https://npmjs.com/package/es-overlay) for Node.js and Bun.
+overlay-kit is available on [npm](https://npmjs.com/package/overlay-kit) for Node.js and Bun.
 
 ## Node.js
 
-Install es-overlay with the following command:
+Install overlay-kit with the following command:
 
 ```sh
-npm install es-overlay
-yarn add es-overlay
-pnpm install es-overlay
+npm install overlay-kit
+yarn add overlay-kit
+pnpm install overlay-kit
 ```
 
 ## Bun
 
-es-overlay is also available on Bun. You can install it via the following command:
+overlay-kit is also available on Bun. You can install it via the following command:
 
 ```sh
-bun add es-overlay
+bun add overlay-kit
 ```

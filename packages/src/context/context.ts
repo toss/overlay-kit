@@ -6,9 +6,9 @@ export type OverlayControllerComponent = FC<OverlayControllerProps>;
 export type OverlayControllerProps = {
   overlayId: string;
   isOpen: boolean;
-  onClose: () => void;
-  onExit: () => void;
-  onDelayedExit: (ms?: number) => void;
+  close: () => void;
+  exit: () => void;
+  delayedExit: (ms?: number) => void;
 };
 
 export type OverlayContextValue = {
@@ -23,7 +23,7 @@ export type OverlayContextValue = {
 };
 
 export const [OverlayContextProvider, useOverlayContext] =
-  createSafeContext<OverlayContextValue>('es-overlay/OverlayContext');
+  createSafeContext<OverlayContextValue>('overlay-kit/OverlayContext');
 
 export function useOverlayList() {
   return useOverlayContext().overlayList;

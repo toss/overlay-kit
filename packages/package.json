@@ -1,5 +1,5 @@
 {
-  "name": "es-overlay",
+  "name": "overlay-kit",
   "description": "Next-generation tools for managing overlays",
   "version": "0.0.0",
   "main": "./dist/index.js",

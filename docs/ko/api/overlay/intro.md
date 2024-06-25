@@ -1,7 +1,7 @@
 ---
 description: Introduction
 prev:
-  text: es-overlay 설치
+  text: overlay-kit 설치
   link: /ko/installation.md
 next:
   text: overlay.open
@@ -23,7 +23,7 @@ next:
 `OverlayProvider` 컴포넌트로 앱을 감싸세요.
 
 ```tsx
-import { OverlayProvider } from 'es-overlay';
+import { OverlayProvider } from 'overlay-kit';
 
 function App() {
   return <OverlayProvider>{/* Your app here */}</OverlayProvider>;

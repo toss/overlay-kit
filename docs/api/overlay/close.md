@@ -17,7 +17,7 @@ Here's how you can close an open overlay.
 The overlay's id can be obtained via the `useOverlayList()` hook to get a list of all overlay's ids, or by storing the overlayId in state when the modal is opened.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -25,14 +25,14 @@ function Demo() {
   const overlayList = useOverlayList();
 
   const openModal = () => {
-    overlays.open(({ isOpen, overlayId, onClose }) => {
+    overlay.open(({ isOpen, overlayId, close }) => {
       // You can get the overlayId when the overlay is opened.
       console.log(overlayId);
 
       return (
-        <Modal opened={isOpen} onClose={onClose}>
+        <Modal opened={isOpen} onClose={close}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });
@@ -44,10 +44,10 @@ function Demo() {
 
 ## overlay.close
 
-The overlay.close function takes the overlay's id value as an argument and passes the onClose event to that overlay.
+The overlay.close function takes the overlay's id value as an argument and passes the close event to that overlay.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 
 // Remove the overlay with the id 1234 from the screen.
 overlay.close('1234');
@@ -55,10 +55,10 @@ overlay.close('1234');
 
 ## overlay.exit
 
-The overlay.exit function takes the overlay's id value as an argument and passes the onExit event to that overlay.
+The overlay.exit function takes the overlay's id value as an argument and passes the exit event to that overlay.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 
 // Remove the overlay with id 1234 from memory.
 overlay.exit('1234');
@@ -69,7 +69,7 @@ overlay.exit('1234');
 The overlay.delayedExit function takes the overlay's id value as an argument and passes the onDelayedExit event to that overlay.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 
 // Remove the overlay with id 1234 from the screen, then remove it from memory after 150ms.
 overlay.delayedExit({ id: '1234', ms: 150 });
@@ -77,10 +77,10 @@ overlay.delayedExit({ id: '1234', ms: 150 });
 
 ## overlay.closeAll
 
-The overlay.closeAll function removes all currently open overlays from the screen.
+The overlay.closeAll function removes all currently open overlay from the screen.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 
 // Remove the overlay with id 1234 from screen.
 overlay.closeAll();
@@ -88,10 +88,10 @@ overlay.closeAll();
 
 ## overlay.exitAll
 
-The overlay.exitAll function removes all currently open overlays from memory.
+The overlay.exitAll function removes all currently open overlay from memory.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 
 // Remove the overlay with id 1234 from memory.
 overlay.exitAll();
@@ -99,21 +99,21 @@ overlay.exitAll();
 
 ## overlay.delayedExitAll
 
-The overlay.exitAll function removes all currently open overlays from the screen, and then removes them from memory.
+The overlay.exitAll function removes all currently open overlay from the screen, and then removes them from memory.
 
 ```ts
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 
-// Remove all overlays from the screen, then remove them from memory after 150ms.
+// Remove all overlay from the screen, then remove them from memory after 150ms.
 overlay.delayedExitAll(150);
 ```
 
 ## useRemoveAllOnUnmount
 
-Components with the useRemoveAllOnUnmount hook called will remove all currently open overlays when they are unmounted.
+Components with the useRemoveAllOnUnmount hook called will remove all currently open overlay when they are unmounted.
 
 ```tsx
-import { overlays, useRemoveAllOnUnmount } from 'es-overlay';
+import { overlay, useRemoveAllOnUnmount } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
@@ -121,11 +121,11 @@ function Demo() {
   useRemoveAllOnUnmount(150);
 
   const openModal = () => {
-    overlays.open(({ isOpen, onClose, onExit }) => {
+    overlay.open(({ isOpen, close, exit }) => {
       return (
-        <Modal opened={isOpen} onExit={onExit}>
+        <Modal opened={isOpen} onExit={exit}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });

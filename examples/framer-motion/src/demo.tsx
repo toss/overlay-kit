@@ -1,4 +1,4 @@
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { useState } from 'react';
 import { Modal } from './components/modal';
 
@@ -31,17 +31,17 @@ function DemoWithState() {
 function DemoWithEsOverlay() {
   return (
     <div>
-      <p>Demo with es-overlay</p>
+      <p>Demo with overlay-kit</p>
       <button
         onClick={() => {
-          overlays.open(({ isOpen, onClose, onExit }) => {
+          overlay.open(({ isOpen, close, exit }) => {
             return (
-              <Modal isOpen={isOpen} onExit={onExit}>
+              <Modal isOpen={isOpen} onExit={exit}>
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
                 >
                   <p>MODAL CONTENT</p>
-                  <button onClick={() => onClose()}>close modal</button>
+                  <button onClick={close}>close modal</button>
                 </div>
               </Modal>
             );

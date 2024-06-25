@@ -1,6 +1,8 @@
-# es-overlay
+![](./docs/public/og.png)
 
-[English](https://github.com/toss/es-overlay/blob/main/README.md) | 한국어
+# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE)
+
+[English](https://github.com/toss/overlay-kit/blob/main/README.md) | 한국어
 
 es-overlay는 선언적으로 오버레이를 관리하기 위한 도구입니다.
 
@@ -12,7 +14,7 @@ es-overlay를 사용하면 선언적 언어를 사용하여 오버레이를 더 
 
 ## License
 
-MIT © Viva Republica, Inc. 자세한 내용은 [LICENSE](https://github.com/toss/es-overlay/blob/main/LICENSE)를 참고하세요.
+MIT © Viva Republica, Inc. 자세한 내용은 [LICENSE](https://github.com/toss/overlay-kit/blob/main/LICENSE)를 참고하세요.
 
 <a title="Toss" href="https://toss.im">
   <picture>

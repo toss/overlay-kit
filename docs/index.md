@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: 'es-overlay'
+  name: 'overlay-kit'
   text: 'Tools for managing overlays declaratively.'
   # tagline:
   actions:
@@ -16,9 +16,9 @@ hero:
 
 features:
   - title: Co-location
-    details: es-overlay achieve co-location by putting the place where we declare the overlay and the place where we call it closer together.
+    details: overlay-kit achieve co-location by putting the place where we declare the overlay and the place where we call it closer together.
   - title: Comfortable
-    details: es-overlay handles the boring stuff like overlay management.
+    details: overlay-kit handles the boring stuff like overlay management.
   - title: Robust types
-    details: es-overlay provides simple but robust types for all functions.
+    details: overlay-kit provides simple but robust types for all functions.
 ---

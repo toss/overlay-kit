@@ -1,4 +1,4 @@
-import { OverlayProvider } from 'es-overlay';
+import { OverlayProvider } from 'overlay-kit';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Demo } from './demo';

@@ -1,5 +1,5 @@
 {
-  "name": "@es-overlay/playground",
+  "name": "@overlay-kit/playground",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "es-overlay": "workspace:^",
     "framer-motion": "^11.2.10",
+    "overlay-kit": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

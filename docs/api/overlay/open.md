@@ -8,19 +8,19 @@ next:
   link: /api/overlay/close.md
 ---
 
-# Open overlays
+# Open overlay
 
-es-overlay uses the open function to bring an overlay to the screen.
+overlay-kit uses the open function to bring an overlay to the screen.
 
 The callback function provides the open state of the modal along with a function to close the overlay.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
   const openModal = () => {
-    overlays.open(({ isOpen }) => {
+    overlay.open(({ isOpen }) => {
       return (
         <Modal opened={isOpen}>
           <p>MODAL CONTENT</p>
@@ -33,24 +33,24 @@ function Demo() {
 }
 ```
 
-## onClose
+## close
 
-The onClose function changes the overlay's isOpen state to false and clears the overlay from the screen. However, the overlay's information stored in memory is retained, so the overlay's information may remain in the dome, etc.
+The close function changes the overlay's isOpen state to false and clears the overlay from the screen. However, the overlay's information stored in memory is retained, so the overlay's information may remain in the dome, etc.
 
-- The onClose function allows you to reopen the modal with the overlay's information retained because it is still in memory.
-- You can use onClose when you don't want to immediately remove it from the dome to show an animation, etc.
+- The close function allows you to reopen the modal with the overlay's information retained because it is still in memory.
+- You can use close when you don't want to immediately remove it from the dome to show an animation, etc.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
   const openModal = () => {
-    overlays.open(({ isOpen, onClose }) => {
+    overlay.open(({ isOpen, close }) => {
       return (
-        <Modal opened={isOpen} onClose={onClose}>
+        <Modal opened={isOpen} onClose={close}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });
@@ -60,24 +60,24 @@ function Demo() {
 }
 ```
 
-## onExit
+## exit
 
-The onExit function removes the overlay's information from memory. If you don't run onExit, the overlay's information remains in memory, so be sure to run onExit when the overlay is no longer in use.
+The exit function removes the overlay's information from memory. If you don't run exit, the overlay's information remains in memory, so be sure to run exit when the overlay is no longer in use.
 
 **If the modal provides props that are executed after the close animation ends.**
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
   const openModal = () => {
-    overlays.open(({ isOpen, onClose, onExit }) => {
+    overlay.open(({ isOpen, close, exit }) => {
       return (
-        // Pass the onExit function to the props provided by the Modal.
-        <Modal opened={isOpen} onExit={onExit}>
+        // Pass the exit function to the props provided by the Modal.
+        <Modal opened={isOpen} onExit={exit}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onClose}>Close Overlay</Button>
+          <Button onClick={close}>Close Overlay</Button>
         </Modal>
       );
     });
@@ -90,16 +90,16 @@ function Demo() {
 **if the modal does not provide any props to be executed after the close animation ends**.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
   const openModal = () => {
-    overlays.open(({ isOpen, onClose, onExit }) => {
+    overlay.open(({ isOpen, close, exit }) => {
       function onCloseOverlay() {
-        onClose();
-        // onExit will be executed after 150 ms. The ms in setTimeout can be passed to the appropriate time when the animation ends.
-        setTimeout(() => onExit(), 150);
+        close();
+        // exit will be executed after 150 ms. The ms in setTimeout can be passed to the appropriate time when the animation ends.
+        setTimeout(() => exit(), 150);
       }
 
       return (
@@ -118,17 +118,17 @@ function Demo() {
 **For modals without a closing animation**.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
   const openModal = () => {
-    overlays.open(({ isOpen, onExit }) => {
+    overlay.open(({ isOpen, exit }) => {
       return (
-        // We don't need to use onClose to delay the closing of the modal, so we can just use onExit.
-        <Modal opened={isOpen} onClose={onExit}>
+        // We don't need to use close to delay the closing of the modal, so we can just use exit.
+        <Modal opened={isOpen} onClose={exit}>
           <p>MODAL CONTENT</p>
-          <Button onClick={onExit}>Close Overlay</Button>
+          <Button onClick={exit}>Close Overlay</Button>
         </Modal>
       );
     });
@@ -140,19 +140,19 @@ function Demo() {
 
 ## onDelayedExit
 
-It can be tedious to run onClose and onExit together every time.
+It can be tedious to run close and exit together every time.
 
-We provide an onDelayedExit function that waits a certain amount of time after running onClose before running onExit. This can be useful when an overlay, such as a modal, has an exit animation and the dome doesn't need to be emptied immediately.
+We provide an onDelayedExit function that waits a certain amount of time after running close before running exit. This can be useful when an overlay, such as a modal, has an exit animation and the dome doesn't need to be emptied immediately.
 
 ```tsx
-import { overlays } from 'es-overlay';
+import { overlay } from 'overlay-kit';
 import { Modal, Button, Text } from '@src/component';
 
 function Demo() {
   const openModal = () => {
-    overlays.open(({ isOpen, onDelayedExit }) => {
+    overlay.open(({ isOpen, onDelayedExit }) => {
       function onCloseOverlay() {
-        // After onClose() is executed, onExit() is executed 150ms later.
+        // After close() is executed, exit() is executed 150ms later.
         onDelayedExit(150);
       }
 

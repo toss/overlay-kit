@@ -23,7 +23,7 @@ This refers to components that appear on a separate UI layer, such as Modal, Dia
 Wrap your app in an `OverlayProvider` component.
 
 ```tsx
-import { OverlayProvider } from 'es-overlay';
+import { OverlayProvider } from 'overlay-kit';
 
 function App() {
   return <OverlayProvider>{/* Your app here */}</OverlayProvider>;

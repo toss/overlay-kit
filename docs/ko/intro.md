@@ -1,10 +1,10 @@
 ---
 next:
-  text: es-overlay 설치
+  text: overlay-kit 설치
   link: /ko/installation.md
 ---
 
-# es-overlay 소개
+# overlay-kit 소개
 
 es-overlay는 선언적으로 오버레이를 관리하기 위한 도구입니다.
 

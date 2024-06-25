@@ -1,4 +1,6 @@
-# overlay-kit
+![](./docs/public/og.png)
+
+# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE)
 
 [English](https://github.com/toss/overlay-kit/blob/main/README.md) | 한국어
 

@@ -1,20 +1,20 @@
 ---
-description: overlay-kit 설치
+description: Installation
 prev:
-  text: overlay-kit 소개
-  link: /ko/intro.md
+  text: 기능
+  link: ./features.md
 next:
   text: API
-  link: /ko/api/overlay/intro.md
+  link: ./api/overlay.md
 ---
 
 # 설치
 
-es-overlay는 Node.js용 [npm](https://npmjs.com/package/overlay-kit) 및 Bun에서 사용할 수 있습니다.
+Node.js와 Bun을 사용하는 경우, [npm](https://npmjs.com/package/overlay-kit)에서 설치할 수 있어요.
 
 ## Node.js
 
-다음 명령어로 es-overlay를 설치합니다:
+아래 명령어로 overlay-kit을 설치하세요.
 
 ```sh
 npm install overlay-kit
@@ -24,7 +24,7 @@ pnpm install overlay-kit
 
 ## Bun
 
-es-overlay는 Bun에서도 사용할 수 있습니다. 다음 명령어를 통해 설치할 수 있습니다:
+Bun에서도 overlay-kit을 사용할 수 있어요. 아래 명령어로 설치하세요.
 
 ```sh
 bun add overlay-kit

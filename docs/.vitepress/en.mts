@@ -7,28 +7,24 @@ export const en = defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/intro' },
+      { text: 'Guide', link: '/motivation' },
       { text: 'API', link: '/api/overlay/intro' },
     ],
     sidebar: [
       {
         text: 'Guide',
         items: [
-          { text: 'Introduction', link: '/intro' },
+          { text: 'The Overlay Problem', link: '/motivation' },
+          { text: 'Features', link: '/features' },
           { text: 'Installation', link: '/installation' },
+          { text: 'Quick Start', link: '/quickstart' },
         ],
       },
       {
         text: 'API',
         items: [
-          {
-            text: 'overlay',
-            items: [
-              { text: 'Introduction', link: '/api/overlay/intro' },
-              { text: 'open', link: '/api/overlay/open' },
-              { text: 'close', link: '/api/overlay/close' },
-            ],
-          },
+          { text: 'OverlayProvider', link: '/api/OverlayProvider' },
+          { text: 'The overlay object', link: '/api/overlay' },
         ],
       },
     ],

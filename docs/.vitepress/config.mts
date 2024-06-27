@@ -11,6 +11,20 @@ export default defineConfig({
   title: 'overlay-kit',
   head: [
     ['link', { rel: 'icon', type: 'image/png', sizes: '100x100', href: '/favicon-100x100.png' }],
+    [
+      "link",
+      {
+        rel: "stylesheet",
+        href: "https://static.toss.im/tps/main.css"
+      }
+    ],
+    [
+      "link",
+      {
+        rel: "stylesheet",
+        href: "https://static.toss.im/tps/others.css"
+      }
+    ],
     ['meta', { property: 'og:image', content: '/og.png' }],
   ],
   themeConfig: {

@@ -1,11 +1,11 @@
 ---
 description: Installation
 prev:
-  text: Introduction
-  link: ./intro.md
+  text: Features
+  link: ./features.md
 next:
-  text: API
-  link: ./api/overlay/intro.md
+  text: Quick Start
+  link: ./quickstart.md
 ---
 
 # Installation

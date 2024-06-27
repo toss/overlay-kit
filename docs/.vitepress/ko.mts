@@ -14,21 +14,17 @@ export const ko = defineConfig({
       {
         text: '가이드',
         items: [
-          { text: '소개', link: '/ko/intro' },
+          { text: '오버레이 문제', link: '/ko/motivation' },
+          { text: '기능', link: '/ko/features' },
           { text: '설치', link: '/ko/installation' },
+          { text: '튜토리얼', link: '/ko/quickstart' },
         ],
       },
       {
         text: 'API',
         items: [
-          {
-            text: 'overlay',
-            items: [
-              { text: 'Introduction', link: '/ko/api/overlay/intro' },
-              { text: 'open', link: '/ko/api/overlay/open' },
-              { text: 'close', link: '/ko/api/overlay/close' },
-            ],
-          },
+          { text: 'OverlayProvider', link: '/ko/api/OverlayProvider' },
+          { text: 'overlay 객체', link: '/ko/api/overlay' },
         ],
       },
     ],

@@ -1,24 +1,27 @@
 ---
-# https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
 hero:
   name: 'overlay-kit'
-  text: 'Tools for managing overlays declaratively.'
-  # tagline:
+  text: 'A declarative way to manage overlays in React'
   actions:
     - theme: brand
-      text: Introduction
-      link: /intro
+      text: 'Introduction'
+      link: '/motivation'
     - theme: alt
-      text: API
-      link: /api/overlay/intro
+      text: 'Why overlay-kit?'
+      link: '/motivation'
+    - theme: alt
+      text: 'API'
+      link: '/api/overlay'
 
 features:
-  - title: Co-location
-    details: overlay-kit achieve co-location by putting the place where we declare the overlay and the place where we call it closer together.
-  - title: Comfortable
-    details: overlay-kit handles the boring stuff like overlay management.
-  - title: Robust types
-    details: overlay-kit provides simple but robust types for all functions.
+  - title: 'Hassle-free'
+    details: 'overlay-kit makes overlay management straightforward with a simple function call: overlay.open(...).'
+  - title: 'Battle-tested Reliability'
+    details: 'overlay-kit is proven in real-world applications and boasts 100% test coverage.'
+  - title: 'Small Bundle Size'
+    details: 'Optimized for minimal impact, overlay-kit maintains a lean footprint with a gzipped size of only 1KB.'
+  - title: 'Robust Types'
+    details: 'overlay-kit ensures reliable coding with robust, well-defined types for all functionalities.'
 ---

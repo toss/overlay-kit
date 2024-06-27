@@ -4,13 +4,29 @@
 
 English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
 
-overlay-kit is a tools for managing overlays declaratively.
+overlay-kit is a library that lets you manage overlays in a simple and declarative way using React.
 
-As you develop your product, you'll often need to manage overlays, like Modal, Drawer, and more.
+```tsx
+import { overlay } from 'overlay-kit';
 
-Managing overlays can be more complicated than you think.
+<Button 
+  onClick={() => {
+    overlay.open(({ isOpen, close }) => {
+      return <Dialog open={isOpen} onClose={close} />;
+    })
+  }}
+>
+  Open
+</Button>
+```
 
-overlay-kit helps you manage overlays more easily and quickly, using declarative language.
+Here are the features overlay-kit provides:
+
+- **Hassle-free**: overlay-kit makes overlay management straightforward with a simple function call: just call `overlay.open(...)`. See [the overlay problem](https://overlay-kit.slash.page/motivation.html) for details.
+- **Maximum Compatibility**: overlay-kit is compatible with the majority of overlay types. From Material UI to custom component libraries, overlay-kit can handle almost all types of overlays.
+- **Promise Integration**: overlay-kit is easy to use with promises when getting results from overlays.
+- **Robust Built-in Types**: overlay-kit offers robust types for all functions, ensuring type safety and enhancing the developer experience.
+
 
 ## License
 

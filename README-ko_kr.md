@@ -4,13 +4,29 @@
 
 [English](https://github.com/toss/overlay-kit/blob/main/README.md) | 한국어
 
-es-overlay는 선언적으로 오버레이를 관리하기 위한 도구입니다.
+overlay-kit은 React에서 오버레이를 선언적으로 관리하기 위한 라이브러리예요.
 
-제품을 개발하다 보면 모달, 드로어 등과 같은 오버레이를 관리해야 하는 경우가 많습니다.
+```tsx
+import { overlay } from 'overlay-kit';
 
-오버레이 관리는 생각보다 복잡할 수 있습니다.
+<Button 
+  onClick={() => {
+    overlay.open(({ isOpen, close }) => {
+      return <Dialog open={isOpen} onClose={close} />;
+    })
+  }}
+>
+  Open
+</Button>
+```
 
-es-overlay를 사용하면 선언적 언어를 사용하여 오버레이를 더 쉽고 빠르게 관리할 수 있습니다.
+overlay-kit은 다음과 같은 기능을 제공해요.
+
+- **간편한 오버레이 관리**: overlay-kit로 오버레이를 간단하게 열고 닫을 수 있어요. `overlay.open(...)` 함수 호출 한 번으로 끝나죠. [오버레이 문제](https://overlay-kit.slash.page/ko/motivation.html) 문서를 참고해보세요.
+- **호환성**: overlay-kit로 거의 모든 오버레이를 다룰 수 있어요. Material UI부터 사내 컴포넌트 라이브러리까지, 대부분의 오버레이에 이미 대응되어 있답니다.
+- **Promise 통합**: overlay-kit과 Promise를 함께 사용하면 오버레이로부터 결괏값을 쉽게 가져올 수 있어요.
+- **견고한 내장 타입**: overlay-kit은 모든 함수에 대해서 견고한 타입을 제공해요. 타입 안정성이 높고, 개발자 경험도 좋죠.
+
 
 ## License
 

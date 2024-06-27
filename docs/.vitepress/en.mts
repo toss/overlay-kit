@@ -2,7 +2,7 @@ import { defineConfig, type DefaultTheme } from 'vitepress';
 
 export const en = defineConfig({
   lang: 'en',
-  description: 'Management tools to help you manage overlays in a declarative way.',
+  description: 'A declarative way to manage overlays in React',
 
   themeConfig: {
     nav: [

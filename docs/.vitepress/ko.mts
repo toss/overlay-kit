@@ -2,7 +2,7 @@ import { defineConfig, type DefaultTheme } from 'vitepress';
 
 export const ko = defineConfig({
   lang: 'ko',
-  description: '선언형으로 오버레이를 관리하기 위한 도구.',
+  description: 'React에서 선언적으로 오버레이를 다루는 방법',
 
   themeConfig: {
     nav: [

@@ -38,7 +38,7 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent)).toBeInTheDocument();
   });
 
-  it('overlay.exit를 통해 열려있는 overlay를 닫을 수 있어야 한다.', async () => {
+  it('overlay.unmount를 통해 열려있는 overlay를 닫을 수 있어야 한다.', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent = 'context-modal-test-content';

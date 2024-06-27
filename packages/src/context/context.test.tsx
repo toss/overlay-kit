@@ -122,4 +122,66 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent3)).toBeInTheDocument();
     expect(screen.queryByText(testContent4)).toBeInTheDocument();
   });
+
+  it('overlay.unmountAll 통해 여러 개의 overlay를 닫을 수 있어야 한다', async () => {
+    const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
+
+    const testContent1 = 'context-modal-test-content-1';
+    const testContent2 = 'context-modal-test-content-2';
+    const testContent3 = 'context-modal-test-content-3';
+    const testContent4 = 'context-modal-test-content-4';
+
+    const Component = () => {
+      const overlay = useOverlayContext();
+
+      useEffect(() => {
+        overlay.open({
+          overlayId: '1',
+          controller: () => {
+            return (
+              <p
+                onClick={() => {
+                  overlay.unmountAll();
+                }}
+              >
+                {testContent1}
+              </p>
+            );
+          },
+        });
+        overlay.open({
+          overlayId: '2',
+          controller: () => {
+            return <p>{testContent2}</p>;
+          },
+        });
+        overlay.open({
+          overlayId: '3',
+          controller: () => {
+            return <p>{testContent3}</p>;
+          },
+        });
+        overlay.open({
+          overlayId: '4',
+          controller: () => {
+            return <p>{testContent4}</p>;
+          },
+        });
+      }, []);
+
+      return <div>Empty</div>;
+    };
+
+    const renderComponent = render(<Component />, { wrapper });
+
+    const testContentElement = await renderComponent.findByText(testContent1);
+    act(() => {
+      testContentElement.click();
+    });
+
+    expect(screen.queryByText(testContent1)).not.toBeInTheDocument();
+    expect(screen.queryByText(testContent2)).not.toBeInTheDocument();
+    expect(screen.queryByText(testContent3)).not.toBeInTheDocument();
+    expect(screen.queryByText(testContent4)).not.toBeInTheDocument();
+  });
 });

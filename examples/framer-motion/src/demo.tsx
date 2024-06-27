@@ -34,9 +34,9 @@ function DemoWithEsOverlay() {
       <p>Demo with overlay-kit</p>
       <button
         onClick={() => {
-          overlay.open(({ isOpen, close, exit }) => {
+          overlay.open(({ isOpen, close, unmount }) => {
             return (
-              <Modal isOpen={isOpen} onExit={exit}>
+              <Modal isOpen={isOpen} onExit={unmount}>
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
                 >

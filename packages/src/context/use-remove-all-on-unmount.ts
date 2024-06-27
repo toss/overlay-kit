@@ -7,17 +7,17 @@ import { useOverlayContext } from './context';
 export function useRemoveAllOnUnmount(delay = 0) {
   const overlayContext = useOverlayContext();
   const closeAllOverlayRef = useRef(overlayContext.closeAll);
-  const exitAllOverlayRef = useRef(overlayContext.exitAll);
+  const unmountAllOverlayRef = useRef(overlayContext.unmountAll);
 
   closeAllOverlayRef.current = overlayContext.closeAll;
-  exitAllOverlayRef.current = overlayContext.exitAll;
+  unmountAllOverlayRef.current = overlayContext.unmountAll;
 
   useEffect(() => {
     return () => {
       closeAllOverlayRef.current();
 
       setTimeout(() => {
-        exitAllOverlayRef.current();
+        unmountAllOverlayRef.current();
       }, delay);
     };
   }, []);

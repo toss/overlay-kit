@@ -14,10 +14,10 @@ const open = (controller: OverlayControllerComponent) => {
   return overlayId;
 };
 const close = createEvent('close');
-const exit = createEvent('exit');
+const unmount = createEvent('unmount');
 const closeAll = createEvent('closeAll');
-const exitAll = createEvent('exitAll');
-const delayedExit = createEvent('delayedExit');
-const delayedExitAll = createEvent('delayedExitAll');
+const unmountAll = createEvent('unmountAll');
+const delayedUnmount = createEvent('delayedUnmount');
+const delayedUnmountAll = createEvent('delayedUnmountAll');
 
-export const overlay = { open, close, exit, closeAll, exitAll, delayedExit, delayedExitAll };
+export const overlay = { open, close, unmount, closeAll, unmountAll, delayedUnmount, delayedUnmountAll };

@@ -7,9 +7,9 @@ The `overlay` object provides various APIs to manage overlays in React.
 Use the `overlay.open(...)` function to open overlays using `overlay-kit`.
 
 ```tsx
-overlay.open(({ isOpen, close, exit }) => {
+overlay.open(({ isOpen, close, unmount }) => {
   return (
-    <Dialog open={isOpen} onClose={close} onExit={exit}>
+    <Dialog open={isOpen} onClose={close} onExit={unmount}>
       {/* Dialog content */}
     </Dialog>
   );
@@ -22,7 +22,7 @@ The callback function provided to `overlay.open(...)` includes the following pro
 
 - `isOpen`: Indicates if the overlay is open. When the overlay is closed, this property is updated to `false`, which can be useful if the overlay has a closing animation.
 - `close`: Closes the overlay and sets `isOpen` to `false`.
-- `exit`: Completely unmounts the overlay from the React tree.
+- `unmount`: Completely unmounts the overlay from the React tree.
 
 ### Closing the Overlay
 
@@ -32,7 +32,7 @@ Most overlays have exit animations when closed. Keeping the overlay mounted afte
 
 ### Unmounting the Overlay
 
-To unmount the overlay, use the `exit` function provided to the callback. After calling `exit`, the overlay is completely removed from the React tree.
+To unmount the overlay, use the `unmount` function provided to the callback. After calling `unmount`, the overlay is completely removed from the React tree.
 
 For example, if the overlay component provides an `onExit` prop indicating that the exit animation is over, we write code like this:
 
@@ -41,8 +41,8 @@ import { overlay } from 'overlay-kit';
 
 function Demo() {
   const openDialog = () => {
-    overlay.open(({ isOpen, close, exit }) => {
-      return <Dialog opened={isOpen} onClose={close} onExit={exit} />
+    overlay.open(({ isOpen, close, unmount }) => {
+      return <Dialog opened={isOpen} onClose={close} onExit={unmount} />
     });
   };
 
@@ -57,20 +57,20 @@ import { overlay } from 'overlay-kit';
 
 function Demo() {
   const openModal = () => {
-    overlay.open(({ isOpen, close, exit }) => {
+    overlay.open(({ isOpen, close, unmount }) => {
       return (
-        <Dialog 
-          open={isOpen} 
+        <Dialog
+          open={isOpen}
           onClose={() => {
             close();
 
-            // `exit` will be executed after 150 ms.
-            // Adjust the timeout to the appropriate time 
+            // `unmount` will be executed after 150 ms.
+            // Adjust the timeout to the appropriate time
             // when the animation ends.
             setTimeout(() => {
-              exit()
+              unmount()
             }, 150);
-          }} 
+          }}
         />
       );
     });
@@ -87,11 +87,11 @@ import { overlay } from 'overlay-kit';
 
 function Demo() {
   const openModal = () => {
-    overlay.open(({ isOpen, exit }) => {
+    overlay.open(({ isOpen, unmount }) => {
       return (
-        <Dialog 
-          open={isOpen} 
-          onClose={exit} 
+        <Dialog
+          open={isOpen}
+          onClose={unmount}
         />
       );
     });
@@ -100,10 +100,10 @@ function Demo() {
   return <Button onClick={openModal}>Open confirm modal</Button>;
 }
 ```
-s
+
 ### The Overlay ID
 
-`overlay.open(...)`  returns the ID of the opened overlay, which can be used later to close or unmount the overlay outside the callback function.
+`overlay.open(...)` returns the ID of the opened overlay, which can be used later to close or unmount the overlay outside the callback function.
 
 ```tsx
 const overlayId = overlay.open(...);
@@ -114,15 +114,15 @@ const overlayId = overlay.open(...);
 To close a specific overlay, pass its `overlayId` to `overlay.close(...)`.
 
 ```tsx
-overlay.close(overlayId)
+overlay.close(overlayId);
 ```
 
-## overlay.exit
+## overlay.unmount
 
-To unmount a specific overlay, pass its `overlayId` to `overlay.exit(...)`.
+To unmount a specific overlay, pass its `overlayId` to `overlay.unmount(...)`.
 
 ```tsx
-overlay.exit(overlayId)
+overlay.unmount(overlayId);
 ```
 
 ## overlay.closeAll
@@ -133,7 +133,7 @@ To close all open overlays, use `overlay.closeAll()`.
 overlay.closeAll();
 ```
 
-## overlay.exitAll
+## overlay.unmountAll
 
 To unmount all open overlays, use `overlay.unmountAll()`.
 

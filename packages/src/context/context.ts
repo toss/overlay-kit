@@ -7,19 +7,19 @@ export type OverlayControllerProps = {
   overlayId: string;
   isOpen: boolean;
   close: () => void;
-  exit: () => void;
-  delayedExit: (ms?: number) => void;
+  unmount: () => void;
+  delayedUnmount: (ms?: number) => void;
 };
 
 export type OverlayContextValue = {
   overlayList: string[];
   open: (value: { controller: OverlayControllerComponent; overlayId: string }) => void;
   close: (id: string) => void;
-  exit: (id: string) => void;
+  unmount: (id: string) => void;
   closeAll: () => void;
-  exitAll: () => void;
-  delayedExit: (options: { id: string; ms?: number }) => void;
-  delayedExitAll: (ms?: number) => void;
+  unmountAll: () => void;
+  delayedUnmount: (options: { id: string; ms?: number }) => void;
+  delayedUnmountAll: (ms?: number) => void;
 };
 
 export const [OverlayContextProvider, useOverlayContext] =

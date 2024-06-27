@@ -25,43 +25,43 @@ export function OverlayProvider({ children }: PropsWithChildren) {
   const close: OverlayContextValue['close'] = useCallback((id: string) => {
     overlayDispatch({ type: 'CLOSE', overlayId: id });
   }, []);
-  const exit: OverlayContextValue['exit'] = useCallback((id: string) => {
+  const unmount: OverlayContextValue['unmount'] = useCallback((id: string) => {
     overlayDispatch({ type: 'REMOVE', overlayId: id });
   }, []);
   const closeAll: OverlayContextValue['closeAll'] = useCallback(() => {
     overlayDispatch({ type: 'CLOSE_ALL' });
   }, []);
-  const exitAll: OverlayContextValue['exitAll'] = useCallback(() => {
+  const unmountAll: OverlayContextValue['unmountAll'] = useCallback(() => {
     overlayDispatch({ type: 'REMOVE_ALL' });
   }, []);
-  const delayedExit: OverlayContextValue['delayedExit'] = useCallback(
+  const delayedUnmount: OverlayContextValue['delayedUnmount'] = useCallback(
     (options: { id: string; ms?: number }) => {
       close(options.id);
-      setTimeout(() => exit(options.id), options.ms ?? 100);
+      setTimeout(() => unmount(options.id), options.ms ?? 100);
     },
-    [close, exit]
+    [close, unmount]
   );
-  const delayedExitAll: OverlayContextValue['delayedExitAll'] = useCallback(
+  const delayedUnmountAll: OverlayContextValue['delayedUnmountAll'] = useCallback(
     (ms?: number) => {
       closeAll();
-      setTimeout(() => exitAll(), ms ?? 100);
+      setTimeout(() => unmountAll(), ms ?? 100);
     },
-    [closeAll, exitAll]
+    [closeAll, unmountAll]
   );
   /**
    * @description customEvent 함수를 실행시켰을 때 위 함수가 실행되도록 매핑합니다.
    */
-  useOverlayEvent({ open, close, exit, closeAll, exitAll, delayedExit, delayedExitAll });
+  useOverlayEvent({ open, close, unmount, closeAll, unmountAll, delayedUnmount, delayedUnmountAll });
 
   const contextValue: OverlayContextValue = {
     overlayList: overlayState.overlayOrderList,
     open,
     close,
-    exit,
+    unmount,
     closeAll,
-    exitAll,
-    delayedExit,
-    delayedExitAll,
+    unmountAll,
+    delayedUnmount,
+    delayedUnmountAll,
   };
 
   return (
@@ -81,8 +81,8 @@ export function OverlayProvider({ children }: PropsWithChildren) {
               });
             }}
             onCloseModal={() => close(currentOverlayId)}
-            onExitModal={() => exit(currentOverlayId)}
-            onDelayedExit={(ms) => delayedExit({ id: currentOverlayId, ms })}
+            onExitModal={() => unmount(currentOverlayId)}
+            onDelayedExit={(ms) => delayedUnmount({ id: currentOverlayId, ms })}
             controller={currentController}
           />
         );
@@ -121,8 +121,8 @@ function ContentOverlayController({
       overlayId={overlayId}
       isOpen={isOpen}
       close={onCloseModal}
-      exit={onExitModal}
-      delayedExit={onDelayedExit}
+      unmount={onExitModal}
+      delayedUnmount={onDelayedExit}
     />
   );
 }

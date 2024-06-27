@@ -35,11 +35,11 @@ export default function App(props) {
 Now, every overlay opened by `overlay-kit` will be rendered next to the `<Example />` component.
 
 > [!IMPORTANT]
-> Ensure to render exactly one `<OverlayProvider />` in the entire React app. 
+> Ensure to render exactly one `<OverlayProvider />` in the entire React app.
 
 ## Opening an overlay
 
-To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./api/overlay.md). 
+To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./api/overlay.md).
 
 For example, to open a `<Dialog />` from Material UI, use the following code:
 
@@ -88,8 +88,7 @@ The `overlay.open(...)` API provides essential properties and functions to manag
 
 - `isOpen`: Indicates if the overlay is open. When the overlay is closed, this property is updated to `false`, which can be useful if the overlay has a closing animation.
 - `close`: Closes the overlay and sets `isOpen` to `false`.
-- `exit`: Completely unmounts the overlay from the React tree.
-
+- `unmount`: Completely unmounts the overlay from the React tree.
 
 ## Usage with Promises
 
@@ -106,7 +105,7 @@ function Example() {
               resolve(true);
               close();
             };
-            
+
             const cancel = () => {
               resolve(false);
               close();
@@ -130,7 +129,7 @@ function Example() {
           });
         });
 
-        /* 
+        /*
          * If the user clicked "Yes", agreed is `true` here.
          * Otherwise, agreed is `false`.
          */
@@ -158,15 +157,13 @@ const api = ky.extend({
       (_, __, response) => {
         if (response.status >= 400) {
           overlay.open(({ isOpen, close }) => {
-            return (
-              <ErrorDialog open={isOpen} onClose={close} />
-            );
+            return <ErrorDialog open={isOpen} onClose={close} />;
           });
         }
-      }
-    ]
-  }
-})
+      },
+    ],
+  },
+});
 ```
 
 Here, when the status code is 400 or higher, an `<ErrorDialog />` is displayed. Although `ky` is used in this example, similar behavior can be easily implemented with other libraries.

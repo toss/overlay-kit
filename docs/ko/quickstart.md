@@ -14,7 +14,7 @@ overlay-kit의 쉽고 간단한 API를 소개드려요. 이 튜토리얼에서�
 
 ## 앱에 `OverlayProvider` 추가하기
 
-overlay-kit으로 오버레이를 열기 위해서는, 먼저 열린 오버레이들이 렌더링될 곳을 지정해야 해요. 일반적으로는, 다른 요소들 위에 오버레이가 보이도록, 애플리케이션 루트에 오버레이를 렌더링해요. 
+overlay-kit으로 오버레이를 열기 위해서는, 먼저 열린 오버레이들이 렌더링될 곳을 지정해야 해요. 일반적으로는, 다른 요소들 위에 오버레이가 보이도록, 애플리케이션 루트에 오버레이를 렌더링해요.
 `<OverlayProvider />` 컴포넌트를 사용할 수 있어요.
 
 애플리케이션 루트에 `OverlayProvider` 를 추가해 봅시다.
@@ -35,8 +35,7 @@ export default function App(props) {
 
 이제 overlay-kit으로 열리는 모든 오버레이는 `<Example />` 컴포넌트 옆에 렌더링될거예요.
 
-> [!IMPORTANT]
-> `<OverlayProvider />`는 React 애플리케이션 전체에서 1개만 렌더링해야 해요.
+> [!IMPORTANT] > `<OverlayProvider />`는 React 애플리케이션 전체에서 1개만 렌더링해야 해요.
 
 ## 오버레이 열기
 
@@ -89,8 +88,7 @@ overlay-kit으로 직관적으로 오버레이를 열 수 있는데요, 위 예�
 
 - `isOpen`: 오버레이가 열려 있는지를 나타내요. 오버레이가 닫히면, `isOpen`은 `true`에서 `false`로 바뀌어요. 오버레이가 닫히는 애니메이션이 있는 경우에 유용해요.
 - `close`: 오버레이를 닫고, `isOpen`을 `false`로 설정해요.
-- `exit`: 오버레이를 React의 요소 트리에서 완전히 제거해서 Unmount시켜요.
-
+- `unmount`: 오버레이를 React의 요소 트리에서 완전히 제거해서 Unmount시켜요.
 
 ## Promise와 사용하기
 
@@ -107,7 +105,7 @@ function Example() {
               resolve(true);
               close();
             };
-            
+
             const cancel = () => {
               resolve(false);
               close();
@@ -131,7 +129,7 @@ function Example() {
           });
         });
 
-        /* 
+        /*
          * 사용자가 "네"를 눌렀다면, `agreed` 는 `true`가 돼요.
          * 아니면, `agreed`는 `false`예요.
          */
@@ -159,15 +157,13 @@ const api = ky.extend({
       (_, __, response) => {
         if (response.status >= 400) {
           overlay.open(({ isOpen, close }) => {
-            return (
-              <ErrorDialog open={isOpen} onClose={close} />
-            );
+            return <ErrorDialog open={isOpen} onClose={close} />;
           });
         }
-      }
-    ]
-  }
-})
+      },
+    ],
+  },
+});
 ```
 
 여기에서 Status Code가 400 이상이라면, `<ErrorDialog />` 오버레이가 렌더링돼요. 여기에서는 `ky` 를 사용했지만, 다른 라이브러리에서도 비슷하게 코드를 작성할 수 있어요.

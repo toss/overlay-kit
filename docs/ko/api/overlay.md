@@ -7,9 +7,9 @@
 오버레이를 열기 위해서 `overlay.open(...)` 함수를 쓸 수 있어요.
 
 ```tsx
-overlay.open(({ isOpen, close, exit }) => {
+overlay.open(({ isOpen, close, unmount }) => {
   return (
-    <Dialog open={isOpen} onClose={close} onExit={exit}>
+    <Dialog open={isOpen} onClose={close} onExit={unmount}>
       {/* Dialog content */}
     </Dialog>
   );
@@ -22,18 +22,18 @@ overlay.open(({ isOpen, close, exit }) => {
 
 - `isOpen`: 오버레이가 열려 있는지를 나타내요. 오버레이가 닫히면, `isOpen`은 `true`에서 `false`로 바뀌어요. 오버레이가 닫히는 애니메이션이 있는 경우에 유용해요.
 - `close`: 오버레이를 닫고, `isOpen`을 `false`로 설정해요.
-- `exit`: 오버레이를 React의 요소 트리에서 완전히 제거해서 Unmount시켜요.
+- `unmount`: 오버레이를 React의 요소 트리에서 완전히 제거해서 Unmount시켜요.
 
 ### 오버레이 닫기
 
 오버레이를 닫기 위해서는, 콜백 함수에 주어진 `close` 함수를 사용하세요. `close` 함수를 호출하면, `isOpen` 상태는 `false`가 되어요. 오버레이가 `open` Prop을 구현한다면, 화면에서 사라지죠.
 
-대부분의 오버레이는 닫힐 때 애니메이션을 가지고 있어요. overlay-kit에서는 오버레이를 닫아도 애니메이션이 계속 실행되도록, Mount 상태를 유지해요. 
+대부분의 오버레이는 닫힐 때 애니메이션을 가지고 있어요. overlay-kit에서는 오버레이를 닫아도 애니메이션이 계속 실행되도록, Mount 상태를 유지해요.
 메모리 릭을 피하기 위해서는, 닫히는 애니메이션이 끝난 다음에 잊지 않고 오버레이를 Unmount시켜줘야 해요.
 
 ### 오버레이 Unmount
 
-오버레이를 Unmount시키기 위해서는, 콜백 함수에 주어진 `exit` 함수를 사용하세요. `exit` 함수를 호출하면, 오버레이는 React 트리에서 완전히 사라져요.
+오버레이를 Unmount시키기 위해서는, 콜백 함수에 주어진 `unmount` 함수를 사용하세요. `unmount` 함수를 호출하면, 오버레이는 React 트리에서 완전히 사라져요.
 
 예를 들어서, 오버레이 컴포넌트가 닫히는 애니메이션이 종료되었음을 나타내는 `onExit` Prop을 구현한다면, 이렇게 코드를 쓸 수 있어요.
 
@@ -42,8 +42,8 @@ import { overlay } from 'overlay-kit';
 
 function Demo() {
   const openDialog = () => {
-    overlay.open(({ isOpen, close, exit }) => {
-      return <Dialog opened={isOpen} onClose={close} onExit={exit} />
+    overlay.open(({ isOpen, close, unmount }) => {
+      return <Dialog opened={isOpen} onClose={close} onExit={unmount} />
     });
   };
 
@@ -58,19 +58,19 @@ import { overlay } from 'overlay-kit';
 
 function Demo() {
   const openModal = () => {
-    overlay.open(({ isOpen, close, exit }) => {
+    overlay.open(({ isOpen, close, unmount }) => {
       return (
-        <Dialog 
-          open={isOpen} 
+        <Dialog
+          open={isOpen}
           onClose={() => {
             close();
 
-            // `exit`은 150ms 이후에 실행돼요.
+            // `unmount`은 150ms 이후에 실행돼요.
             // 애니메이션 재생 시간에 맞춰서 적절하게 타임아웃을 조절해주세요.
             setTimeout(() => {
-              exit()
+              unmount()
             }, 150);
-          }} 
+          }}
         />
       );
     });
@@ -87,11 +87,11 @@ import { overlay } from 'overlay-kit';
 
 function Demo() {
   const openModal = () => {
-    overlay.open(({ isOpen, exit }) => {
+    overlay.open(({ isOpen, unmount }) => {
       return (
-        <Dialog 
-          open={isOpen} 
-          onClose={exit} 
+        <Dialog
+          open={isOpen}
+          onClose={unmount}
         />
       );
     });
@@ -114,15 +114,15 @@ const overlayId = overlay.open(...);
 특정 오버레이를 닫기 위해서는, `overlay.close(...)`에 `overlayId`를 제공하세요.
 
 ```tsx
-overlay.close(overlayId)
+overlay.close(overlayId);
 ```
 
-## overlay.exit
+## overlay.unmount
 
-특정 오버레이를 Unmount 시키기 위해서는, `overlay.exit(...)`에 `overlayId`를 제공하세요.
+특정 오버레이를 Unmount 시키기 위해서는, `overlay.unmount(...)`에 `overlayId`를 제공하세요.
 
 ```tsx
-overlay.exit(overlayId)
+overlay.unmount(overlayId);
 ```
 
 ## overlay.closeAll
@@ -133,7 +133,7 @@ overlay.exit(overlayId)
 overlay.closeAll();
 ```
 
-## overlay.exitAll
+## overlay.unmountAll
 
 모든 오버레이를 Unmount 시키기 위해서는, `overlay.unmountAll()` 을 사용하세요.
 

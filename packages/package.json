@@ -1,7 +1,19 @@
 {
   "name": "overlay-kit",
-  "description": "Next-generation tools for managing overlays",
   "version": "0.0.1",
+  "description": "Next-generation tools for managing overlays",
+  "keywords": [
+    "overlay",
+    "react"
+  ],
+  "homepage": "https://overlay-kit.slash.page",
+  "bugs": "https://github.com/toss/overlay-kit/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/toss/overlay-kit.git",
+    "directory": "packages"
+  },
+  "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -25,6 +37,9 @@
     "build": "tsup",
     "test": "vitest run"
   },
+  "dependencies": {
+    "mitt": "^3.0.1"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.5",
@@ -42,8 +57,5 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
-  },
-  "dependencies": {
-    "mitt": "^3.0.1"
   }
 }

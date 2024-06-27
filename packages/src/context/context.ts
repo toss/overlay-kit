@@ -8,7 +8,6 @@ export type OverlayControllerProps = {
   isOpen: boolean;
   close: () => void;
   unmount: () => void;
-  delayedUnmount: (ms?: number) => void;
 };
 
 export type OverlayContextValue = {
@@ -18,8 +17,6 @@ export type OverlayContextValue = {
   unmount: (id: string) => void;
   closeAll: () => void;
   unmountAll: () => void;
-  delayedUnmount: (options: { id: string; ms?: number }) => void;
-  delayedUnmountAll: (ms?: number) => void;
 };
 
 export const [OverlayContextProvider, useOverlayContext] =

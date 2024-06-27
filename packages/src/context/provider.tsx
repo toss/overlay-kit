@@ -34,24 +34,10 @@ export function OverlayProvider({ children }: PropsWithChildren) {
   const unmountAll: OverlayContextValue['unmountAll'] = useCallback(() => {
     overlayDispatch({ type: 'REMOVE_ALL' });
   }, []);
-  const delayedUnmount: OverlayContextValue['delayedUnmount'] = useCallback(
-    (options: { id: string; ms?: number }) => {
-      close(options.id);
-      setTimeout(() => unmount(options.id), options.ms ?? 100);
-    },
-    [close, unmount]
-  );
-  const delayedUnmountAll: OverlayContextValue['delayedUnmountAll'] = useCallback(
-    (ms?: number) => {
-      closeAll();
-      setTimeout(() => unmountAll(), ms ?? 100);
-    },
-    [closeAll, unmountAll]
-  );
   /**
    * @description customEvent 함수를 실행시켰을 때 위 함수가 실행되도록 매핑합니다.
    */
-  useOverlayEvent({ open, close, unmount, closeAll, unmountAll, delayedUnmount, delayedUnmountAll });
+  useOverlayEvent({ open, close, unmount, closeAll, unmountAll });
 
   const contextValue: OverlayContextValue = {
     overlayList: overlayState.overlayOrderList,
@@ -60,8 +46,6 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     unmount,
     closeAll,
     unmountAll,
-    delayedUnmount,
-    delayedUnmountAll,
   };
 
   return (
@@ -82,7 +66,6 @@ export function OverlayProvider({ children }: PropsWithChildren) {
             }}
             onCloseModal={() => close(currentOverlayId)}
             onExitModal={() => unmount(currentOverlayId)}
-            onDelayedExit={(ms) => delayedUnmount({ id: currentOverlayId, ms })}
             controller={currentController}
           />
         );
@@ -97,7 +80,6 @@ type ContentOverlayControllerProps = {
   onMounted: () => void;
   onCloseModal: () => void;
   onExitModal: () => void;
-  onDelayedExit: (ms?: number) => void;
   controller: OverlayControllerComponent;
 };
 
@@ -107,7 +89,6 @@ function ContentOverlayController({
   onMounted,
   onCloseModal,
   onExitModal,
-  onDelayedExit,
   controller: Controller,
 }: ContentOverlayControllerProps) {
   const onMountedRef = useRef(onMounted);
@@ -116,13 +97,5 @@ function ContentOverlayController({
     onMountedRef.current();
   }, []);
 
-  return (
-    <Controller
-      overlayId={overlayId}
-      isOpen={isOpen}
-      close={onCloseModal}
-      unmount={onExitModal}
-      delayedUnmount={onDelayedExit}
-    />
-  );
+  return <Controller overlayId={overlayId} isOpen={isOpen} close={onCloseModal} unmount={onExitModal} />;
 }

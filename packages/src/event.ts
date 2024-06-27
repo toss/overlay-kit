@@ -17,7 +17,5 @@ const close = createEvent('close');
 const unmount = createEvent('unmount');
 const closeAll = createEvent('closeAll');
 const unmountAll = createEvent('unmountAll');
-const delayedUnmount = createEvent('delayedUnmount');
-const delayedUnmountAll = createEvent('delayedUnmountAll');
 
-export const overlay = { open, close, unmount, closeAll, unmountAll, delayedUnmount, delayedUnmountAll };
+export const overlay = { open, close, unmount, closeAll, unmountAll };

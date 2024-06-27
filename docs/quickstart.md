@@ -39,7 +39,7 @@ Now, every overlay opened by `overlay-kit` will be rendered next to the `<Exampl
 
 ## Opening an overlay
 
-To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./api/overlay/open.md). 
+To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./api/overlay.md). 
 
 For example, to open a `<Dialog />` from Material UI, use the following code:
 

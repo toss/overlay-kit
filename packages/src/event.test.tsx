@@ -1,33 +1,18 @@
-import { act, render, renderHook, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it } from 'vitest';
-import { useOverlayContext } from './context';
-import { OverlayProvider } from './provider';
+import { OverlayProvider } from './context/provider';
+import { overlay } from './event';
 
 describe('useOverlayContext는', () => {
-  it('OverlayProvider의 context 값을 반환해야 한다.', () => {
-    const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
-    const useOverlayCOntextRenderHook = renderHook(useOverlayContext, { wrapper });
-    const { current } = useOverlayCOntextRenderHook.result;
-
-    expect(current.overlayList).toBeDefined();
-    expect(current.open).toBeDefined();
-    expect(current.close).toBeDefined();
-  });
-
   it('overlay.open을 통해 overlay를 그릴 수 있어야 한다.', () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent = 'context-modal-test-content';
     const Component = () => {
-      const overlay = useOverlayContext();
-
       useEffect(() => {
-        overlay.open({
-          overlayId: '1',
-          controller: () => {
-            return <p>{testContent}</p>;
-          },
+        overlay.open(() => {
+          return <p>{testContent}</p>;
         });
       }, []);
 
@@ -43,22 +28,17 @@ describe('useOverlayContext는', () => {
 
     const testContent = 'context-modal-test-content';
     const Component = () => {
-      const overlay = useOverlayContext();
-
       useEffect(() => {
-        overlay.open({
-          overlayId: '1',
-          controller: ({ overlayId }) => {
-            return (
-              <p
-                onClick={() => {
-                  overlay.unmount(overlayId);
-                }}
-              >
-                {testContent}
-              </p>
-            );
-          },
+        overlay.open(({ overlayId }) => {
+          return (
+            <p
+              onClick={() => {
+                overlay.unmount(overlayId);
+              }}
+            >
+              {testContent}
+            </p>
+          );
         });
       }, []);
 
@@ -84,32 +64,18 @@ describe('useOverlayContext는', () => {
     const testContent4 = 'context-modal-test-content-4';
 
     const Component = () => {
-      const overlay = useOverlayContext();
-
       useEffect(() => {
-        overlay.open({
-          overlayId: '1',
-          controller: () => {
-            return <p>{testContent1}</p>;
-          },
+        overlay.open(() => {
+          return <p>{testContent1}</p>;
         });
-        overlay.open({
-          overlayId: '2',
-          controller: () => {
-            return <p>{testContent2}</p>;
-          },
+        overlay.open(() => {
+          return <p>{testContent2}</p>;
         });
-        overlay.open({
-          overlayId: '3',
-          controller: () => {
-            return <p>{testContent3}</p>;
-          },
+        overlay.open(() => {
+          return <p>{testContent3}</p>;
         });
-        overlay.open({
-          overlayId: '4',
-          controller: () => {
-            return <p>{testContent4}</p>;
-          },
+        overlay.open(() => {
+          return <p>{testContent4}</p>;
         });
       }, []);
 

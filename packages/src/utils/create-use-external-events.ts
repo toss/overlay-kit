@@ -1,7 +1,8 @@
-import mitt from 'mitt';
 import { useEffect, useLayoutEffect } from 'react';
+import { createEmitter } from './emitter';
 
-const emitter = mitt();
+
+const emitter = createEmitter();
 const useIsomorphicEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 function dispatchEvent<Detail>(type: string, detail?: Detail) {

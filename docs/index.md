@@ -19,7 +19,7 @@ features:
   - title: 'Hassle-free'
     details: 'overlay-kit makes overlay management straightforward with a simple function call: overlay.open(...).'
   - title: 'Battle-tested Reliability'
-    details: 'overlay-kit is proven in real-world applications and boasts 100% test coverage.'
+    details: 'overlay-kit is proven in real-world applications.'
   - title: 'Small Bundle Size'
     details: 'Optimized for minimal impact, overlay-kit maintains a lean footprint with a gzipped size of only 1KB.'
   - title: 'Robust Types'

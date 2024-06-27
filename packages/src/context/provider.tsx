@@ -1,8 +1,7 @@
-import { type FC, type PropsWithChildren, useCallback, useReducer, useEffect, useRef } from 'react';
-import { type OverlayContextValue, type OverlayControllerProps, OverlayContextProvider } from './context';
+import { type PropsWithChildren, useCallback, useReducer, useEffect, useRef } from 'react';
+import { type OverlayContextValue, OverlayContextProvider, OverlayControllerComponent } from './context';
 import { type OverlayReducerState, overlayReducer } from './reducer';
 import { useOverlayEvent } from '../event';
-import { randomId } from '../utils';
 
 export function OverlayProvider({ children }: PropsWithChildren) {
   const [overlayState, overlayDispatch] = useReducer(overlayReducer, {
@@ -11,9 +10,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     overlayData: {},
   } satisfies OverlayReducerState);
 
-  const open: OverlayContextValue['open'] = useCallback((controller) => {
-    const overlayId = randomId();
-
+  const open: OverlayContextValue['open'] = useCallback(({ controller, overlayId }) => {
     overlayDispatch({
       type: 'ADD',
       overlay: {
@@ -101,7 +98,7 @@ type ContentOverlayControllerProps = {
   onCloseModal: () => void;
   onExitModal: () => void;
   onDelayedExit: (ms?: number) => void;
-  controller: FC<OverlayControllerProps>;
+  controller: OverlayControllerComponent;
 };
 
 function ContentOverlayController({

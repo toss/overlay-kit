@@ -13,7 +13,7 @@ export type OverlayControllerProps = {
 
 export type OverlayContextValue = {
   overlayList: string[];
-  open: (value: FC<OverlayControllerProps>) => void;
+  open: (value: { controller: OverlayControllerComponent; overlayId: string }) => void;
   close: (id: string) => void;
   exit: (id: string) => void;
   closeAll: () => void;

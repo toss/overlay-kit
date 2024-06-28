@@ -59,5 +59,8 @@
   "peerDependencies": {
     "react": "^18",
     "react-dom": "^18"
+  },
+  "dependencies": {
+    "immer": "^10.1.1"
   }
 }

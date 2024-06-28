@@ -1,7 +1,7 @@
 import { act, render, renderHook, screen } from '@testing-library/react';
 import { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it } from 'vitest';
-import { useOverlayContext } from './context';
+import { useOverlayContext, useOverlayList } from './context';
 import { OverlayProvider } from './provider';
 
 describe('useOverlayContext는', () => {
@@ -183,5 +183,53 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent2)).not.toBeInTheDocument();
     expect(screen.queryByText(testContent3)).not.toBeInTheDocument();
     expect(screen.queryByText(testContent4)).not.toBeInTheDocument();
+  });
+
+  it('useOverlayList를 통해 overlayList를 확인할 수 있어야 한다', async () => {
+    const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
+    const testId1 = 'context-modal-test-id-1';
+    const testId2 = 'context-modal-test-id-2';
+    const testId3 = 'context-modal-test-id-3';
+    const testId4 = 'context-modal-test-id-4';
+
+    const Component = () => {
+      const overlay = useOverlayContext();
+      const overlayList = useOverlayList();
+
+      useEffect(() => {
+        overlay.open({
+          overlayId: testId1,
+          controller: () => {
+            return <p>test1</p>;
+          },
+        });
+        overlay.open({
+          overlayId: testId2,
+          controller: () => {
+            return <p>test2</p>;
+          },
+        });
+        overlay.open({
+          overlayId: testId3,
+          controller: () => {
+            return <p>test3</p>;
+          },
+        });
+        overlay.open({
+          overlayId: testId4,
+          controller: () => {
+            return <p>test4</p>;
+          },
+        });
+      }, []);
+
+      return <div data-testid="overlay-list">{JSON.stringify(overlayList)}</div>;
+    };
+
+    const renderComponent = render(<Component />, { wrapper });
+
+    const overlayListElement = await renderComponent.findByTestId('overlay-list');
+    const overlayList = JSON.parse(overlayListElement.textContent ?? "");
+    expect(overlayList).toEqual([testId1, testId2, testId3, testId4]);
   });
 });

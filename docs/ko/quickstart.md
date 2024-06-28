@@ -35,7 +35,8 @@ export default function App(props) {
 
 이제 overlay-kit으로 열리는 모든 오버레이는 `<Example />` 컴포넌트 옆에 렌더링될거예요.
 
-> [!IMPORTANT] > `<OverlayProvider />`는 React 애플리케이션 전체에서 1개만 렌더링해야 해요.
+> [!IMPORTANT]
+> `<OverlayProvider />`는 React 애플리케이션 전체에서 1개만 렌더링해야 해요.
 
 ## 오버레이 열기
 

@@ -1,5 +1,5 @@
-import { AnimatePresence, Variants, motion } from 'framer-motion';
-import { PropsWithChildren, useRef } from 'react';
+import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import { useRef, type PropsWithChildren } from 'react';
 
 type ModalProps = {
   isOpen?: boolean;

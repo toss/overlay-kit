@@ -69,6 +69,7 @@ module.exports = tseslint.config(
       },
     },
     rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-var-requires': 'warn',
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'warn',

@@ -1049,9 +1049,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@overlay-kit/playground@workspace:examples/framer-motion":
+"@overlay-kit/framer-motion@workspace:examples/framer-motion":
   version: 0.0.0-use.local
-  resolution: "@overlay-kit/playground@workspace:examples/framer-motion"
+  resolution: "@overlay-kit/framer-motion@workspace:examples/framer-motion"
   dependencies:
     "@types/react": "npm:^18.2.0"
     "@types/react-dom": "npm:^18.2.0"

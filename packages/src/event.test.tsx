@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
 
-describe('useOverlayContext는', () => {
+describe('overlay 객체는', () => {
   it('overlay.open을 통해 overlay를 그릴 수 있어야 한다.', () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 

@@ -1,6 +1,6 @@
-import { type PropsWithChildren, useCallback, useReducer, useEffect, useRef } from 'react';
-import { type OverlayContextValue, OverlayContextProvider, OverlayControllerComponent } from './context';
-import { type OverlayReducerState, overlayReducer } from './reducer';
+import { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
+import { OverlayContextProvider, type OverlayContextValue, type OverlayControllerComponent } from './context';
+import { overlayReducer, type OverlayReducerState } from './reducer';
 import { useOverlayEvent } from '../event';
 
 export function OverlayProvider({ children }: PropsWithChildren) {

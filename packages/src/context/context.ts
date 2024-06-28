@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import type { FC } from 'react';
 import { createSafeContext } from '../utils';
 
 export type OverlayControllerComponent = FC<OverlayControllerProps>;

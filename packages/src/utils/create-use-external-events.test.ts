@@ -2,7 +2,7 @@ import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vitest } from 'vitest';
 import { createUseExternalEvents } from './create-use-external-events';
 
-describe('createCustomEvent는', () => {
+describe('createUseExternalEvents는', () => {
   it('이벤트를 생성할 수 있어야 합니다.', () => {
     type TestEvent = {
       event: () => void;

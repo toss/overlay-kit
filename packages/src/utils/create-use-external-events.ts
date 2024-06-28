@@ -38,13 +38,7 @@ export function createUseExternalEvents<EventHandlers extends Record<string, (pa
   }
 
   function createEvent<EventKey extends keyof EventHandlers>(event: EventKey) {
-    type Parameter = Parameters<EventHandlers[EventKey]>[0];
-
-    /**
-     * @description `undefined`타입을 갖고 있다면 optional하게 타입을 변경하는 Hacky한 코드
-     */
-    return (...payload: Parameter extends undefined ? [undefined?] : [Parameter]) =>
-      dispatchEvent(`${prefix}:${String(event)}`, payload[0]);
+    return (...payload: Parameters<EventHandlers[EventKey]>) => dispatchEvent(`${prefix}:${String(event)}`, payload[0]);
   }
 
   return [useExternalEvents, createEvent] as const;

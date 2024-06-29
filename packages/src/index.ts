@@ -1,2 +1,2 @@
-export * from './event';
-export * from './context';
+export { overlay } from './event';
+export { OverlayProvider } from './context';

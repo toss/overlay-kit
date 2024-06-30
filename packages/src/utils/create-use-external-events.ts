@@ -9,7 +9,7 @@ function dispatchEvent<Detail>(type: string, detail?: Detail) {
   emitter.emit(type, detail);
 }
 
-// event를 생성할 때 params는 어떤 타입이든 올 수 있기 때문에 any로 지정합니다.
+// When creating an event, params can be of any type, so specify the type as any.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createUseExternalEvents<EventHandlers extends Record<string, (params: any) => void>>(prefix: string) {
   function useExternalEvents(events: EventHandlers) {

@@ -13,7 +13,7 @@ export function createSafeContext<T>(displayName?: string): CreateContextReturn<
     const context = useContext(Context);
 
     if (context === NullSymbol) {
-      const error = new Error(`[${Context.displayName}]: Provider를 찾을 수 없습니다.`);
+      const error = new Error(`[${Context.displayName}]: Provider not found.`);
       error.name = '[Error] Context';
 
       throw error;

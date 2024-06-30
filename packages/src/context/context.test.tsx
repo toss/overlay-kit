@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { useOverlayContext, useOverlayList } from './context';
 import { OverlayProvider } from './provider';
 
-describe('useOverlayContext는', () => {
-  it('OverlayProvider의 context 값을 반환해야 한다.', () => {
+describe('useOverlayContext', () => {
+  it('The context value of OverlayProvider must be returned', () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
     const useOverlayCOntextRenderHook = renderHook(useOverlayContext, { wrapper });
     const { current } = useOverlayCOntextRenderHook.result;
@@ -15,7 +15,7 @@ describe('useOverlayContext는', () => {
     expect(current.close).toBeDefined();
   });
 
-  it('overlay.open을 통해 overlay를 그릴 수 있어야 한다.', () => {
+  it('should be able to draw an overlay through overlay.open', () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent = 'context-modal-test-content';
@@ -38,7 +38,7 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent)).toBeInTheDocument();
   });
 
-  it('overlay.unmount를 통해 열려있는 overlay를 닫을 수 있어야 한다.', async () => {
+  it('should be able to close an open overlay using overlay.unmount', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent = 'context-modal-test-content';
@@ -75,7 +75,7 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent)).not.toBeInTheDocument();
   });
 
-  it('overlay.open을 통해 여러 개의 overlay를 열 수 있어야 한다', async () => {
+  it('should be able to open multiple overlays via overlay.open', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent1 = 'context-modal-test-content-1';
@@ -123,7 +123,7 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent4)).toBeInTheDocument();
   });
 
-  it('overlay.unmountAll 통해 여러 개의 overlay를 닫을 수 있어야 한다', async () => {
+  it('should be able to close multiple overlays via overlay.unmountAll', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent1 = 'context-modal-test-content-1';
@@ -185,7 +185,7 @@ describe('useOverlayContext는', () => {
     expect(screen.queryByText(testContent4)).not.toBeInTheDocument();
   });
 
-  it('useOverlayList를 통해 overlayList를 확인할 수 있어야 한다', async () => {
+  it('should be able to check the overlayList through useOverlayList.', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
     const testId1 = 'context-modal-test-id-1';
     const testId2 = 'context-modal-test-id-2';

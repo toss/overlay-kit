@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
 
-describe('overlay 객체는', () => {
-  it('overlay.open을 통해 overlay를 그릴 수 있어야 한다.', () => {
+describe('overlay object', () => {
+  it('should be able to draw an overlay through overlay.open.', () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent = 'context-modal-test-content';
@@ -23,7 +23,7 @@ describe('overlay 객체는', () => {
     expect(screen.queryByText(testContent)).toBeInTheDocument();
   });
 
-  it('overlay.unmount를 통해 열려있는 overlay를 닫을 수 있어야 한다.', async () => {
+  it('should be able to close an open overlay using overlay.unmount', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent = 'context-modal-test-content';
@@ -55,7 +55,7 @@ describe('overlay 객체는', () => {
     expect(screen.queryByText(testContent)).not.toBeInTheDocument();
   });
 
-  it('overlay.open을 통해 여러 개의 overlay를 열 수 있어야 한다', async () => {
+  it('should be able to open multiple overlays via overlay.open', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
     const testContent1 = 'context-modal-test-content-1';

@@ -1,4 +1,4 @@
-import { OverlayControllerComponent, type OverlayContextValue } from './context/context';
+import { type OverlayContextValue, type OverlayControllerComponent } from './context/context';
 import { randomId } from './utils';
 import { createUseExternalEvents } from './utils/create-use-external-events';
 

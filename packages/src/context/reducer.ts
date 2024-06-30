@@ -1,4 +1,4 @@
-import type { OverlayControllerComponent } from './context';
+import { type OverlayControllerComponent } from './context';
 
 export type OverlayItem = {
   id: string;

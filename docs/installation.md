@@ -14,7 +14,7 @@ overlay-kit is available on [npm](https://npmjs.com/package/overlay-kit) for Nod
 
 ## Prerequisites
 
-- [React](https://react.dev/) version 18 or higher.
+- [React](https://react.dev/) version ^18
 
 Install overlay-kit with the following command:
 

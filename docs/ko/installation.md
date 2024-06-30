@@ -14,7 +14,7 @@ Node.js와 Bun을 사용하는 경우, [npm](https://npmjs.com/package/overlay-k
 
 ## Prerequisites
 
-- [React](https://react.dev/) 18 버전 이상이 설치되어있어야 해요.
+- [React](https://react.dev/) ^18 버전이 설치되어있어야 해요.
 
 Install overlay-kit with the following command:
 

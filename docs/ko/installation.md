@@ -12,20 +12,26 @@ next:
 
 Node.js와 Bun을 사용하는 경우, [npm](https://npmjs.com/package/overlay-kit)에서 설치할 수 있어요.
 
-## Node.js
+## Prerequisites
 
-아래 명령어로 overlay-kit을 설치하세요.
+- [React](https://react.dev/) 18 버전 이상이 설치되어있어야 해요.
 
-```sh
+Install overlay-kit with the following command:
+
+::: code-group
+
+```sh [npm]
 npm install overlay-kit
-yarn add overlay-kit
+```
+
+```sh [pnpm]
 pnpm install overlay-kit
 ```
 
-## Bun
+```sh [yarn]
+yarn add overlay-kit
+```
 
-Bun에서도 overlay-kit을 사용할 수 있어요. 아래 명령어로 설치하세요.
-
-```sh
+```sh [bun]
 bun add overlay-kit
 ```

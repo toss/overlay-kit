@@ -12,20 +12,26 @@ next:
 
 overlay-kit is available on [npm](https://npmjs.com/package/overlay-kit) for Node.js and Bun.
 
-## Node.js
+## Prerequisites
+
+- [React](https://react.dev/) version 18 or higher.
 
 Install overlay-kit with the following command:
 
-```sh
-npm install overlay-kit
-yarn add overlay-kit
-pnpm install overlay-kit
+::: code-group
+
+```sh [npm]
+npm add -D overlay-kit
 ```
 
-## Bun
+```sh [pnpm]
+pnpm add -D overlay-kit
+```
 
-overlay-kit is also available on Bun. You can install it via the following command:
+```sh [yarn]
+yarn add -D overlay-kit
+```
 
-```sh
-bun add overlay-kit
+```sh [bun]
+bun add -D overlay-kit
 ```

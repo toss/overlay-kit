@@ -21,17 +21,17 @@ Install overlay-kit with the following command:
 ::: code-group
 
 ```sh [npm]
-npm add -D overlay-kit
+npm install overlay-kit
 ```
 
 ```sh [pnpm]
-pnpm add -D overlay-kit
+pnpm install overlay-kit
 ```
 
 ```sh [yarn]
-yarn add -D overlay-kit
+yarn add overlay-kit
 ```
 
 ```sh [bun]
-bun add -D overlay-kit
+bun add overlay-kit
 ```

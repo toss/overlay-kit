@@ -35,7 +35,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     overlayDispatch({ type: 'REMOVE_ALL' });
   }, []);
   /**
-   * @description customEvent 함수를 실행시켰을 때 위 함수가 실행되도록 매핑합니다.
+   * @description Map the above function to be executed when the customEvent function is executed.
    */
   useOverlayEvent({ open, close, unmount, closeAll, unmountAll });
 

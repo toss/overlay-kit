@@ -5,7 +5,7 @@ prev:
   link: ./installation.md
 next:
   text: OverlayProvider
-  link: ./api/overlay-provider.md
+  link: ./usage/overlay-provider.md
 ---
 
 # 튜토리얼
@@ -39,7 +39,7 @@ export default function App(props) {
 
 ## 오버레이 열기
 
-`<OverlayProvider />` 안에 오버레이를 열기 위해서는, [overlay.open(...)](./api/overlay.md)을 호출해요.
+`<OverlayProvider />` 안에 오버레이를 열기 위해서는, [overlay.open(...)](./usage/overlay.md)을 호출해요.
 
 예를 들어서, Material UI의 `<Dialog />`를 열기 위해서는 아래와 같이 코드를 쓸 수 있어요.
 

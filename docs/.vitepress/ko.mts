@@ -8,7 +8,7 @@ export const ko = defineConfig({
     nav: [
       { text: '홈', link: '/ko/' },
       { text: '가이드', link: '/ko/motivation' },
-      { text: 'API', link: '/ko/api/overlay' },
+      { text: '사용법', link: '/ko/usage/overlay' },
     ],
     sidebar: [
       {
@@ -21,10 +21,10 @@ export const ko = defineConfig({
         ],
       },
       {
-        text: 'API',
+        text: '사용법',
         items: [
-          { text: 'OverlayProvider', link: '/ko/api/overlay-provider' },
-          { text: 'overlay 객체', link: '/ko/api/overlay' },
+          { text: 'OverlayProvider', link: '/ko/usage/overlay-provider' },
+          { text: 'overlay 객체', link: '/ko/usage/overlay' },
         ],
       },
     ],

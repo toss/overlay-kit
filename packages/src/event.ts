@@ -4,10 +4,14 @@ import { createUseExternalEvents } from './utils/create-use-external-events';
 
 type OverlayEvent = Omit<OverlayContextValue, 'overlayList'>;
 
+type OverlayOpenOptions = {
+  overlayId?: string;
+};
+
 export const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>('overlay-kit');
 
-const open = (controller: OverlayControllerComponent) => {
-  const overlayId = randomId();
+const open = (controller: OverlayControllerComponent, options?: OverlayOpenOptions) => {
+  const overlayId = options?.overlayId ?? randomId();
   const dispatchOpenEvent = createEvent('open');
 
   dispatchOpenEvent({ controller, overlayId });

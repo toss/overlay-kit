@@ -1,4 +1,5 @@
 import { type FC, useEffect, useRef, type PropsWithChildren } from 'react';
+import { OverlayContextProvider } from './context';
 import { dispatchOverlay } from './store';
 import { useSyncOverlayStore } from './use-sync-overlay-store';
 import { overlay } from '../event';
@@ -7,7 +8,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
   const overlayState = useSyncOverlayStore();
 
   return (
-    <>
+    <OverlayContextProvider value={overlayState}>
       {children}
       {overlayState.overlayOrderList.map((item) => {
         const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
@@ -28,7 +29,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
           />
         );
       })}
-    </>
+    </OverlayContextProvider>
   );
 }
 

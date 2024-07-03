@@ -1,4 +1,4 @@
-import { type OverlayControllerComponent } from './context';
+import { type OverlayControllerComponent } from './provider';
 import { type OverlayReducerAction, overlayReducer } from './reducer';
 
 type OverlayId = string;

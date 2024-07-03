@@ -1,16 +1,4 @@
-import { type OverlayControllerComponent } from './context';
-
-export type OverlayItem = {
-  id: string;
-  isOpen: boolean;
-  controller: OverlayControllerComponent;
-};
-
-export type OverlayReducerState = {
-  current: string | null;
-  overlayOrderList: string[];
-  overlayData: Record<string, OverlayItem>;
-};
+import { type OverlayData, type OverlayItem } from './store';
 
 export type OverlayReducerAction =
   | { type: 'ADD'; overlay: OverlayItem }
@@ -20,7 +8,7 @@ export type OverlayReducerAction =
   | { type: 'CLOSE_ALL' }
   | { type: 'REMOVE_ALL' };
 
-export function overlayReducer(state: OverlayReducerState, action: OverlayReducerAction): OverlayReducerState {
+export function overlayReducer(state: OverlayData, action: OverlayReducerAction): OverlayData {
   switch (action.type) {
     case 'ADD': {
       return {

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
 import { OverlayContextProvider, type OverlayContextValue, type OverlayControllerComponent } from './context';
-import { overlayReducer, type OverlayReducerState } from './reducer';
+import { overlayReducer } from './reducer';
+import { type OverlayData } from './store';
 import { useOverlayEvent } from '../event';
 
 export function OverlayProvider({ children }: PropsWithChildren) {
@@ -8,7 +9,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     current: null,
     overlayOrderList: [],
     overlayData: {},
-  } satisfies OverlayReducerState);
+  } satisfies OverlayData);
 
   const open: OverlayContextValue['open'] = useCallback(({ controller, overlayId }) => {
     overlayDispatch({

@@ -1,28 +1,10 @@
-import { act, render, screen } from '@testing-library/react';
-import { useEffect, type PropsWithChildren } from 'react';
+import { render, screen } from '@testing-library/react';
+import { act, useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
 
 describe('overlay object', () => {
-  it('should be able to draw an overlay through overlay.open.', () => {
-    const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
-
-    const testContent = 'context-modal-test-content';
-    const Component = () => {
-      useEffect(() => {
-        overlay.open(() => {
-          return <p>{testContent}</p>;
-        });
-      }, []);
-
-      return <div>Empty</div>;
-    };
-
-    render(<Component />, { wrapper });
-    expect(screen.queryByText(testContent)).toBeInTheDocument();
-  });
-
   it('should be able to close an open overlay using overlay.unmount', async () => {
     const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 

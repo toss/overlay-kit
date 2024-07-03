@@ -4,8 +4,8 @@ prev:
   text: Why overlay-kit?
   link: ./motivation.md
 next:
-  text: API
-  link: ./api/overlay.md
+  text: OverlayProvider
+  link: ./api/overlay-provider.md
 ---
 
 # Quick Start

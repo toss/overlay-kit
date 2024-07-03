@@ -12,8 +12,8 @@ hero:
       text: '튜토리얼'
       link: '/ko/quickstart'
     - theme: alt
-      text: 'API'
-      link: '/ko/api/overlay'
+      text: '사용법'
+      link: '/ko/usage/overlay'
 
 features:
   - title: '간편함'

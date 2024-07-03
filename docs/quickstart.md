@@ -5,7 +5,7 @@ prev:
   link: ./motivation.md
 next:
   text: OverlayProvider
-  link: ./api/overlay-provider.md
+  link: ./usage/overlay-provider.md
 ---
 
 # Quick Start
@@ -39,7 +39,7 @@ Now, every overlay opened by `overlay-kit` will be rendered next to the `<Exampl
 
 ## Opening an overlay
 
-To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./api/overlay.md).
+To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./usage/overlay.md).
 
 For example, to open a `<Dialog />` from Material UI, use the following code:
 

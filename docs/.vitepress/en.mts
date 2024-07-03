@@ -8,7 +8,7 @@ export const en = defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/motivation' },
-      { text: 'API', link: '/api/overlay' },
+      { text: 'Usage', link: '/usage/overlay' },
     ],
     sidebar: [
       {
@@ -21,10 +21,10 @@ export const en = defineConfig({
         ],
       },
       {
-        text: 'API',
+        text: 'Usage',
         items: [
-          { text: 'OverlayProvider', link: '/api/overlay-provider' },
-          { text: 'The overlay object', link: '/api/overlay' },
+          { text: 'OverlayProvider', link: '/usage/overlay-provider' },
+          { text: 'The overlay object', link: '/usage/overlay' },
         ],
       },
     ],

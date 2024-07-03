@@ -12,8 +12,8 @@ hero:
       text: 'Quick Start'
       link: '/quickstart'
     - theme: alt
-      text: 'API'
-      link: '/api/overlay'
+      text: 'Usage'
+      link: '/usage/overlay'
 
 features:
   - title: 'Hassle-free'

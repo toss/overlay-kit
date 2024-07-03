@@ -9,8 +9,8 @@ hero:
       text: '소개'
       link: '/ko/motivation'
     - theme: alt
-      text: '왜 사용하나요?'
-      link: '/ko/motivation'
+      text: '튜토리얼'
+      link: '/ko/quickstart'
     - theme: alt
       text: 'API'
       link: '/ko/api/overlay'

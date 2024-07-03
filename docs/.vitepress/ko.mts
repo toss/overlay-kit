@@ -23,7 +23,7 @@ export const ko = defineConfig({
       {
         text: 'API',
         items: [
-          { text: 'OverlayProvider', link: '/ko/api/OverlayProvider' },
+          { text: 'OverlayProvider', link: '/ko/api/overlay-provider' },
           { text: 'overlay 객체', link: '/ko/api/overlay' },
         ],
       },

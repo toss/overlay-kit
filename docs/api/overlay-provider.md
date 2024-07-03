@@ -25,9 +25,9 @@ export default function App({ Component }) {
     <OverlayProvider>
       <Component />
     </OverlayProvider>
-  )
+  );
 }
 ```
 
 > [!IMPORTANT]
-> Make sure to render only one `<OverlayProvider />` in the entire React application. 
+> Make sure to render only one `<OverlayProvider />` in the entire React application.

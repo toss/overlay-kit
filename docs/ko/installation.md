@@ -4,8 +4,8 @@ prev:
   text: 기능
   link: ./features.md
 next:
-  text: API
-  link: ./api/overlay.md
+  text: 튜토리얼
+  link: ./quickstart.md
 ---
 
 # 설치

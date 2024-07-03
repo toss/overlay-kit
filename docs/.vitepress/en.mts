@@ -23,7 +23,7 @@ export const en = defineConfig({
       {
         text: 'API',
         items: [
-          { text: 'OverlayProvider', link: '/api/OverlayProvider' },
+          { text: 'OverlayProvider', link: '/api/overlay-provider' },
           { text: 'The overlay object', link: '/api/overlay' },
         ],
       },

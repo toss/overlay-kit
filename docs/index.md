@@ -9,8 +9,8 @@ hero:
       text: 'Introduction'
       link: '/motivation'
     - theme: alt
-      text: 'Why overlay-kit?'
-      link: '/motivation'
+      text: 'Quick Start'
+      link: '/quickstart'
     - theme: alt
       text: 'API'
       link: '/api/overlay'

@@ -1,27 +1,12 @@
-import { type FC } from 'react';
-import { createSafeContext } from '../utils';
+import { type OverlayData } from './store';
+import { createSafeContext } from '../utils/create-safe-context';
 
-export type OverlayControllerComponent = FC<OverlayControllerProps>;
+export const [OverlayContextProvider, useOverlayContext] = createSafeContext<OverlayData>('overlay-kit/OverlayContext');
 
-export type OverlayControllerProps = {
-  overlayId: string;
-  isOpen: boolean;
-  close: () => void;
-  unmount: () => void;
-};
+export function useCurrentOverlay() {
+  return useOverlayContext().current;
+}
 
-export type OverlayContextValue = {
-  overlayList: string[];
-  open: (value: { controller: OverlayControllerComponent; overlayId: string }) => void;
-  close: (overlayId: string) => void;
-  unmount: (overlayId: string) => void;
-  closeAll: () => void;
-  unmountAll: () => void;
-};
-
-export const [OverlayContextProvider, useOverlayContext] =
-  createSafeContext<OverlayContextValue>('overlay-kit/OverlayContext');
-
-export function useOverlayList() {
-  return useOverlayContext().overlayList;
+export function useOverlayData() {
+  return useOverlayContext().overlayData;
 }

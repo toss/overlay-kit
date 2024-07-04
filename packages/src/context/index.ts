@@ -1,2 +1,2 @@
 export { OverlayProvider } from './provider';
-export { useOverlayList } from './context';
+export { useCurrentOverlay, useOverlayData } from './context';

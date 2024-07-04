@@ -1,55 +1,14 @@
-import { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
-import { OverlayContextProvider, type OverlayContextValue, type OverlayControllerComponent } from './context';
-import { overlayReducer, type OverlayReducerState } from './reducer';
-import { useOverlayEvent } from '../event';
+import { type FC, useEffect, useRef, type PropsWithChildren } from 'react';
+import { OverlayContextProvider } from './context';
+import { dispatchOverlay } from './store';
+import { useSyncOverlayStore } from './use-sync-overlay-store';
+import { overlay } from '../event';
 
 export function OverlayProvider({ children }: PropsWithChildren) {
-  const [overlayState, overlayDispatch] = useReducer(overlayReducer, {
-    current: null,
-    overlayOrderList: [],
-    overlayData: {},
-  } satisfies OverlayReducerState);
-
-  const open: OverlayContextValue['open'] = useCallback(({ controller, overlayId }) => {
-    overlayDispatch({
-      type: 'ADD',
-      overlay: {
-        id: overlayId,
-        isOpen: false,
-        controller: controller,
-      },
-    });
-
-    return overlayId;
-  }, []);
-  const close: OverlayContextValue['close'] = useCallback((id: string) => {
-    overlayDispatch({ type: 'CLOSE', overlayId: id });
-  }, []);
-  const unmount: OverlayContextValue['unmount'] = useCallback((id: string) => {
-    overlayDispatch({ type: 'REMOVE', overlayId: id });
-  }, []);
-  const closeAll: OverlayContextValue['closeAll'] = useCallback(() => {
-    overlayDispatch({ type: 'CLOSE_ALL' });
-  }, []);
-  const unmountAll: OverlayContextValue['unmountAll'] = useCallback(() => {
-    overlayDispatch({ type: 'REMOVE_ALL' });
-  }, []);
-  /**
-   * @description Map the above function to be executed when the customEvent function is executed.
-   */
-  useOverlayEvent({ open, close, unmount, closeAll, unmountAll });
-
-  const contextValue: OverlayContextValue = {
-    overlayList: overlayState.overlayOrderList,
-    open,
-    close,
-    unmount,
-    closeAll,
-    unmountAll,
-  };
+  const overlayState = useSyncOverlayStore();
 
   return (
-    <OverlayContextProvider value={contextValue}>
+    <OverlayContextProvider value={overlayState}>
       {children}
       {overlayState.overlayOrderList.map((item) => {
         const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
@@ -61,11 +20,11 @@ export function OverlayProvider({ children }: PropsWithChildren) {
             overlayId={currentOverlayId}
             onMounted={() => {
               requestAnimationFrame(() => {
-                overlayDispatch({ type: 'OPEN', overlayId: currentOverlayId });
+                dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
               });
             }}
-            onCloseModal={() => close(currentOverlayId)}
-            onExitModal={() => unmount(currentOverlayId)}
+            onCloseModal={() => overlay.close(currentOverlayId)}
+            onExitModal={() => overlay.unmount(currentOverlayId)}
             controller={currentController}
           />
         );
@@ -73,6 +32,15 @@ export function OverlayProvider({ children }: PropsWithChildren) {
     </OverlayContextProvider>
   );
 }
+
+type OverlayControllerProps = {
+  overlayId: string;
+  isOpen: boolean;
+  close: () => void;
+  unmount: () => void;
+};
+
+export type OverlayControllerComponent = FC<OverlayControllerProps>;
 
 type ContentOverlayControllerProps = {
   isOpen: boolean;

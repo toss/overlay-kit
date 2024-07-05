@@ -23,6 +23,7 @@ export const ko = defineConfig({
       {
         text: '사용법',
         items: [
+          { text: 'Custom id 지정하기', link: '/ko/usage/custom-id' },
           { text: 'OverlayProvider', link: '/ko/usage/overlay-provider' },
           { text: 'overlay 객체', link: '/ko/usage/overlay' },
         ],

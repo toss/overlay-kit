@@ -54,7 +54,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       delete copiedOverlayData[action.overlayId];
 
       return {
-        current: remainingOverlays.at(-1) || state.current,
+        current: remainingOverlays.at(-1) ?? null,
         overlayOrderList: remainingOverlays,
         overlayData: copiedOverlayData,
       };
@@ -75,7 +75,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'REMOVE_ALL': {
-      return { current: state.current, overlayOrderList: [], overlayData: {} };
+      return { current: null, overlayOrderList: [], overlayData: {} };
     }
   }
 }

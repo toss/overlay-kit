@@ -23,6 +23,7 @@ export const en = defineConfig({
       {
         text: 'Usage',
         items: [
+          { text: 'Assignment Custom id', link: '/usage/custom-id' },
           { text: 'OverlayProvider', link: '/usage/overlay-provider' },
           { text: 'The overlay object', link: '/usage/overlay' },
         ],

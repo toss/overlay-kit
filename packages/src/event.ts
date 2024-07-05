@@ -20,11 +20,11 @@ function open(controller: OverlayControllerComponent, options?: OpenOverlayOptio
 
   return overlayId;
 }
-function close(id: string) {
-  dispatchOverlay({ type: 'CLOSE', overlayId: id });
+function close(overlayId: string) {
+  dispatchOverlay({ type: 'CLOSE', overlayId });
 }
-function unmount(id: string) {
-  dispatchOverlay({ type: 'REMOVE', overlayId: id });
+function unmount(overlayId: string) {
+  dispatchOverlay({ type: 'REMOVE', overlayId });
 }
 function closeAll() {
   dispatchOverlay({ type: 'CLOSE_ALL' });

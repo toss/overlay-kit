@@ -1,5 +1,6 @@
 {
   "name": "root",
+  "private": true,
   "packageManager": "yarn@4.2.2",
   "workspaces": [
     ".",
@@ -11,6 +12,8 @@
     "lint": "eslint ."
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.7",
     "@eslint/js": "^9.4.0",
     "@types/eslint__js": "^8.42.3",
     "eslint": "^8.57.0",

@@ -1,8 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { act, useEffect, type PropsWithChildren } from 'react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
+
+afterEach(() => {
+  overlay.unmountAll();
+});
 
 describe('overlay object', () => {
   it('should be able to close an open overlay using overlay.unmount', async () => {

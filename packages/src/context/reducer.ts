@@ -33,8 +33,21 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'CLOSE': {
+      const remainingOverlays = state.overlayOrderList.filter((item) => item !== action.overlayId);
+      /**
+       * @description When close a non-existent overlayId
+       */
+      if (state.overlayOrderList.length === remainingOverlays.length) {
+        return state;
+      }
+
       return {
         ...state,
+        current: remainingOverlays.at(-1) ?? null,
+        /**
+         * @description Empty the overlayOrderList to adjust the order when you reopen the overlay
+         */
+        overlayOrderList: remainingOverlays,
         overlayData: {
           ...state.overlayData,
           [action.overlayId]: {
@@ -46,6 +59,9 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
     }
     case 'REMOVE': {
       const remainingOverlays = state.overlayOrderList.filter((item) => item !== action.overlayId);
+      /**
+       * @description When unmount a non-existent overlayId
+       */
       if (state.overlayOrderList.length === remainingOverlays.length) {
         return state;
       }
@@ -55,13 +71,17 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
 
       return {
         current: remainingOverlays.at(-1) ?? null,
+        /**
+         * @description Handles unmount without close.
+         */
         overlayOrderList: remainingOverlays,
         overlayData: copiedOverlayData,
       };
     }
     case 'CLOSE_ALL': {
       return {
-        ...state,
+        current: null,
+        overlayOrderList: [],
         overlayData: Object.keys(state.overlayData).reduce(
           (prev, curr) => ({
             ...prev,

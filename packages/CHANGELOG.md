@@ -1,5 +1,14 @@
 # overlay-kit
 
+## 1.2.3
+
+### Patch Changes
+
+- [#50](https://github.com/toss/overlay-kit/pull/50) [`5d7e84d`](https://github.com/toss/overlay-kit/commit/5d7e84d3d096a5510ba4d7953d37824a4af5dfc2) Thanks [@jungpaeng](https://github.com/jungpaeng)! - Fix: Ensure 'current' reflects the last overlay when closing intermediate overlays
+
+  - Resolve issue where 'current' does not update to the last overlay when closing an intermediate overlay
+  - Add logic to correctly update 'current' in reducer
+
 ## 1.2.2
 
 ### Patch Changes

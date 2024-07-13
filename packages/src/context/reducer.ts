@@ -11,9 +11,18 @@ export type OverlayReducerAction =
 export function overlayReducer(state: OverlayData, action: OverlayReducerAction): OverlayData {
   switch (action.type) {
     case 'ADD': {
+      const isExisted = state.overlayOrderList.includes(action.overlay.id);
+
+      if (isExisted && state.overlayData[action.overlay.id].isOpen === true) {
+        throw new Error('The same overlayId exists.');
+      }
+
       return {
         current: action.overlay.id,
-        overlayOrderList: [...state.overlayOrderList, action.overlay.id],
+        /**
+         * @description Brings the overlay to the front when reopened after closing without unmounting.
+         */
+        overlayOrderList: [...state.overlayOrderList.filter((item) => item !== action.overlay.id), action.overlay.id],
         overlayData: {
           ...state.overlayData,
           [action.overlay.id]: action.overlay,

@@ -1,5 +1,11 @@
 # overlay-kit
 
+## 1.2.2
+
+### Patch Changes
+
+- [#48](https://github.com/toss/overlay-kit/pull/48) [`2aaa5ea`](https://github.com/toss/overlay-kit/commit/2aaa5eac66ff09ea7477e57b3f2a7d462b6a614a) Thanks [@jungpaeng](https://github.com/jungpaeng)! - fix: Change current value when closing overlay
+
 ## 1.2.1
 
 ### Patch Changes

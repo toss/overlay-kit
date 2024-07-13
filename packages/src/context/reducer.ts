@@ -33,21 +33,12 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'CLOSE': {
-      const remainingOverlays = state.overlayOrderList.filter((item) => item !== action.overlayId);
-      /**
-       * @description When close a non-existent overlayId
-       */
-      if (state.overlayOrderList.length === remainingOverlays.length) {
-        return state;
-      }
+      const closedCurrentIndex = state.overlayOrderList.findIndex((item) => item === action.overlayId);
+      const current = state.overlayOrderList[closedCurrentIndex - 1] ?? null;
 
       return {
         ...state,
-        current: remainingOverlays.at(-1) ?? null,
-        /**
-         * @description Empty the overlayOrderList to adjust the order when you reopen the overlay
-         */
-        overlayOrderList: remainingOverlays,
+        current,
         overlayData: {
           ...state.overlayData,
           [action.overlayId]: {
@@ -59,9 +50,6 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
     }
     case 'REMOVE': {
       const remainingOverlays = state.overlayOrderList.filter((item) => item !== action.overlayId);
-      /**
-       * @description When unmount a non-existent overlayId
-       */
       if (state.overlayOrderList.length === remainingOverlays.length) {
         return state;
       }
@@ -69,19 +57,30 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       const copiedOverlayData = { ...state.overlayData };
       delete copiedOverlayData[action.overlayId];
 
+      const current = state.current
+        ? remainingOverlays.includes(state.current)
+          ? /**
+             * @description If `unmount` was executed after `close`
+             */
+            state.current
+          : /**
+             * @description If you only run `unmount`, there is no `current` in `remainingOverlays`
+             */
+            remainingOverlays.at(-1) ?? null
+        : /**
+           * @description The case where `current` is `null`
+           */
+          null;
+
       return {
-        current: remainingOverlays.at(-1) ?? null,
-        /**
-         * @description Handles unmount without close.
-         */
+        current,
         overlayOrderList: remainingOverlays,
         overlayData: copiedOverlayData,
       };
     }
     case 'CLOSE_ALL': {
       return {
-        current: null,
-        overlayOrderList: [],
+        ...state,
         overlayData: Object.keys(state.overlayData).reduce(
           (prev, curr) => ({
             ...prev,

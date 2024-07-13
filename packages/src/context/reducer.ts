@@ -33,12 +33,29 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'CLOSE': {
-      const closedCurrentIndex = state.overlayOrderList.findIndex((item) => item === action.overlayId);
-      const current = state.overlayOrderList[closedCurrentIndex - 1] ?? null;
+      const openedOverlayOrderList = state.overlayOrderList.filter(
+        (orderedOverlayId) => state.overlayData[orderedOverlayId].isOpen === true
+      );
+      const targetIndexInOpenedList = openedOverlayOrderList.findIndex((item) => item === action.overlayId);
+
+      /**
+       * @description If closing the last overlay, specify the overlay before it.
+       * @description If closing intermediate overlays, specifies the last overlay.
+       *
+       * @example open - [1, 2, 3, 4]
+       * close 2 => current: 4
+       * close 4 => current: 3
+       * close 2 => current: 1
+       * close 1 => current: null
+       */
+      const currentOverlayId =
+        targetIndexInOpenedList === openedOverlayOrderList.length - 1
+          ? openedOverlayOrderList[targetIndexInOpenedList - 1] ?? null
+          : openedOverlayOrderList.at(-1) ?? null;
 
       return {
         ...state,
-        current,
+        current: currentOverlayId,
         overlayData: {
           ...state.overlayData,
           [action.overlayId]: {

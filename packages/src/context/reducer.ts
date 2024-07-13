@@ -33,8 +33,12 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'CLOSE': {
+      const closedCurrentIndex = state.overlayOrderList.findIndex((item) => item === action.overlayId);
+      const current = state.overlayOrderList[closedCurrentIndex - 1] ?? null;
+
       return {
         ...state,
+        current,
         overlayData: {
           ...state.overlayData,
           [action.overlayId]: {
@@ -53,8 +57,23 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       const copiedOverlayData = { ...state.overlayData };
       delete copiedOverlayData[action.overlayId];
 
+      const current = state.current
+        ? remainingOverlays.includes(state.current)
+          ? /**
+             * @description If `unmount` was executed after `close`
+             */
+            state.current
+          : /**
+             * @description If you only run `unmount`, there is no `current` in `remainingOverlays`
+             */
+            remainingOverlays.at(-1) ?? null
+        : /**
+           * @description The case where `current` is `null`
+           */
+          null;
+
       return {
-        current: remainingOverlays.at(-1) ?? null,
+        current,
         overlayOrderList: remainingOverlays,
         overlayData: copiedOverlayData,
       };

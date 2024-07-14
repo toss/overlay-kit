@@ -14,7 +14,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       const isExisted = state.overlayOrderList.includes(action.overlay.id);
 
       if (isExisted && state.overlayData[action.overlay.id].isOpen === true) {
-        throw new Error('The same overlayId exists.');
+        throw new Error("You can't open the multiple overlays with the same overlayId. Please set a different id.");
       }
 
       return {

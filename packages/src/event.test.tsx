@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { act, useEffect, type PropsWithChildren } from 'react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
 
@@ -73,5 +73,71 @@ describe('overlay object', () => {
     expect(screen.queryByText(testContent2)).toBeInTheDocument();
     expect(screen.queryByText(testContent3)).toBeInTheDocument();
     expect(screen.queryByText(testContent4)).toBeInTheDocument();
+  });
+
+  it('The value passed as an argument to close is passed to resolve. overlay.openAsync', async () => {
+    const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
+    const testContent = 'context-modal-test-content';
+    const dialogContent = 'context-modal-dialog-content';
+    const mockFn = vi.fn();
+    const Component = () => {
+      const handleClick = async () => {
+        const result = await overlay.openAsync<boolean>(({ close }) => (
+          <button onClick={() => close(true)}>{dialogContent}</button>
+        ));
+
+        if (result) {
+          mockFn(result);
+        }
+      };
+
+      return <button onClick={handleClick}>{testContent}</button>;
+    };
+
+    const renderComponent = render(<Component />, { wrapper });
+    const testContentElement = await renderComponent.findByText(testContent);
+
+    act(() => {
+      testContentElement.click();
+    });
+
+    const dialogContentElement = await renderComponent.findByText(dialogContent);
+
+    act(() => {
+      dialogContentElement.click();
+    });
+    waitFor(() => {
+      expect(mockFn).toHaveBeenCalledWith(true);
+    });
+  });
+
+  it('should be able to turn off overlay through close overlay.openAsync', async () => {
+    const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
+    const testContent = 'context-modal-test-content';
+    const dialogContent = 'context-modal-dialog-content';
+
+    const Component = () => {
+      const handleClick = async () => {
+        overlay.openAsync<boolean>(({ close }) => <button onClick={() => close(true)}>{dialogContent}</button>);
+      };
+      return <button onClick={handleClick}>{testContent}</button>;
+    };
+
+    const renderComponent = render(<Component />, { wrapper });
+    const testContentElement = await renderComponent.findByText(testContent);
+
+    act(() => {
+      testContentElement.click();
+    });
+
+    const dialogContentElement = await renderComponent.findByText(dialogContent);
+
+    act(() => {
+      dialogContentElement.click();
+    });
+
+    waitFor(() => {
+      expect(dialogContentElement).not.toBeInTheDocument();
+    });
   });
 });

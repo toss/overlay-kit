@@ -41,7 +41,12 @@ type OverlayControllerProps = {
   unmount: () => void;
 };
 
+type OverlayAsyncControllerProps<T = undefined> = Omit<OverlayControllerProps, 'close'> & {
+  close: (param: T) => void;
+};
+
 export type OverlayControllerComponent = FC<OverlayControllerProps>;
+export type OverlayAsyncControllerComponent<T> = FC<OverlayAsyncControllerProps<T>>;
 
 type ContentOverlayControllerProps = {
   isOpen: boolean;

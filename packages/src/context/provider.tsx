@@ -17,6 +17,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
           <ContentOverlayController
             key={currentOverlayId}
             isOpen={isOpen}
+            current={overlayState.current}
             overlayId={currentOverlayId}
             onMounted={() => {
               requestAnimationFrame(() => {
@@ -44,6 +45,7 @@ export type OverlayControllerComponent = FC<OverlayControllerProps>;
 
 type ContentOverlayControllerProps = {
   isOpen: boolean;
+  current: string | null;
   overlayId: string;
   onMounted: () => void;
   onCloseModal: () => void;
@@ -53,13 +55,26 @@ type ContentOverlayControllerProps = {
 
 function ContentOverlayController({
   isOpen,
+  current,
   overlayId,
   onMounted,
   onCloseModal,
   onExitModal,
   controller: Controller,
 }: ContentOverlayControllerProps) {
+  const prevCurrent = useRef(current);
   const onMountedRef = useRef(onMounted);
+
+  /**
+   * @description Executes when closing and reopening an overlay without unmounting.
+   */
+  if (prevCurrent.current !== current) {
+    prevCurrent.current = current;
+
+    if (current === overlayId) {
+      onMountedRef.current();
+    }
+  }
 
   useEffect(() => {
     onMountedRef.current();

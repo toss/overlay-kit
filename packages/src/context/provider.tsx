@@ -41,7 +41,7 @@ type OverlayControllerProps = {
   unmount: () => void;
 };
 
-type OverlayAsyncControllerProps<T = undefined> = Omit<OverlayControllerProps, 'close'> & {
+type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close'> & {
   close: (param: T) => void;
 };
 

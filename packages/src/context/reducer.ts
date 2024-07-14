@@ -23,10 +23,12 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
          * @description Brings the overlay to the front when reopened after closing without unmounting.
          */
         overlayOrderList: [...state.overlayOrderList.filter((item) => item !== action.overlay.id), action.overlay.id],
-        overlayData: {
-          ...state.overlayData,
-          [action.overlay.id]: action.overlay,
-        },
+        overlayData: isExisted
+          ? state.overlayData
+          : {
+              ...state.overlayData,
+              [action.overlay.id]: action.overlay,
+            },
       };
     }
     case 'OPEN': {

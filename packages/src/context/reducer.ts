@@ -45,7 +45,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
        * @example open - [1, 2, 3, 4]
        * close 2 => current: 4
        * close 4 => current: 3
-       * close 2 => current: 1
+       * close 3 => current: 1
        * close 1 => current: null
        */
       const currentOverlayId =

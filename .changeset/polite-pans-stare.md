@@ -1,5 +1,5 @@
 ---
-"overlay-kit": patch
+"overlay-kit": minor
 ---
 
 feat: Add overlayAsync implementation

@@ -1,10 +1,6 @@
-# overlay 객체
+# overlay 열기
 
-`overlay` 객체는 React에서 오버레이를 관리하기 위해 다양한 API를 제공해요.
-
-## overlay.open
-
-오버레이를 열기 위해서 `overlay.open(...)` 함수를 쓸 수 있어요.
+`overlay.open(...)` 함수를 이용해서 오버레이를 열 수 있어요.
 
 ```tsx
 overlay.open(({ isOpen, close, unmount }) => {
@@ -16,7 +12,7 @@ overlay.open(({ isOpen, close, unmount }) => {
 });
 ```
 
-### API
+## API
 
 `overlay.open(...)`의 콜백 함수에는 다음과 같은 프로퍼티들이 주어져요.
 
@@ -29,7 +25,9 @@ overlay.open(({ isOpen, close, unmount }) => {
 오버레이를 닫기 위해서는, 콜백 함수에 주어진 `close` 함수를 사용하세요. `close` 함수를 호출하면, `isOpen` 상태는 `false`가 되어요. 오버레이가 `open` Prop을 구현한다면, 화면에서 사라지죠.
 
 대부분의 오버레이는 닫힐 때 애니메이션을 가지고 있어요. overlay-kit에서는 오버레이를 닫아도 애니메이션이 계속 실행되도록, Mount 상태를 유지해요.
-메모리 릭을 피하기 위해서는, 닫히는 애니메이션이 끝난 다음에 잊지 않고 오버레이를 Unmount시켜줘야 해요.
+
+> [!WARNING]
+> 메모리 릭을 피하기 위해서는, 닫히는 애니메이션이 끝난 다음에 잊지 않고 오버레이를 Unmount시켜줘야 해요.
 
 ### 오버레이 Unmount
 
@@ -101,42 +99,10 @@ function Demo() {
 }
 ```
 
-### 오버레이 ID
+### 콜백 함수 바깥에서 오버레이 조작하기
 
-`overlay.open(...)`은 오버레이의 ID를 반환해요. 추후 콜백 함수 바깥에서도 오버레이를 닫거나 Unmount 시키는 데에 사용돼요.
+`overlay.open(...)`은 오버레이의 ID를 반환해요. 콜백 함수 바깥에서 오버레이를 조작하고 싶다면 [오버레이 조작하기](./handle-overlay.md) 문서를 참고해주세요.
 
 ```tsx
 const overlayId = overlay.open(...);
-```
-
-## overlay.close
-
-특정 오버레이를 닫기 위해서는, `overlay.close(...)`에 `overlayId`를 제공하세요.
-
-```tsx
-overlay.close(overlayId);
-```
-
-## overlay.unmount
-
-특정 오버레이를 Unmount 시키기 위해서는, `overlay.unmount(...)`에 `overlayId`를 제공하세요.
-
-```tsx
-overlay.unmount(overlayId);
-```
-
-## overlay.closeAll
-
-열려 있는 모든 오버레이를 닫기 위해서는, `overlay.closeAll()` 을 사용하세요.
-
-```tsx
-overlay.closeAll();
-```
-
-## overlay.unmountAll
-
-모든 오버레이를 Unmount 시키기 위해서는, `overlay.unmountAll()` 을 사용하세요.
-
-```tsx
-overlay.unmountAll();
 ```

@@ -10,10 +10,10 @@ hero:
       link: '/ko/motivation'
     - theme: alt
       text: '튜토리얼'
-      link: '/ko/quickstart'
+      link: '/ko/quick-start/mui'
     - theme: alt
       text: '사용법'
-      link: '/ko/usage/overlay'
+      link: '/ko/usage/custom-id'
 
 features:
   - title: '간편함'

@@ -1,6 +1,6 @@
 ---
 next:
-  text: 기능
+  text: overlay-kit의 기능
   link: ./features.md
 ---
 

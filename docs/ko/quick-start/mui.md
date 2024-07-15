@@ -1,5 +1,5 @@
 ---
-description: 튜토리얼
+description: mui와 함께 사용하기
 prev:
   text: 설치
   link: ./installation.md
@@ -40,11 +40,11 @@ export default function App(props) {
 
 ## 오버레이 열기
 
-`<OverlayProvider />` 안에 오버레이를 열기 위해서는, [overlay.open(...)](./usage/overlay.md)을 호출해요.
+`<OverlayProvider />` 안에 오버레이를 열기 위해서는, [overlay.open(...)](../usage/open-overlay.md)을 호출해요.
 
 예를 들어서, Material UI의 `<Dialog />`를 열기 위해서는 아래와 같이 코드를 쓸 수 있어요.
 
-```tsx{1,14-30}
+```tsx{1,14-28}
 import { overlay } from 'overlay-kit';
 
 import Button from '@mui/material/Button';
@@ -58,23 +58,21 @@ function Example() {
   return (
     <button
       onClick={() => {
-        overlay.open(({ isOpen, close }) => {
-          return (
-            <Dialog open={isOpen} onClose={close}>
-              <DialogTitle>
-                정말로 계속하시겠어요?
-              </DialogTitle>
-              <DialogActions>
-                <Button onClick={close}>
-                  아니요
-                </Button>
-                <Button onClick={close}>
-                  네
-                </Button>
-              </DialogActions>
-            </Dialog>
-          )
-        });
+        overlay.open(({ isOpen, close }) => (
+          <Dialog open={isOpen} onClose={close}>
+            <DialogTitle>
+              정말로 계속하시겠어요?
+            </DialogTitle>
+            <DialogActions>
+              <Button onClick={close}>
+                아니요
+              </Button>
+              <Button onClick={close}>
+                네
+              </Button>
+            </DialogActions>
+          </Dialog>
+        ));
       }}
     >
       Alert Dialog 열기
@@ -144,27 +142,43 @@ function Example() {
 
 이렇게 overlay-kit은 `Promise`와 함께 사용됨으로써 쉽게 오버레이로부터 결과를 얻어올 수 있어요.
 
-## React 바깥에서 오버레이 열기
+### 보일러 플레이트 줄이기
 
-overlay-kit을 사용하면, React 바깥에서도 오버레이를 열 수 있어요. 예를 들어서, API 오류가 발생했을 때 오버레이를 열고 싶을 수 있어요. 그러면 아래와 같이 코드를 작성할 수 있어요.
+Promise와 함께 사용될 때마다 `new Promise`를 함께 사용하는 것이 귀찮을 수 있어요.
 
-```tsx
-import ky from 'ky';
-import { overlay } from 'overlay-kit';
+이를 대응하기 위해서 `overlay.openAsync(...)` API를 지원해요. `overlay.open(...)`과 대부분 동일하며, `close(...)`의 인자로 resolve 값을 전달할 수 있어요.
 
-const api = ky.extend({
-  hooks: {
-    afterResponse: [
-      (_, __, response) => {
-        if (response.status >= 400) {
-          overlay.open(({ isOpen, close }) => {
-            return <ErrorDialog open={isOpen} onClose={close} />;
-          });
-        }
-      },
-    ],
-  },
-});
+위의 예제를 `overlay.openAsync(...)`로 다시 구성해볼게요.
+
+```tsx{5-24}
+function Example() {
+  return (
+    <button
+      onClick={async () => {
+        const agreed = await overlay.open<boolean>(({ isOpen, close }) => {
+          const agree = () => close(true);
+          const cancel = () => close(false);
+
+          return (
+            <Dialog open={isOpen} onClose={cancel}>
+              <DialogTitle>
+                정말 계속하시겠어요?
+              </DialogTitle>
+              <DialogActions>
+                <Button onClick={cancel}>
+                  아니요
+                </Button>
+                <Button onClick={agree}>
+                  네
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )
+        });
+      }}
+    >
+      Alert Dialog 열기
+    </button>
+  );
+}
 ```
-
-여기에서 Status Code가 400 이상이라면, `<ErrorDialog />` 오버레이가 렌더링돼요. 여기에서는 `ky` 를 사용했지만, 다른 라이브러리에서도 비슷하게 코드를 작성할 수 있어요.

@@ -23,27 +23,23 @@ overlay-kit으로 대부분의 오버레이를 관리할 수 있어요. 꼭 필�
 예를 들어서, 아래와 같이 코드를 씀으로써 손쉽게 `<Dialog />` 를 열 수 있어요.
 
 ```tsx
-overlay.open(({ isOpen, close }) => {
-  return (
-    <Dialog 
-      open={isOpen}
-      title="Hello, world!" 
-      onClose={close}
-    />
-  );
-})
+overlay.open(({ isOpen, close }) => (
+  <Dialog 
+    open={isOpen}
+    title="Hello, world!" 
+    onClose={close}
+  />
+))
 ```
 
 비슷하게, children을 가지는 `<Toast />` 오버레이도 열 수 있죠.
 
 ```tsx
-overlay.open(({ isOpen, close }) => {
-  return (
-    <Toast open={isOpen} onClose={close}>
-      Hello, world!
-    </Toast>
-  );
-})
+overlay.open(({ isOpen, close }) => (
+  <Toast open={isOpen} onClose={close}>
+    Hello, world!
+  </Toast>
+))
 ```
 
 이렇게 overlay-kit은 오버레이를 열고 닫는 다양한 케이스에 대해서 모두 대응하고 있어요.
@@ -56,26 +52,62 @@ overlay-kit은 Promise와도 쉽게 사용할 수 있어요. 오버레이로부�
 
 ```tsx
 const result = await new Promise<boolean>(resolve => {
-  overlay.open(({ isOpen, close }) => {
-    return (
-      <AlertDialog 
-        open={isOpen} 
-        title="Are you sure?"
-        onConfirm={() => {
-          resolve(true);
-          close();
-        }}
-        onCancel={() => {
-          resolve(false);
-          close();
-        }} 
-      />
-    )
-  })
+  overlay.open(({ isOpen, close }) => (
+    <AlertDialog 
+      open={isOpen} 
+      title="Are you sure?"
+      onConfirm={() => {
+        resolve(true);
+        close();
+      }}
+      onCancel={() => {
+        resolve(false);
+        close();
+      }} 
+    />
+  ))
 });
 ```
 
 overlay-kit을 사용하지 않는다면, 여러 개의 상태를 정의하고 callback이 다른 callback을 부르는 복잡한 코드가 되기 쉬워요.
+
+또한, 아래처럼 `overlay.openAsync`를 사용해서 보일러플레이트를 최소화할 수 있어요.
+
+```tsx
+const result = await overlay.openAsync(({ isOpen, close }) => (
+  <AlertDialog 
+    open={isOpen} 
+    title="Are you sure?"
+    onConfirm={() => close(true)}
+    onCancel={() => close(false)} 
+  />
+));
+```
+
+## React 바깥에서 열기
+
+overlay-kit을 사용하면, React 바깥에서도 오버레이를 열 수 있어요. 예를 들어서, API 오류가 발생했을 때 오버레이를 열고 싶을 수 있어요. 그러면 아래와 같이 코드를 작성할 수 있어요.
+
+```tsx
+import ky from 'ky';
+import { overlay } from 'overlay-kit';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        if (response.status >= 400) {
+          overlay.open(({ isOpen, close }) => (
+            <ErrorDialog open={isOpen} onClose={close} />
+          ));
+        }
+      },
+    ],
+  },
+});
+```
+
+여기에서 Status Code가 400 이상이라면, `<ErrorDialog />` 오버레이가 렌더링돼요. 여기에서는 `ky`를 사용했지만, 다른 라이브러리에서도 비슷하게 코드를 작성할 수 있어요.
 
 ## 강력한 빌트인 타입
 

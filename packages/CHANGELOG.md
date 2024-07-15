@@ -1,5 +1,23 @@
 # overlay-kit
 
+## 1.2.4
+
+### Patch Changes
+
+- [#53](https://github.com/toss/overlay-kit/pull/53) [`6f3c26a`](https://github.com/toss/overlay-kit/commit/6f3c26aef21ab639dcaa0c3134299f87de1c01ff) Thanks [@jungpaeng](https://github.com/jungpaeng)! - fix: Enhance Overlay State Management and Prevent Duplicate Entries
+
+  This change enhances the overlay state management to ensure overlays maintain the correct state when closed and reopened, and prevents duplicate overlay entries.
+  It addresses issues with the overlay's `current` state not updating correctly in certain scenarios.
+
+  **Related Issue:** Fixes # 46
+
+- [#58](https://github.com/toss/overlay-kit/pull/58) [`b35ac6f`](https://github.com/toss/overlay-kit/commit/b35ac6fdd14e9438a922b9c29c06753da312bc3e) Thanks [@jungpaeng](https://github.com/jungpaeng)! - fix: state reset issue on overlay reopen
+
+  This change fixes an issue where overlays did not retain their state when reopened without unmounting, even though they were not removed from the DOM.
+  The overlayReducer has been updated to maintain the state of overlays between close and open cycles, addressing an unintended state reset.
+
+  Related Issue: Fixes #57
+
 ## 1.2.3
 
 ### Patch Changes

@@ -106,7 +106,7 @@ describe('overlay object', () => {
     act(() => {
       dialogContentElement.click();
     });
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockFn).toHaveBeenCalledWith(true);
     });
   });
@@ -118,7 +118,9 @@ describe('overlay object', () => {
 
     const Component = () => {
       const handleClick = async () => {
-        overlay.openAsync<boolean>(({ close }) => <button onClick={() => close(true)}>{dialogContent}</button>);
+        overlay.openAsync<boolean>(({ isOpen, close }) =>
+          isOpen ? <button onClick={() => close(true)}>{dialogContent}</button> : null
+        );
       };
       return <button onClick={handleClick}>{testContent}</button>;
     };
@@ -136,7 +138,7 @@ describe('overlay object', () => {
       dialogContentElement.click();
     });
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(dialogContentElement).not.toBeInTheDocument();
     });
   });

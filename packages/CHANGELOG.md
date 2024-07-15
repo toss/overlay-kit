@@ -1,5 +1,15 @@
 # overlay-kit
 
+## 1.3.0
+
+### Minor Changes
+
+- [#59](https://github.com/toss/overlay-kit/pull/59) [`828fad5`](https://github.com/toss/overlay-kit/commit/828fad59172a96ca0fecb3a027792db96d942ebe) Thanks [@XionWCFM](https://github.com/XionWCFM)! - feat: Add overlayAsync implementation
+
+  This change implements the openAsync method for overly-kit's promise support discussed in #47.
+
+  **Related Issue:** Fixes #47
+
 ## 1.2.4
 
 ### Patch Changes

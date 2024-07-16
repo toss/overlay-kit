@@ -1,5 +1,12 @@
 # @overlay-kit/framer-motion
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [[`828fad5`](https://github.com/toss/overlay-kit/commit/828fad59172a96ca0fecb3a027792db96d942ebe)]:
+  - overlay-kit@1.3.0
+
 ## 0.0.4
 
 ### Patch Changes

@@ -7,6 +7,12 @@ import { overlay } from '../event';
 export function OverlayProvider({ children }: PropsWithChildren) {
   const overlayState = useSyncOverlayStore();
 
+  useEffect(() => {
+    return () => {
+      dispatchOverlay({ type: 'REMOVE_ALL' });
+    };
+  }, []);
+
   return (
     <OverlayContextProvider value={overlayState}>
       {children}

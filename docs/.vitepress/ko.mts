@@ -7,21 +7,27 @@ export const ko = defineConfig({
   themeConfig: {
     nav: [
       { text: '홈', link: '/ko/' },
-      { text: '가이드', link: '/ko/motivation' },
-      { text: '사용법', link: '/ko/usage/overlay' },
+      { text: '소개', link: '/ko/motivation' },
+      { text: '가이드', link: '/ko/usage/overlay' },
+      { text: '레퍼런스', link: '/ko/usage/overlay' },
     ],
     sidebar: [
       {
+        text: '이해하기',
+        items: [
+          { text: '소개', link: '/ko/motivation' },
+          { text: '기능', link: '/ko/features' }
+        ],
+      },
+      {
         text: '가이드',
         items: [
-          { text: '오버레이 문제', link: '/ko/motivation' },
-          { text: '기능', link: '/ko/features' },
           { text: '설치', link: '/ko/installation' },
           { text: '튜토리얼', link: '/ko/quickstart' },
         ],
       },
       {
-        text: '사용법',
+        text: '레퍼런스',
         items: [
           { text: 'Custom id 지정하기', link: '/ko/usage/custom-id' },
           { text: 'OverlayProvider', link: '/ko/usage/overlay-provider' },

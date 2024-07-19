@@ -1,7 +1,7 @@
 ---
-description: 기능
+description: 주요 기능
 prev:
-  text: 왜 사용하나요?
+  text: 소개
   link: ./introduction.md
 next:
   text: 설치
@@ -10,11 +10,13 @@ next:
 
 # 주요 기능
 
-## 높은 호환성
+## 오버레이 관리
 
-overlay-kit으로 대부분의 오버레이를 관리할 수 있어요. 꼭 필요한 `isOpen`, `open`, `close`를 비롯해서, 오버레이를 효율적으로 관리하기 위한 대부분의 API를 제공하고 있기 때문이죠.
+overlay-kit을 사용하면 오버레이를 관리하는 다양한 케이스를 모두 대응할 수 있어요.
 
-예를 들어서, 아래와 같이 코드를 씀으로써 손쉽게 `<Dialog />` 를 열 수 있어요.
+꼭 필요한 기능인 오버레이 열기([`overlay.open()`](./reference/overlay.md#overlayopen)), 오버레이 닫기([`overlay.close()`](./reference/overlay.md#overlayclose)), 오버레이가 열려 있는지 여부 확인([`isOpen`](./reference/overlay.md#파라미터))등을 포함한 [다양한 API를 제공](./reference/overlay.md)해요.
+
+예를 들어 다음과 같이 코드를 작성해서 손쉽게 `<Dialog />` 를 열 수 있어요.
 
 ```tsx
 overlay.open(({ isOpen, close }) => {
@@ -28,7 +30,7 @@ overlay.open(({ isOpen, close }) => {
 })
 ```
 
-비슷하게, children을 가지는 `<Toast />` 오버레이도 열 수 있죠.
+자식 요소를 가지는 `<Toast />` 오버레이도 열 수 있죠.
 
 ```tsx
 overlay.open(({ isOpen, close }) => {
@@ -40,13 +42,11 @@ overlay.open(({ isOpen, close }) => {
 })
 ```
 
-이렇게 overlay-kit은 오버레이를 열고 닫는 다양한 케이스에 대해서 모두 대응하고 있어요.
-
 ## Promise와의 호환성
 
-overlay-kit은 Promise와도 쉽게 사용할 수 있어요. 오버레이로부터 결괏값을 받는 더 복잡한 유스케이스에 대해서도 쉽게 대응할 수 있어요.
+overlay-kit은 Promise와 함께 사용하기도 쉬운데요. 복잡한 유즈케이스가 오버레이와 연결되어 있을 때도 오버레이로부터 결과값을 받아 처리할 수 있어요. 여러 상태를 정의한 뒤, 복잡한 콜백 구조를 가진 코드를 만들 필요가 없죠.
 
-예를 들어서, 아래와 같이 사용자에게서 승인을 받는 `<Dialog />`를 렌더링하려고 하는 경우가 있어요. 마치 DOM API의 `confirm(...)`을 사용하는 것처럼 쉽게 코드를 작성할 수 있어요.
+예를 들어 아래와 같이 사용자의 승인 결과를 받아 처리하는 `<Dialog />`를 렌더링 할 때도 마치 DOM API의 [`confirm()`](https://developer.mozilla.org/en-US/docs/Web/API/Window/confirm)을 사용할 때처럼 쉽게 코드를 작성할 수 있어요.
 
 ```tsx
 const result = await new Promise<boolean>(resolve => {
@@ -68,9 +68,3 @@ const result = await new Promise<boolean>(resolve => {
   })
 });
 ```
-
-overlay-kit을 사용하지 않는다면, 여러 개의 상태를 정의하고 callback이 다른 callback을 부르는 복잡한 코드가 되기 쉬워요.
-
-## 강력한 빌트인 타입
-
-overlay-kit은 모든 함수에 대해서 강력한 타입을 내장해서 제공하고 있어요. 개발자들은 타입 안전하게 코딩하고, 미리 오류를 감지할 수 있어요.

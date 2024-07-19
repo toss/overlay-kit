@@ -2,15 +2,15 @@
 
 `overlay` 객체는 React에서 오버레이를 관리하기 위한 API를 제공해요.
 
-- [overlay.open](#overlayopen)
-- [overlay.close](#overlayclose)
-- [overlay.unmount](#overlayunmount)
-- [overlay.closeAll](#overlaycloseall)
-- [overlay.unmountAll](#overlayunmountall)
+- [overlay.open()](#overlayopen)
+- [overlay.close()](#overlayclose)
+- [overlay.unmount()](#overlayunmount)
+- [overlay.closeAll()](#overlaycloseall)
+- [overlay.unmountAll()](#overlayunmountall)
 
 ## overlay.open
 
-오버레이를 열기 위해 `overlay.open(...)` 함수를 사용해요.
+오버레이를 열기 위해 `overlay.open()` 함수를 사용해요.
 
 ### 인터페이스
 
@@ -87,7 +87,7 @@ overlay.close(overlayId);
 
 ## overlay.unmount
 
-특정 오버레이를 완전히 제거하기 위해 `overlay.unmount(...)`를 사용하세요.
+특정 오버레이를 완전히 제거하기 위해 `overlay.unmount()`를 사용하세요.
 
 ### 인터페이스
 

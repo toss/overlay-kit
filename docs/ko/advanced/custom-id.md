@@ -1,6 +1,6 @@
-# Custom id 지정하기
+# Custom ID 지정하기
 
-랜덤으로 생성되는 `overlayId`를 사용자가 직접 주입해서 대체할 수 있어요. `string`을 입력해주세요.
+`overlayId`를 사용자가 직접 주입해서 대체할 수 있어요. `string`을 입력해주세요.
 
 ```tsx
 function Demo() {

@@ -29,9 +29,15 @@ export const ko = defineConfig({
       {
         text: '레퍼런스',
         items: [
-          { text: 'Custom id 지정하기', link: '/ko/usage/custom-id' },
-          { text: 'OverlayProvider', link: '/ko/usage/overlay-provider' },
-          { text: 'overlay 객체', link: '/ko/usage/overlay' },
+          { text: 'OverlayProvider', link: '/ko/reference/overlay-provider' },
+          { text: 'overlay 객체', link: '/ko/reference/overlay' },
+        ],
+      },
+      {
+        text: '더 알아보기',
+        items: [
+          { text: 'Custom ID 지정하기', link: '/ko/advanced/custom-id' },
+          { text: '오버레이 애니메이션과 Unmount 처리하기', link: '/ko/advanced/unmount-with-animation' }
         ],
       },
     ],

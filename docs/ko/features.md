@@ -8,7 +8,7 @@ next:
   link: ./installation.md
 ---
 
-# 기능
+# 주요 기능
 
 ## 높은 호환성
 

@@ -7,7 +7,7 @@ export const ko = defineConfig({
   themeConfig: {
     nav: [
       { text: '홈', link: '/ko/' },
-      { text: '소개', link: '/ko/motivation' },
+      { text: '소개', link: '/ko/introduction' },
       { text: '가이드', link: '/ko/usage/overlay' },
       { text: '레퍼런스', link: '/ko/usage/overlay' },
     ],
@@ -15,7 +15,7 @@ export const ko = defineConfig({
       {
         text: '이해하기',
         items: [
-          { text: '소개', link: '/ko/motivation' },
+          { text: '소개', link: '/ko/introduction' },
           { text: '기능', link: '/ko/features' }
         ],
       },

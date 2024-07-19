@@ -2,19 +2,13 @@
 description: 기능
 prev:
   text: 왜 사용하나요?
-  link: ./motivation.md
+  link: ./introduction.md
 next:
   text: 설치
   link: ./installation.md
 ---
 
-# overlay-kit의 기능
-
-overlay-kit은 React에서 오버레이 관리를 직관적이고 쉽게 할 수 있도록 도와요. 핵심 기능은 다음과 같아요.
-
-## 단순한 코드
-
-overlay-kit은 오버레이 관리에 필요한 보일러플레이트 코드를 최소화시켜줘요. 자세한 내용은 [왜 사용하나요?](./motivation.md) 문서를 참고해주세요.
+# 기능
 
 ## 높은 호환성
 

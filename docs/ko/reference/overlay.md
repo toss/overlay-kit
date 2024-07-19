@@ -1,6 +1,6 @@
 # overlay 객체
 
-`overlay` 객체는 React에서 오버레이를 관리하기 위한 API를 제공해요.
+`overlay` 객체는 React에서 오버레이를 관리하기 위한 API를 제공해요. 오버레이를 관리하는 다양한 케이스를 모두 대응할 수 있어요.
 
 - [overlay.open()](#overlayopen)
 - [overlay.close()](#overlayclose)

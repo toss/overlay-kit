@@ -8,20 +8,15 @@ export const ko = defineConfig({
     nav: [
       { text: '홈', link: '/ko/' },
       { text: '소개', link: '/ko/introduction' },
-      { text: '가이드', link: '/ko/usage/overlay' },
-      { text: '레퍼런스', link: '/ko/usage/overlay' },
+      { text: '가이드', link: '/ko/installation' },
+      { text: '레퍼런스', link: '/ko/reference/overlay-provider' },
     ],
     sidebar: [
       {
-        text: '이해하기',
-        items: [
-          { text: '소개', link: '/ko/introduction' },
-          { text: '기능', link: '/ko/features' }
-        ],
-      },
-      {
         text: '가이드',
         items: [
+          { text: '소개', link: '/ko/introduction' },
+          { text: '코드 비교', link: '/ko/code-comparison' },
           { text: '설치', link: '/ko/installation' },
           { text: '튜토리얼', link: '/ko/quickstart' },
         ],
@@ -29,14 +24,15 @@ export const ko = defineConfig({
       {
         text: '레퍼런스',
         items: [
-          { text: 'OverlayProvider', link: '/ko/reference/overlay-provider' },
           { text: 'overlay 객체', link: '/ko/reference/overlay' },
+          { text: 'OverlayProvider 컴포넌트', link: '/ko/reference/overlay-provider' },
         ],
       },
       {
         text: '더 알아보기',
         items: [
           { text: 'Custom ID 지정하기', link: '/ko/advanced/custom-id' },
+          { text: 'Promise와 함께 사용하기', link: '/ko/advanced/promise' },
           { text: '오버레이 애니메이션과 Unmount 처리하기', link: '/ko/advanced/unmount-with-animation' }
         ],
       },

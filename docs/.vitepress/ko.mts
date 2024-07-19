@@ -7,9 +7,8 @@ export const ko = defineConfig({
   themeConfig: {
     nav: [
       { text: '홈', link: '/ko/' },
-      { text: '소개', link: '/ko/introduction' },
-      { text: '가이드', link: '/ko/installation' },
-      { text: '레퍼런스', link: '/ko/reference/overlay-provider' },
+      { text: '가이드', link: '/ko/introduction' },
+      { text: '레퍼런스', link: '/ko/reference/overlay' },
     ],
     sidebar: [
       {

@@ -30,6 +30,7 @@ export const ko = defineConfig({
       {
         text: '더 알아보기',
         items: [
+          { text: 'React 바깥에서 열기', link: '/ko/advanced/outside-react-overlay' },
           { text: 'Custom ID 지정하기', link: '/ko/advanced/custom-id' },
           { text: 'Promise와 함께 사용하기', link: '/ko/advanced/promise' },
           { text: '오버레이 애니메이션과 Unmount 처리하기', link: '/ko/advanced/unmount-with-animation' }

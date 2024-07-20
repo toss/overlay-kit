@@ -140,7 +140,62 @@ function Example() {
 }
 ```
 
-## 4. 오류 처리하기
+## 4. 오버레이 닫기와 메모리 관리
+
+오버레이가 닫힐 때 메모리 누수를 피하려면 오버레이를 닫은 뒤 Unmount까지 해야 합니다. 오버레이를 닫으면 화면에서는 오버레이가 사라진 것처럼 보이지만 메모리와 React 요소 트리에는 남아있기 때문이에요. 자세한 내용은 [메모리 관리](./advanced/unmount-with-animation.md#오버레이-애니메이션과-unmount-처리) 문서를 참고하세요.
+
+사용자가 "네" 또는 "아니요" 버튼을 클릭한 후, 오버레이가 닫히는 애니메이션이 끝나면 오버레이를 Unmount하여 메모리 누수를 방지하는 코드를 추가해 볼게요.
+
+```tsx
+function Example() {
+  return (
+    <button
+      onClick={async () => {
+        const agreed = await new Promise<boolean>(resolve => {
+          overlay.open(({ isOpen, close, unmount }) => {
+            const agree = () => {
+              resolve(true);
+              close();
+              setTimeout(unmount, 150); // 애니메이션 지속 시간에 맞춰서 설정하세요.
+            };
+
+            const cancel = () => {
+              resolve(false);
+              close();
+              setTimeout(unmount, 150); // 애니메이션 지속 시간에 맞춰서 설정하세요.
+            };
+
+            return (
+              <Dialog open={isOpen} onClose={cancel}>
+                <DialogTitle>
+                  정말 계속하시겠어요?
+                </DialogTitle>
+                <DialogActions>
+                  <Button onClick={cancel}>
+                    아니요
+                  </Button>
+                  <Button onClick={agree}>
+                    네
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            )
+          });
+        });
+
+        /*
+         * 사용자가 "네"를 눌렀다면, `agreed` 는 `true`가 돼요.
+         * 아니면, `agreed`는 `false`예요.
+         */
+      }}
+    >
+      Alert Dialog 열기
+    </button>
+  );
+}
+```
+
+## 5. 오류 처리하기
 
 마지막으로 API 오류가 발생했을 때를 대비해 [React 외부에서 오버레이를 열어](./advanced/outside-react-overlay.md) 확인할 수 있도록 해 볼게요.
 

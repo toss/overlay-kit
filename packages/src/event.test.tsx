@@ -5,15 +5,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
 
-/**
- *
- * @description This is a wrapper component that provides the OverlayProvider context to the children components.
- */
 const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
 
 /**
  *
- * @description utility function by render and userEvent.setup
+ * @description Utility functions to perform render and userEvent.setup
  */
 const renderWithUser = <T extends JSX.Element>(Component: T, options?: Parameters<typeof render>[1]) => {
   const user = userEvent.setup();

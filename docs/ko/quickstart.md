@@ -4,8 +4,8 @@ prev:
   text: 설치
   link: ./installation.md
 next:
-  text: OverlayProvider
-  link: ./usage/overlay-provider.md
+  text: overlay 객체
+  link: ./reference/overlay.md
 ---
 
 # 튜토리얼

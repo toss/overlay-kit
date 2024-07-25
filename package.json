@@ -6,7 +6,7 @@
     ".",
     "packages",
     "docs",
-    "examples/**"
+    "examples/**/**"
   ],
   "scripts": {
     "lint": "eslint .",

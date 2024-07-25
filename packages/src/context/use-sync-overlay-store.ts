@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'use-sync-external-store';
 import { registerOverlaysStore } from './store';
 
 export function useSyncOverlayStore() {

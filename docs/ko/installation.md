@@ -14,7 +14,7 @@ Node.js나 [Bun](https://bun.sh/)을 사용한다면, [npm](https://npmjs.com/pa
 
 ## 전제 조건
 
-- [React](https://react.dev/) 18 버전 이상이 설치되어 있어야 해요.
+- [React](https://react.dev/) 16.8 버전 이상이 설치되어 있어야 해요.
 
 ## 설치 방법
 

@@ -1,6 +1,6 @@
 {
   "name": "overlay-kit",
-  "version": "1.4.0-canary.2407260853",
+  "version": "1.4.0",
   "description": "Next-generation tools for managing overlays",
   "keywords": [
     "overlay",

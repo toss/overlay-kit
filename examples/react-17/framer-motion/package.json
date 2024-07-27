@@ -1,7 +1,7 @@
 {
   "name": "@overlay-kit/framer-motion-react-17",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "scripts": {
     "predev": "yarn workspace overlay-kit build",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "framer-motion": "^6",
-    "overlay-kit": "1.4.0-canary.2407260853",
+    "overlay-kit": "1.4.0",
     "react": "^17",
     "react-dom": "^17"
   },

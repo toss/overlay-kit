@@ -16,7 +16,7 @@ import { overlay } from 'overlay-kit';
 function Demo() {
   const openDialog = () => {
     overlay.open(({ isOpen, close, unmount }) => {
-      return <Dialog opened={isOpen} onClose={close} onExit={unmount} />
+      return <Dialog open={isOpen} onClose={close} onExit={unmount} />
     });
   };
 

@@ -28,7 +28,6 @@ overlay.open(
   - `isOpen` (boolean): 오버레이가 열려 있는지 여부
   - `close` (function): 오버레이를 닫는 함수로 `isOpen`을 `false`로 설정함
   - `unmount` (function): 오버레이를 React의 요소 트리에서 완전히 제거하는 함수
-
 - `options` (object): 오버레이의 설정을 정의하는 객체 (optional)
   - `overlayId`(string): 오버레이가 열릴 때 생성되는 오버레이 ID
 
@@ -78,7 +77,6 @@ overlay.openAsync(
   - `isOpen` (boolean): 오버레이가 열려 있는지 여부
   - `close` (function): 오버레이를 닫는 함수로 `isOpen`을 `false`로 설정함
   - `unmount` (function): 오버레이를 React의 요소 트리에서 완전히 제거하는 함수
-
 - `options` (object): 오버레이의 설정을 정의하는 객체 (optional)
   - `overlayId`(string): 오버레이가 열릴 때 생성되는 오버레이 ID
 
@@ -158,7 +156,7 @@ overlay.close(overlayId);
 
 열려 있는 모든 오버레이를 닫습니다.
 
-이 메서드를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다. 오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 [`overlay.unmount()`](#overlay-unmount)를 호출하세요.
+이 메서드를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다. 오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 [`overlay.unmountAll()`](#overlay-unmountall)를 호출하세요.
 
 ### 인터페이스
 

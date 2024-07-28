@@ -1,8 +1,8 @@
 ---
 description: Installation
 prev:
-  text: 기능
-  link: ./features.md
+  text: 코드 비교
+  link: ./code-comparison.md
 next:
   text: 튜토리얼
   link: ./quickstart.md

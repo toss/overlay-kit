@@ -1442,7 +1442,7 @@ __metadata:
     "@types/react-dom": "npm:^16.8"
     "@vitejs/plugin-react": "npm:^4.3.0"
     framer-motion: "npm:^6"
-    overlay-kit: "npm:1.4.0"
+    overlay-kit: "npm:overlay-kit@1.4.0-canary.2407260853"
     react: "npm:^16.8"
     react-dom: "npm:^16.8"
     typescript: "npm:^5.4.5"
@@ -1458,7 +1458,7 @@ __metadata:
     "@types/react-dom": "npm:^17"
     "@vitejs/plugin-react": "npm:^4.3.0"
     framer-motion: "npm:^6"
-    overlay-kit: "npm:1.4.0"
+    overlay-kit: "npm:overlay-kit@1.4.0-canary.2407260853"
     react: "npm:^17"
     react-dom: "npm:^17"
     typescript: "npm:^5.4.5"
@@ -5747,7 +5747,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"overlay-kit@npm:1.4.0, overlay-kit@workspace:^, overlay-kit@workspace:packages":
+"overlay-kit@npm:overlay-kit@1.4.0-canary.2407260853":
+  version: 1.4.0-canary.2407260853
+  resolution: "overlay-kit@npm:1.4.0-canary.2407260853"
+  dependencies:
+    use-sync-external-store: "npm:^1.2.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/da27ad566839a975a6f56a4544b53d0e260b6b13e23b218b0cf370e5c8f7a7cb80930792f2ada5a9d6704b082b5e62d89510d37ba5bf186f8af94c9b431775b8
+  languageName: node
+  linkType: hard
+
+"overlay-kit@workspace:^, overlay-kit@workspace:packages":
   version: 0.0.0-use.local
   resolution: "overlay-kit@workspace:packages"
   dependencies:

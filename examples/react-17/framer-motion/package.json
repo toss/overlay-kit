@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "framer-motion": "^6",
-    "overlay-kit": "1.4.0",
+    "overlay-kit": "npm:overlay-kit@1.4.0-canary.2407260853",
     "react": "^17",
     "react-dom": "^17"
   },

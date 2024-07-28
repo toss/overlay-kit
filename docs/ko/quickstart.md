@@ -195,7 +195,7 @@ function Example() {
 }
 ```
 
-## 5. 오류 처리하기
+## 5. 네트워크 오류 처리하기
 
 마지막으로 API 오류가 발생했을 때를 대비해 [React 외부에서 오버레이를 열어](./advanced/outside-react-overlay.md) 확인할 수 있도록 해 볼게요.
 

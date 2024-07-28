@@ -1,8 +1,8 @@
 ---
 description: Installation
 prev:
-  text: Features
-  link: ./features.md
+  text: Code Comparison
+  link: ./code-comparison.md
 next:
   text: Quick Start
   link: ./quickstart.md
@@ -10,13 +10,15 @@ next:
 
 # Installation
 
-overlay-kit is available on [npm](https://npmjs.com/package/overlay-kit) for Node.js and Bun.
+If you are using Node.js or [Bun](https://bun.sh/), you can install overlay-kit from [npm](https://npmjs.com/package/overlay-kit).
 
 ## Prerequisites
 
-- [React](https://react.dev/) version >=16.8
+- You need to have [React](https://react.dev/) version 16.8 or higher installed.
 
-Install overlay-kit with the following command:
+## Installation Steps
+
+Use the following commands to install overlay-kit.
 
 ::: code-group
 

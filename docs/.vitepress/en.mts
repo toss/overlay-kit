@@ -7,25 +7,33 @@ export const en = defineConfig({
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Guide', link: '/motivation' },
-      { text: 'Usage', link: '/usage/overlay' },
+      { text: 'Guide', link: '/introduction' },
+      { text: 'Reference', link: '/reference/overlay' },
     ],
     sidebar: [
       {
         text: 'Guide',
         items: [
-          { text: 'The Overlay Problem', link: '/motivation' },
-          { text: 'Features', link: '/features' },
+          { text: 'Introduction', link: '/introduction' },
+          { text: 'Code Comparison', link: '/code-comparison' },
           { text: 'Installation', link: '/installation' },
           { text: 'Quick Start', link: '/quickstart' },
         ],
       },
       {
-        text: 'Usage',
+        text: 'Reference',
         items: [
-          { text: 'Assignment Custom id', link: '/usage/custom-id' },
-          { text: 'OverlayProvider', link: '/usage/overlay-provider' },
-          { text: 'The overlay object', link: '/usage/overlay' },
+          { text: 'The overlay object', link: '/reference/overlay' },
+          { text: 'OverlayProvider', link: '/reference/overlay-provider' },
+        ],
+      },
+      {
+        text: 'Advanced',
+        items: [
+          { text: 'Open outside of react', link: '/advanced/outside-react-overlay' },
+          { text: 'Assign custom id', link: '/advanced/custom-id' },
+          { text: 'Using with Promise', link: '/advanced/promise' },
+          { text: 'Unmount with animation', link: '/advanced/unmount-with-animation' },
         ],
       },
     ],

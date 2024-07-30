@@ -7,6 +7,10 @@ import { overlay } from '../event';
 export function OverlayProvider({ children }: PropsWithChildren) {
   const overlayState = useSyncOverlayStore();
 
+  if (overlayState == null) {
+    dispatchOverlay({ type: 'INIT' });
+  }
+
   useEffect(() => {
     return () => {
       dispatchOverlay({ type: 'REMOVE_ALL' });
@@ -16,26 +20,27 @@ export function OverlayProvider({ children }: PropsWithChildren) {
   return (
     <OverlayContextProvider value={overlayState}>
       {children}
-      {overlayState.overlayOrderList.map((item) => {
-        const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
+      {overlayState != null &&
+        overlayState.overlayOrderList.map((item) => {
+          const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
 
-        return (
-          <ContentOverlayController
-            key={currentOverlayId}
-            isOpen={isOpen}
-            current={overlayState.current}
-            overlayId={currentOverlayId}
-            onMounted={() => {
-              requestAnimationFrame(() => {
-                dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
-              });
-            }}
-            onCloseModal={() => overlay.close(currentOverlayId)}
-            onExitModal={() => overlay.unmount(currentOverlayId)}
-            controller={currentController}
-          />
-        );
-      })}
+          return (
+            <ContentOverlayController
+              key={currentOverlayId}
+              isOpen={isOpen}
+              current={overlayState.current}
+              overlayId={currentOverlayId}
+              onMounted={() => {
+                requestAnimationFrame(() => {
+                  dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
+                });
+              }}
+              onCloseModal={() => overlay.close(currentOverlayId)}
+              onExitModal={() => overlay.unmount(currentOverlayId)}
+              controller={currentController}
+            />
+          );
+        })}
     </OverlayContextProvider>
   );
 }

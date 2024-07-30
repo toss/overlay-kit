@@ -1,6 +1,7 @@
 import { type OverlayData, type OverlayItem } from './store';
 
 export type OverlayReducerAction =
+  | { type: 'INIT' }
   | { type: 'ADD'; overlay: OverlayItem }
   | { type: 'OPEN'; overlayId: string }
   | { type: 'CLOSE'; overlayId: string }
@@ -9,6 +10,18 @@ export type OverlayReducerAction =
   | { type: 'REMOVE_ALL' };
 
 export function overlayReducer(state: OverlayData, action: OverlayReducerAction): OverlayData {
+  if (state == null) {
+    if (action.type !== 'INIT') {
+      throw new Error('This component must be used inside a <OverlayProvider> component.');
+    }
+
+    return {
+      current: null,
+      overlayOrderList: [],
+      overlayData: {},
+    };
+  }
+
   switch (action.type) {
     case 'ADD': {
       const isExisted = state.overlayOrderList.includes(action.overlay.id);

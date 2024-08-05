@@ -40,7 +40,7 @@ if (result) {
 }
 ```
 
-## 2. `overlay.openAsync()` 사용하기
+## 2. Using `overlay.openAsync()`
 
 For a simpler way to use overlays with Promises, you can use [`overlay.openAsync()`](../reference/overlay.md#overlay-openasync).
 

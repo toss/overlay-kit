@@ -63,7 +63,7 @@ Opens an overlay and can be used with Promises.
 
 This method works similarly to [`overlay.open()`](#overlay-open) but returns a Promise, allowing you to pass a resolve value from `overlay.close()`. For detailed usage, refer to [Using with Promises](../advanced/promise.md).
 
-### INterface
+### Interface
 
 ```tsx{5}
 overlay.openAsync(

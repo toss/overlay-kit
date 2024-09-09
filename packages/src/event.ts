@@ -40,6 +40,11 @@ async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, opti
   });
 }
 
+function exclusiveOpen(controller: OverlayControllerComponent, options?: OpenOverlayOptions) {
+  unmountAll();
+  open(controller, options);
+}
+
 function close(overlayId: string) {
   dispatchOverlay({ type: 'CLOSE', overlayId });
 }
@@ -53,4 +58,4 @@ function unmountAll() {
   dispatchOverlay({ type: 'REMOVE_ALL' });
 }
 
-export const overlay = { open, close, unmount, closeAll, unmountAll, openAsync };
+export const overlay = { open, close, unmount, closeAll, unmountAll, openAsync, exclusiveOpen };

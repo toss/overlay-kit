@@ -138,4 +138,36 @@ describe('overlay object', () => {
       expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
     });
   });
+
+  it('should exclusively open overlay using overlay.exclusiveOpen', async () => {
+    const testContent1 = 'context-modal-test-content-1';
+    const testContent2 = 'context-modal-test-content-2';
+    const testContent3 = 'context-modal-test-content-3';
+    const testContent4 = 'context-modal-test-content-4';
+
+    const Component = () => {
+      useEffect(() => {
+        overlay.exclusiveOpen(() => {
+          return <p>{testContent1}</p>;
+        });
+        overlay.exclusiveOpen(() => {
+          return <p>{testContent2}</p>;
+        });
+        overlay.exclusiveOpen(() => {
+          return <p>{testContent3}</p>;
+        });
+        overlay.exclusiveOpen(() => {
+          return <p>{testContent4}</p>;
+        });
+      }, []);
+
+      return <div>Empty</div>;
+    };
+
+    render(<Component />, { wrapper });
+    expect(screen.queryByText(testContent1)).not.toBeInTheDocument();
+    expect(screen.queryByText(testContent2)).not.toBeInTheDocument();
+    expect(screen.queryByText(testContent3)).not.toBeInTheDocument();
+    expect(screen.queryByText(testContent4)).toBeInTheDocument();
+  });
 });

@@ -3,25 +3,25 @@ layout: home
 
 hero:
   name: 'overlay-kit'
-  text: 'A declarative way to manage overlays in React'
+  text: 'The simplest and most intuitive React overlay'
   actions:
     - theme: brand
       text: 'Introduction'
-      link: '/motivation'
+      link: '/introduction'
     - theme: alt
       text: 'Quick Start'
       link: '/quickstart'
     - theme: alt
-      text: 'Usage'
-      link: '/usage/overlay'
+      text: 'Reference'
+      link: '/reference/overlay'
 
 features:
-  - title: 'Hassle-free'
-    details: 'overlay-kit makes overlay management straightforward with a simple function call: overlay.open(...).'
-  - title: 'Battle-tested Reliability'
-    details: 'overlay-kit is proven in real-world applications.'
+  - title: 'Simplicity'
+    details: 'Manage overlays in React with a single function call.'
+  - title: 'Reliability'
+    details: 'Proven stability in live production applications.'
   - title: 'Small Bundle Size'
-    details: 'Optimized for minimal impact, overlay-kit maintains a lean footprint with a gzipped size of only 1KB.'
-  - title: 'Robust Types'
-    details: 'overlay-kit ensures reliable coding with robust, well-defined types for all functionalities.'
+    details: 'Around 1KB gzipped.'
+  - title: 'Strong Typing'
+    details: 'All features are provided with safe and robust typing.'
 ---

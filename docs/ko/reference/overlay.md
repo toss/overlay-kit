@@ -2,12 +2,12 @@
 
 `overlay` 객체는 React에서 오버레이를 관리하기 위한 API를 제공해요. 오버레이를 관리하는 다양한 케이스를 모두 대응할 수 있어요.
 
-- [overlay.open()](#overlayopen)
-- [overlay.openAsync()](#overlayopenasync)
-- [overlay.close()](#overlayclose)
-- [overlay.closeAll()](#overlaycloseall)
-- [overlay.unmount()](#overlayunmount)
-- [overlay.unmountAll()](#overlayunmountall)
+- [overlay.open()](#overlay-open)
+- [overlay.openAsync()](#overlay-openasync)
+- [overlay.close()](#overlay-close)
+- [overlay.closeAll()](#overlay-closeall)
+- [overlay.unmount()](#overlay-unmount)
+- [overlay.unmountAll()](#overlay-unmountall)
 
 ## overlay.open()
 
@@ -28,7 +28,6 @@ overlay.open(
   - `isOpen` (boolean): 오버레이가 열려 있는지 여부
   - `close` (function): 오버레이를 닫는 함수로 `isOpen`을 `false`로 설정함
   - `unmount` (function): 오버레이를 React의 요소 트리에서 완전히 제거하는 함수
-
 - `options` (object): 오버레이의 설정을 정의하는 객체 (optional)
   - `overlayId`(string): 오버레이가 열릴 때 생성되는 오버레이 ID
 
@@ -61,7 +60,7 @@ overlay.unmount(overlayId);
 
 오버레이를 엽니다. Promise와 함께 사용할 수 있어요.
 
-이 메서드는 [`overlay.open()`](#overlayopen)과 비슷하게 작동하지만, Promise를 반환해서 `overlay.close()`에서 resolve 값을 전달할 수 있습니다. 자세한 사용법은 [Promise와 함께 사용하기](../advanced/promise.md)를 참고하세요.
+이 메서드는 [`overlay.open()`](#overlay-open)과 비슷하게 작동하지만, Promise를 반환해서 `overlay.close()`에서 resolve 값을 전달할 수 있습니다. 자세한 사용법은 [Promise와 함께 사용하기](../advanced/promise.md)를 참고하세요.
 
 ### 인터페이스
 
@@ -78,7 +77,6 @@ overlay.openAsync(
   - `isOpen` (boolean): 오버레이가 열려 있는지 여부
   - `close` (function): 오버레이를 닫는 함수로 `isOpen`을 `false`로 설정함
   - `unmount` (function): 오버레이를 React의 요소 트리에서 완전히 제거하는 함수
-
 - `options` (object): 오버레이의 설정을 정의하는 객체 (optional)
   - `overlayId`(string): 오버레이가 열릴 때 생성되는 오버레이 ID
 
@@ -127,7 +125,7 @@ function Example() {
 
 특정 오버레이를 닫습니다.
 
-이 메서드를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다. 오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 [`overlay.unmount()`](#overlayunmount)를 호출하세요.
+이 메서드를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다. 오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 [`overlay.unmount()`](#overlay-unmount)를 호출하세요.
 
 ### 인터페이스
 
@@ -158,7 +156,7 @@ overlay.close(overlayId);
 
 열려 있는 모든 오버레이를 닫습니다.
 
-이 메서드를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다. 오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 [`overlay.unmount()`](#overlayunmount)를 호출하세요.
+이 메서드를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다. 오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 [`overlay.unmountAll()`](#overlay-unmountall)를 호출하세요.
 
 ### 인터페이스
 

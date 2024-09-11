@@ -1,30 +1,28 @@
 ---
-description: Features
+description: Quick Start
 prev:
-  text: Why overlay-kit?
-  link: ./motivation.md
+  text: Installation
+  link: ./installation.md
 next:
-  text: OverlayProvider
-  link: ./usage/overlay-provider.md
+  text: The overlay object
+  link: ./reference/overlay.md
 ---
 
 # Quick Start
 
-Using overlay-kit is simple and straightforward. In this quick start tutorial, we will create a button that opens an `<Dialog />` from Material UI.
+## 1. Adding an Overlay
 
-## Adding an `OverlayProvider` to the App
+To open an overlay with overlay-kit, you first need to designate where the overlay will be rendered. Typically, overlays are rendered at the root of the application so that they appear above other elements.
 
-To open overlays using overlay-kit, we need to specify where the overlay will be placed. Typically, we put the overlays near the application's root so that they appear above all other elements. We can use an `<OverlayProvider />` to achieve this.
-
-Let's add an `OverlayProvider` to the root of the app:
+You can use the [`<OverlayProvider />`](./reference/overlay-provider.md) component for this. Let's add the [`<OverlayProvider />`](./reference/overlay-provider.md) to the root of your application.
 
 ```tsx{1,7,9}
 import { OverlayProvider } from 'overlay-kit';
 
 export default function App(props) {
   return (
-    // Add an `OverlayProvider` at the top of the app.
-    // Every overlay is mounted as a sibling to the child of `OverlayProvider`.
+    // Render `OverlayProvider` at the top level of your app.
+    // Now all overlays will be rendered next to the `<Example />` component.
     <OverlayProvider>
       <Example />
     </OverlayProvider>
@@ -32,16 +30,19 @@ export default function App(props) {
 }
 ```
 
-Now, every overlay opened by `overlay-kit` will be rendered next to the `<Example />` component.
+Now, all overlays opened with overlay-kit will be rendered next to the <Example /> component.
 
-> [!IMPORTANT]
-> Ensure to render exactly one `<OverlayProvider />` in the entire React app.
+::: tip Note
 
-## Opening an overlay
+[`<OverlayProvider />`](./reference/overlay-provider.md) should only be rendered once in the entire React application.
 
-To open an overlay within the `<OverlayProvider />`, we call [overlay.open(...)](./usage/overlay.md).
+:::
 
-For example, to open a `<Dialog />` from Material UI, use the following code:
+## 2. Opening an overlay
+
+Next, let’s add functionality to open an overlay when a button is clicked. To open an overlay within the [`<OverlayProvider />`](./reference/overlay-provider.md), you can call [overlay.open()](./reference/overlay.md#overlay-open).
+
+Since we want to open a `<Dialog />` from Material UI, we can write the following code:
 
 ```tsx{1,14-30}
 import { overlay } from 'overlay-kit';
@@ -61,7 +62,7 @@ function Example() {
           return (
             <Dialog open={isOpen} onClose={close}>
               <DialogTitle>
-                Are you sure?
+                Do you really want to continue?
               </DialogTitle>
               <DialogActions>
                 <Button onClick={close}>
@@ -76,23 +77,19 @@ function Example() {
         });
       }}
     >
-      Open an alert dialog
+      Open Alert Dialog
     </button>
   );
 }
 ```
 
-Opening an overlay with overlay-kit is very straightforward: import the `overlay` object and call `overlay.open(...)`.
+With overlay-kit, opening an overlay is intuitive. Simply import the `overlay` object and call [`overlay.open()`](./reference/overlay.md#overlay-open).
 
-The `overlay.open(...)` API provides essential properties and functions to manage overlays:
+The [`overlay.open()`](./reference/overlay.md#overlay-open) API provides all the properties needed to open and close the overlay. Check the [reference](./reference/overlay.md) for more details.
 
-- `isOpen`: Indicates if the overlay is open. When the overlay is closed, this property is updated to `false`, which can be useful if the overlay has a closing animation.
-- `close`: Closes the overlay and sets `isOpen` to `false`.
-- `unmount`: Completely unmounts the overlay from the React tree.
+## 3. Handling User Button Click Results
 
-## Usage with Promises
-
-In the previous example, it's simple to determine whether the user clicked the "Yes" or "No" button. Just wrap it with a `Promise` that returns a `boolean` value:
+Now, let’s handle the result of the button clicked by the user. overlay-kit can work with Promises, making it easy to get the result from the overlay. Wrap it in a `Promise` that returns a `boolean` value as shown below:
 
 ```tsx{5,7-10,12-15,35-38}
 function Example() {
@@ -114,7 +111,7 @@ function Example() {
             return (
               <Dialog open={isOpen} onClose={cancel}>
                 <DialogTitle>
-                  Are you sure?
+                  Do you really want to continue?
                 </DialogTitle>
                 <DialogActions>
                   <Button onClick={cancel}>
@@ -130,22 +127,75 @@ function Example() {
         });
 
         /*
-         * If the user clicked "Yes", agreed is `true` here.
-         * Otherwise, agreed is `false`.
+         * If the user clicked "Yes", `agreed` will be `true`.
+         * Otherwise, `agreed` will be `false`.
          */
       }}
     >
-      Open an alert dialog
+      Open Alert Dialog
     </button>
   );
 }
 ```
 
-overlay-kit can be seamlessly integrated with `Promise`s, making it easy to get results from an overlay.
+## 4. Closing Overlays and Memory Management
 
-## Opening an Overlay Outside of React
+To avoid memory leaks when closing overlays, you should unmount the overlay after closing it. Even though the overlay disappears from the screen, it remains in memory and the React element tree. Refer to the [Memory Management](./advanced/unmount-with-animation.md#unmount-with-animation) documentation for details.
 
-You can also open overlays outside of React with overlay-kit. For example, if you want to open an overlay when an API error occurs, you can use the following code:
+Let’s add code to unmount the overlay after the user clicks "Yes" or "No" and the closing animation finishes.
+
+```tsx
+function Example() {
+  return (
+    <button
+      onClick={async () => {
+        const agreed = await new Promise<boolean>(resolve => {
+          overlay.open(({ isOpen, close, unmount }) => {
+            const agree = () => {
+              resolve(true);
+              close();
+              setTimeout(unmount, 150); // Adjust to match the duration of your animation.
+            };
+
+            const cancel = () => {
+              resolve(false);
+              close();
+              setTimeout(unmount, 150); // Adjust to match the duration of your animation.
+            };
+
+            return (
+              <Dialog open={isOpen} onClose={cancel}>
+                <DialogTitle>
+                  Do you really want to continue?
+                </DialogTitle>
+                <DialogActions>
+                  <Button onClick={cancel}>
+                    No
+                  </Button>
+                  <Button onClick={agree}>
+                    Yes
+                  </Button>
+                </DialogActions>
+              </Dialog>
+            )
+          });
+        });
+
+        /*
+         * If the user clicked "Yes", `agreed` will be `true`.
+         * Otherwise, `agreed` will be `false`.
+         */
+      }}
+    >
+      Open Alert Dialog
+    </button>
+  );
+}
+```
+
+## 5. Handling Network Errors
+
+Finally, let’s handle potential API errors by opening an overlay from outside React.
 
 ```tsx
 import ky from 'ky';
@@ -166,4 +216,4 @@ const api = ky.extend({
 });
 ```
 
-Here, when the status code is 400 or higher, an `<ErrorDialog />` is displayed. Although `ky` is used in this example, similar behavior can be easily implemented with other libraries.
+By implementing these steps, you can provide a better overlay experience for your users. For more advanced usage, such as assigning custom IDs to overlays or handling overlay animations for a smoother user experience, refer to the 'Advanced' section.

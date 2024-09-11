@@ -1,7 +1,7 @@
 ---
 next:
-  text: 기능
-  link: ./features.md
+  text: 코드 비교
+  link: ./code-comparison.md
 ---
 
 # 소개

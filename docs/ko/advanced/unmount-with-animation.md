@@ -1,6 +1,6 @@
 # 오버레이 애니메이션과 Unmount 처리
 
-대부분의 오버레이는 닫힐 때 애니메이션 효과가 있어요. overlay-kit에서는 오버레이를 닫아도 애니메이션이 계속 실행되도록 Mount 상태를 유지해요. **하지만 메모리 누구를 피하려면 닫히는 애니메이션이 끝난 다음에 잊지 않고 오버레이를 Unmount 해야 해요.**
+대부분의 오버레이는 닫힐 때 애니메이션 효과가 있어요. overlay-kit에서는 오버레이를 닫아도 애니메이션이 계속 실행되도록 Mount 상태를 유지해요. **하지만 메모리 누수를 피하려면 닫히는 애니메이션이 끝난 다음에 잊지 않고 오버레이를 Unmount 해야 해요.**
 
 자연스러운 동작을 구현하기 위해 오버레이를 닫을 때 애니메이션이 끝난 후에 컴포넌트를 완전히 Unmount 할 수 있어요.
 
@@ -16,7 +16,7 @@ import { overlay } from 'overlay-kit';
 function Demo() {
   const openDialog = () => {
     overlay.open(({ isOpen, close, unmount }) => {
-      return <Dialog opened={isOpen} onClose={close} onExit={unmount} />
+      return <Dialog open={isOpen} onClose={close} onExit={unmount} />
     });
   };
 

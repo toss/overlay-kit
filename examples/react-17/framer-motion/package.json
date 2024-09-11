@@ -1,0 +1,26 @@
+{
+  "name": "@overlay-kit/framer-motion-react-17",
+  "private": true,
+  "version": "0.0.7",
+  "type": "module",
+  "scripts": {
+    "predev": "yarn workspace overlay-kit build",
+    "dev": "yarn predev && vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "framer-motion": "^6",
+    "overlay-kit": "npm:overlay-kit@1.4.0-canary.2407260853",
+    "react": "^17",
+    "react-dom": "^17"
+  },
+  "devDependencies": {
+    "@types/react": "^17",
+    "@types/react-dom": "^17",
+    "@vitejs/plugin-react": "^4.3.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.13"
+  }
+}

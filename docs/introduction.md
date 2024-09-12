@@ -18,7 +18,7 @@ Managing the state for opening and closing overlays traditionally requires defin
 
 Increase the cohesion and readability of your code with overlay-kit.
 
-When the logic for opening overlays, state changes, and overlay components are spread across the code, it can be challenging to follow the code flow. Low cohesion leads to reduced readability and higher chances of bugs. Additionally, boilerplate code for overlays unnecessarily lengthens the codebase and complicates maintenance. overlay-kit reduces repetitive code, making your codebase more concise.
+When the logic for opening overlays, state changes, and overlay components is spread across the code, it can be challenging to follow the code flow. Low cohesion leads to reduced readability and higher chances of bugs. Additionally, boilerplate code for overlays unnecessarily lengthens the codebase and complicates maintenance. overlay-kit reduces repetitive code, making your codebase more concise.
 
 ## Robust Built-in Typing
 

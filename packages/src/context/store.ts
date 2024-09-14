@@ -7,17 +7,18 @@ export type OverlayItem = {
   isOpen: boolean;
   controller: OverlayControllerComponent;
 };
-export type OverlayData = {
-  current: OverlayId | null;
-  overlayOrderList: OverlayId[];
-  overlayData: Record<OverlayId, OverlayItem>;
-};
+export type OverlayData =
+  | {
+      current: OverlayId | null;
+      overlayOrderList: OverlayId[];
+      overlayData: Record<OverlayId, OverlayItem>;
+    }
+  | undefined;
 
-let overlays: OverlayData = {
-  current: null,
-  overlayOrderList: [],
-  overlayData: {},
-};
+/**
+ * @description Using `OverlayProvider` will initialize the variable
+ */
+let overlays: OverlayData = undefined;
 let listeners: Array<() => void> = [];
 
 function emitChangeListener() {

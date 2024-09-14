@@ -27,7 +27,7 @@ npm install overlay-kit
 ```
 
 ```sh [pnpm]
-pnpm install overlay-kit
+pnpm add overlay-kit
 ```
 
 ```sh [yarn]

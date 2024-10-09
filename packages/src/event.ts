@@ -1,4 +1,8 @@
-import { type OverlayAsyncControllerComponent, type OverlayControllerComponent } from './context/provider';
+import {
+  OverlayAsyncControllerProps,
+  type OverlayAsyncControllerComponent,
+  type OverlayControllerComponent,
+} from './context/provider';
 import { dispatchOverlay } from './context/store';
 import { randomId } from './utils';
 
@@ -21,20 +25,20 @@ function open(controller: OverlayControllerComponent, options?: OpenOverlayOptio
   return overlayId;
 }
 
-async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) {
+async function openAsync<T = undefined>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) {
   return new Promise<T>((resolve) => {
     open((overlayProps, ...deprecatedLegacyContext) => {
-      /**
-       * @description close the overlay with resolve
-       */
-      const close = (param: T) => {
+      const close = (param = undefined) => {
         resolve(param as T);
         overlayProps.close();
       };
-      /**
-       * @description Passing overridden methods
-       */
-      const props = { ...overlayProps, close };
+
+      const unmount = (param = undefined) => {
+        resolve(param as T);
+        overlayProps.unmount();
+      };
+
+      const props = { ...overlayProps, close, unmount } as OverlayAsyncControllerProps<T>;
       return controller(props, ...deprecatedLegacyContext);
     }, options);
   });

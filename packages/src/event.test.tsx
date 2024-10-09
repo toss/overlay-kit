@@ -138,4 +138,69 @@ describe('overlay object', () => {
       expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
     });
   });
+
+  it('should not cause Typescript errors.', () => {
+    overlay.openAsync(({ close, unmount }) => {
+      close();
+      unmount();
+      //@ts-expect-error
+      close(undefined);
+      //@ts-expect-error
+      unmount(undefined);
+
+      return null;
+    });
+
+    overlay.openAsync<boolean>(({ close, unmount }) => {
+      close(true);
+      unmount(true);
+      //@ts-expect-error
+      close();
+      //@ts-expect-error
+      unmount();
+      return null;
+    });
+
+    overlay.openAsync<void>(({ close, unmount }) => {
+      close();
+      unmount();
+
+      //@ts-expect-error
+      close(undefined);
+      //@ts-expect-error
+      unmount(undefined);
+      return null;
+    });
+
+    overlay.openAsync<undefined>(({ close, unmount }) => {
+      close();
+      unmount();
+
+      //@ts-expect-error
+      close(undefined);
+      //@ts-expect-error
+      unmount(undefined);
+      return null;
+    });
+
+    overlay.openAsync<null>(({ close, unmount }) => {
+      close(null);
+      unmount(null);
+      //@ts-expect-error
+      close();
+      //@ts-expect-error
+      unmount();
+      return null;
+    });
+
+    overlay.openAsync<{ name: string }>(({ close, unmount }) => {
+      close({ name: 'test' });
+      unmount({ name: 'test' });
+      //@ts-expect-error
+      close();
+      //@ts-expect-error
+      unmount();
+      return null;
+    });
+  });
 });

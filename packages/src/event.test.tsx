@@ -139,6 +139,40 @@ describe('overlay object', () => {
     });
   });
 
+  it('should be able to pass resolve value by overlay.openAsync unmount', async () => {
+    const overlayTriggerContent = 'context-modal-test-content';
+    const overlayDialogContent = 'context-modal-dialog-content';
+    const mockFn = vi.fn();
+
+    const Component = () => {
+      return (
+        <button
+          onClick={async () => {
+            const result = await overlay.openAsync<boolean>(({ isOpen, unmount }) =>
+              isOpen ? <button onClick={() => unmount(true)}>{overlayDialogContent}</button> : null
+            );
+
+            if (result) {
+              mockFn(result);
+            }
+          }}
+        >
+          {overlayTriggerContent}
+        </button>
+      );
+    };
+
+    const { user } = renderWithUser(<Component />, { wrapper });
+
+    await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+    await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+    });
+    expect(mockFn).toHaveBeenCalledWith(true);
+  });
   it('should not cause Typescript errors.', () => {
     overlay.openAsync(({ close, unmount }) => {
       close();

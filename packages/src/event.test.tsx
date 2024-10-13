@@ -139,59 +139,20 @@ describe('overlay object', () => {
     });
   });
 
-  it('should be able to pass resolve value by overlay.openAsync unmount', async () => {
-    const overlayTriggerContent = 'context-modal-test-content';
-    const overlayDialogContent = 'context-modal-dialog-content';
-    const mockFn = vi.fn();
-
-    const Component = () => {
-      return (
-        <button
-          onClick={async () => {
-            const result = await overlay.openAsync<boolean>(({ isOpen, unmount }) =>
-              isOpen ? <button onClick={() => unmount(true)}>{overlayDialogContent}</button> : null
-            );
-
-            if (result) {
-              mockFn(result);
-            }
-          }}
-        >
-          {overlayTriggerContent}
-        </button>
-      );
-    };
-
-    const { user } = renderWithUser(<Component />, { wrapper });
-
-    await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
-
-    await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
-
-    await waitFor(() => {
-      expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
-    });
-    expect(mockFn).toHaveBeenCalledWith(true);
-  });
   it('should not cause Typescript errors.', () => {
     overlay.openAsync(({ close, unmount }) => {
       close();
       unmount();
       //@ts-expect-error
       close(undefined);
-      //@ts-expect-error
-      unmount(undefined);
-
       return null;
     });
 
     overlay.openAsync<boolean>(({ close, unmount }) => {
       close(true);
-      unmount(true);
+      unmount();
       //@ts-expect-error
       close();
-      //@ts-expect-error
-      unmount();
       return null;
     });
 
@@ -201,8 +162,6 @@ describe('overlay object', () => {
 
       //@ts-expect-error
       close(undefined);
-      //@ts-expect-error
-      unmount(undefined);
       return null;
     });
 
@@ -212,28 +171,20 @@ describe('overlay object', () => {
 
       //@ts-expect-error
       close(undefined);
-      //@ts-expect-error
-      unmount(undefined);
       return null;
     });
 
     overlay.openAsync<null>(({ close, unmount }) => {
       close(null);
-      unmount(null);
-      //@ts-expect-error
-      close();
-      //@ts-expect-error
       unmount();
       return null;
     });
 
     overlay.openAsync<{ name: string }>(({ close, unmount }) => {
       close({ name: 'test' });
-      unmount({ name: 'test' });
+      unmount();
       //@ts-expect-error
       close();
-      //@ts-expect-error
-      unmount();
       return null;
     });
   });

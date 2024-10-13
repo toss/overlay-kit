@@ -47,7 +47,7 @@ type OverlayControllerProps = {
   unmount: () => void;
 };
 
-export type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close' | 'unmount'> & {
+export type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close'> & {
   /**
    * @description The close and unmount methods are conditionally typed based on the type parameter T.
    * If T is void, the methods are simple functions that take no parameters.
@@ -56,7 +56,6 @@ export type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close
    * The boolean condition is necessary because void extends boolean, which would otherwise cause issues.
    */
   close: T extends void ? () => void : T extends boolean ? (param: boolean) => void : (param: T) => void;
-  unmount: T extends void ? () => void : T extends boolean ? (param: boolean) => void : (param: T) => void;
 };
 
 export type OverlayControllerComponent = FC<OverlayControllerProps>;

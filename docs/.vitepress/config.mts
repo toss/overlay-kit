@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitepress';
+import container from 'markdown-it-container';
+import { renderSandbox } from 'vitepress-plugin-sandpack';
 import { createRequire } from 'module';
 import path from 'path';
 import { en } from './en.mts';
@@ -61,6 +63,22 @@ export default defineConfig({
       },
     },
     socialLinks: [{ icon: 'github', link: 'https://github.com/toss/overlay-kit' }],
+  },
+  markdown: {
+    config(md) {
+      md
+        // code sandbox
+        .use(container, 'sandbox', {
+          render(tokens, idx) {
+            return renderSandbox(tokens, idx, 'sandbox');
+          },
+        })
+        .use(container, 'overlay-kit-sandbox', {
+          render(tokens, idx) {
+            return renderSandbox(tokens, idx, 'overlay-kit-sandbox');
+          },
+        });
+    },
   },
   vite: {
     resolve: {

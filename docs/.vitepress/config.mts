@@ -77,6 +77,11 @@ export default defineConfig({
           render(tokens, idx) {
             return renderSandbox(tokens, idx, 'overlay-kit-sandbox');
           },
+        })
+        .use(container, 'mui-overlay-kit-sandbox', {
+          render(tokens, idx) {
+            return renderSandbox(tokens, idx, 'mui-overlay-kit-sandbox');
+          },
         });
     },
   },

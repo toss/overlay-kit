@@ -2,6 +2,7 @@ import DefaultTheme from 'vitepress/theme';
 import { Sandbox } from 'vitepress-plugin-sandpack';
 import 'vitepress-plugin-sandpack/dist/style.css';
 import OverlayKitSandbox from './overlay-kit-sandbox.vue';
+import MUIOverlayKitSandbox from './mui-overlay-kit-sandbox.vue';
 import './index.css';
 
 export default {
@@ -10,5 +11,6 @@ export default {
     DefaultTheme.enhanceApp(ctx);
     ctx.app.component('Sandbox', Sandbox);
     ctx.app.component('OverlayKitSandbox', OverlayKitSandbox);
+    ctx.app.component('MuiOverlayKitSandbox', MUIOverlayKitSandbox);
   },
 };

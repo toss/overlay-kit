@@ -12,6 +12,58 @@ next:
 
 overlay-kit와 Material UI를 사용해서 `<Dialog />`를 사용하는 오버레이를 만들어 볼게요.
 
+아래 Sandbox를 통해 결과를 미리 확인할 수 있어요.
+
+::: mui-overlay-kit-sandbox {template=react-ts}
+```react /App.tsx
+import { OverlayProvider, overlay } from 'overlay-kit';
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function App() {
+  return (
+    <button
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => {
+          return (
+            <Dialog open={isOpen} onClose={close}>
+              <DialogTitle>
+                정말로 계속하시겠어요?
+              </DialogTitle>
+              <DialogActions>
+                <Button onClick={close}>
+                  아니요
+                </Button>
+                <Button onClick={close}>
+                  네
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )
+        });
+      }}
+    >
+      Alert Dialog 열기
+    </button>
+  )
+}
+
+export default function() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  )
+}
+```
+:::
+
+
 ## 1. 오버레이 추가하기
 
 overlay-kit으로 오버레이를 열려면 먼저 오버레이가 렌더링될 곳을 지정해야 해요. 일반적으로 애플리케이션 루트에 오버레이를 렌더링합니다. 다른 요소들 위에 오버레이가 보이도록 말이죠.

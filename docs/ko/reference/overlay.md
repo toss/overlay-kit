@@ -91,7 +91,7 @@ function Example() {
   return (
     <button
       onClick={async () => {
-        const agreed = await overlay.openAsync<boolean>(({ isOpen, close }) => {
+          const agreed = await overlay.openAsync<boolean>(({ isOpen, close }) => {
           const agree = () => close(true);
           const cancel = () => close(false);
 

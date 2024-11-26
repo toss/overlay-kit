@@ -1,22 +1,22 @@
 import { type OverlayControllerComponent } from './provider';
 import { type OverlayReducerAction, overlayReducer } from './reducer';
 
-type OverlayId = string;
+type OverlayItemId = string;
 export type OverlayItem = {
-  id: OverlayId;
+  id: OverlayItemId;
   isOpen: boolean;
   controller: OverlayControllerComponent;
 };
-export type OverlayData = {
-  current: OverlayId | null;
-  overlayOrderList: OverlayId[];
-  overlayData: Record<OverlayId, OverlayItem>;
+export type OverlayState = {
+  currentId: OverlayItemId | null;
+  orderIds: OverlayItemId[];
+  data: Record<OverlayItemId, OverlayItem>;
 };
 
-let overlays: OverlayData = {
-  current: null,
-  overlayOrderList: [],
-  overlayData: {},
+let overlays: OverlayState = {
+  currentId: null,
+  orderIds: [],
+  data: {},
 };
 let listeners: Array<() => void> = [];
 
@@ -34,7 +34,7 @@ export function dispatchOverlay(action: OverlayReducerAction) {
 /**
  * @description for useSyncExternalStorage
  */
-export const registerOverlaysStore = {
+export const registerOverlayStore = {
   subscribe(listener: () => void) {
     listeners = [...listeners, listener];
 

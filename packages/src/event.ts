@@ -1,9 +1,9 @@
 import { type OverlayAsyncControllerComponent, type OverlayControllerComponent } from './context/provider';
-import { dispatchOverlay } from './context/store';
+import { type OverlayItem, dispatchOverlay } from './context/store';
 import { randomId } from './utils';
 
 type OpenOverlayOptions = {
-  overlayId?: string;
+  overlayId?: OverlayItem['id'];
 };
 
 function open(controller: OverlayControllerComponent, options?: OpenOverlayOptions) {
@@ -40,10 +40,10 @@ async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, opti
   });
 }
 
-function close(overlayId: string) {
+function close(overlayId: OverlayItem['id']) {
   dispatchOverlay({ type: 'CLOSE', overlayId });
 }
-function unmount(overlayId: string) {
+function unmount(overlayId: OverlayItem['id']) {
   dispatchOverlay({ type: 'REMOVE', overlayId });
 }
 function closeAll() {

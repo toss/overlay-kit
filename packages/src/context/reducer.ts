@@ -1,32 +1,32 @@
-import { type OverlayData, type OverlayItem } from './store';
+import { type OverlayState, type OverlayItem } from './store';
 
 export type OverlayReducerAction =
   | { type: 'ADD'; overlay: OverlayItem }
-  | { type: 'OPEN'; overlayId: string }
-  | { type: 'CLOSE'; overlayId: string }
-  | { type: 'REMOVE'; overlayId: string }
+  | { type: 'OPEN'; overlayId: OverlayItem['id'] }
+  | { type: 'CLOSE'; overlayId: OverlayItem['id'] }
+  | { type: 'REMOVE'; overlayId: OverlayItem['id'] }
   | { type: 'CLOSE_ALL' }
   | { type: 'REMOVE_ALL' };
 
-export function overlayReducer(state: OverlayData, action: OverlayReducerAction): OverlayData {
+export function overlayReducer(state: OverlayState, action: OverlayReducerAction): OverlayState {
   switch (action.type) {
     case 'ADD': {
-      const isExisted = state.overlayOrderList.includes(action.overlay.id);
+      const isExisted = state.orderIds.includes(action.overlay.id);
 
-      if (isExisted && state.overlayData[action.overlay.id].isOpen === true) {
+      if (isExisted && state.data[action.overlay.id].isOpen === true) {
         throw new Error("You can't open the multiple overlays with the same overlayId. Please set a different id.");
       }
 
       return {
-        current: action.overlay.id,
+        currentId: action.overlay.id,
         /**
          * @description Brings the overlay to the front when reopened after closing without unmounting.
          */
-        overlayOrderList: [...state.overlayOrderList.filter((item) => item !== action.overlay.id), action.overlay.id],
-        overlayData: isExisted
-          ? state.overlayData
+        orderIds: [...state.orderIds.filter((orderId) => orderId !== action.overlay.id), action.overlay.id],
+        data: isExisted
+          ? state.data
           : {
-              ...state.overlayData,
+              ...state.data,
               [action.overlay.id]: action.overlay,
             },
       };
@@ -34,20 +34,18 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
     case 'OPEN': {
       return {
         ...state,
-        overlayData: {
-          ...state.overlayData,
+        data: {
+          ...state.data,
           [action.overlayId]: {
-            ...state.overlayData[action.overlayId],
+            ...state.data[action.overlayId],
             isOpen: true,
           },
         },
       };
     }
     case 'CLOSE': {
-      const openedOverlayOrderList = state.overlayOrderList.filter(
-        (orderedOverlayId) => state.overlayData[orderedOverlayId].isOpen === true
-      );
-      const targetIndexInOpenedList = openedOverlayOrderList.findIndex((item) => item === action.overlayId);
+      const openedOrderIds = state.orderIds.filter((orderId) => state.data[orderId].isOpen === true);
+      const targetOpenedOrderIdIndex = openedOrderIds.findIndex((openedOrderId) => openedOrderId === action.overlayId);
 
       /**
        * @description If closing the last overlay, specify the overlay before it.
@@ -60,60 +58,60 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
        * close 1 => current: null
        */
       const currentOverlayId =
-        targetIndexInOpenedList === openedOverlayOrderList.length - 1
-          ? openedOverlayOrderList[targetIndexInOpenedList - 1] ?? null
-          : openedOverlayOrderList.at(-1) ?? null;
+        targetOpenedOrderIdIndex === openedOrderIds.length - 1
+          ? openedOrderIds[targetOpenedOrderIdIndex - 1] ?? null
+          : openedOrderIds.at(-1) ?? null;
 
       return {
         ...state,
-        current: currentOverlayId,
-        overlayData: {
-          ...state.overlayData,
+        currentId: currentOverlayId,
+        data: {
+          ...state.data,
           [action.overlayId]: {
-            ...state.overlayData[action.overlayId],
+            ...state.data[action.overlayId],
             isOpen: false,
           },
         },
       };
     }
     case 'REMOVE': {
-      const remainingOverlays = state.overlayOrderList.filter((item) => item !== action.overlayId);
-      if (state.overlayOrderList.length === remainingOverlays.length) {
+      const remainingOrderIds = state.orderIds.filter((orderId) => orderId !== action.overlayId);
+      if (state.orderIds.length === remainingOrderIds.length) {
         return state;
       }
 
-      const copiedOverlayData = { ...state.overlayData };
-      delete copiedOverlayData[action.overlayId];
+      const copiedData = { ...state.data };
+      delete copiedData[action.overlayId];
 
-      const current = state.current
-        ? remainingOverlays.includes(state.current)
+      const currentId = state.currentId
+        ? remainingOrderIds.includes(state.currentId)
           ? /**
              * @description If `unmount` was executed after `close`
              */
-            state.current
+            state.currentId
           : /**
-             * @description If you only run `unmount`, there is no `current` in `remainingOverlays`
+             * @description If you only run `unmount`, there is no `current` in `remainingOrderIds`
              */
-            remainingOverlays.at(-1) ?? null
+            remainingOrderIds.at(-1) ?? null
         : /**
            * @description The case where `current` is `null`
            */
           null;
 
       return {
-        current,
-        overlayOrderList: remainingOverlays,
-        overlayData: copiedOverlayData,
+        currentId,
+        orderIds: remainingOrderIds,
+        data: copiedData,
       };
     }
     case 'CLOSE_ALL': {
       return {
         ...state,
-        overlayData: Object.keys(state.overlayData).reduce(
+        data: Object.keys(state.data).reduce(
           (prev, curr) => ({
             ...prev,
             [curr]: {
-              ...state.overlayData[curr],
+              ...state.data[curr],
               isOpen: false,
             } satisfies OverlayItem,
           }),
@@ -122,7 +120,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'REMOVE_ALL': {
-      return { current: null, overlayOrderList: [], overlayData: {} };
+      return { currentId: null, orderIds: [], data: {} };
     }
   }
 }

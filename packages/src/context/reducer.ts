@@ -90,11 +90,11 @@ export function overlayReducer(state: OverlayState, action: OverlayReducerAction
              */
             state.currentId
           : /**
-             * @description If you only run `unmount`, there is no `current` in `remainingOrderIds`
+             * @description If you only run `unmount`, there is no `currentId` in `remainingOrderIds`
              */
             remainingOrderIds.at(-1) ?? null
         : /**
-           * @description The case where `current` is `null`
+           * @description The case where `currentId` is `null`
            */
           null;
 

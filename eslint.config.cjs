@@ -2,8 +2,8 @@
 
 const eslint = require('@eslint/js');
 const tseslint = require('typescript-eslint');
-const prettierConfig = require('eslint-config-prettier');
 const importPlugin = require('eslint-plugin-import');
+const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const unicorn = require('eslint-plugin-unicorn');
 const unusedImports = require('eslint-plugin-unused-imports');
 
@@ -12,7 +12,6 @@ module.exports = tseslint.config(
     ignores: ['**/.vitepress/', '**/dist/', '**/esm/', '**/.next/', '**/.next-local/', '.pnp.*', '.yarn/'],
   },
   eslint.configs.recommended,
-  prettierConfig,
   {
     plugins: { unicorn },
     rules: {
@@ -123,5 +122,6 @@ module.exports = tseslint.config(
         },
       ],
     },
-  }
+  },
+  eslintPluginPrettierRecommended
 );

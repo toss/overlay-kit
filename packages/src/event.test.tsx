@@ -5,22 +5,25 @@ import { describe, expect, it, vi } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
 
-const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}</OverlayProvider>;
+function wrapper({ children }: PropsWithChildren) {
+  return <OverlayProvider>{children}</OverlayProvider>;
+}
 
 /**
  *
  * @description Utility functions to perform render and userEvent.setup
  */
-const renderWithUser = <T extends JSX.Element>(Component: T, options?: Parameters<typeof render>[1]) => {
+function renderWithUser<T extends JSX.Element>(component: T, options?: Parameters<typeof render>[1]) {
   const user = userEvent.setup();
-  return { ...render(Component, { wrapper, ...options }), user };
-};
+
+  return { ...render(component, { wrapper, ...options }), user };
+}
 
 describe('overlay object', () => {
   it('should be able to close an open overlay using overlay.unmount', async () => {
     const overlayDialogContent = 'context-modal-overlay-dialog-content';
 
-    const Component = () => {
+    function Component() {
       useEffect(() => {
         overlay.open(({ overlayId }) => {
           return (
@@ -34,8 +37,9 @@ describe('overlay object', () => {
           );
         });
       }, []);
+
       return <div>Empty</div>;
-    };
+    }
 
     const { user } = renderWithUser(<Component />);
 
@@ -50,7 +54,7 @@ describe('overlay object', () => {
     const testContent3 = 'context-modal-test-content-3';
     const testContent4 = 'context-modal-test-content-4';
 
-    const Component = () => {
+    function Component() {
       useEffect(() => {
         overlay.open(() => {
           return <p>{testContent1}</p>;
@@ -67,7 +71,7 @@ describe('overlay object', () => {
       }, []);
 
       return <div>Empty</div>;
-    };
+    }
 
     render(<Component />, { wrapper });
     expect(screen.queryByText(testContent1)).toBeInTheDocument();
@@ -81,7 +85,7 @@ describe('overlay object', () => {
     const overlayTriggerContent = 'context-modal-overlay-trigger-content';
     const mockFn = vi.fn();
 
-    const Component = () => {
+    function Component() {
       return (
         <button
           onClick={async () => {
@@ -97,7 +101,7 @@ describe('overlay object', () => {
           {overlayTriggerContent}
         </button>
       );
-    };
+    }
 
     const { user } = renderWithUser(<Component />);
 
@@ -114,7 +118,7 @@ describe('overlay object', () => {
     const overlayTriggerContent = 'context-modal-test-content';
     const overlayDialogContent = 'context-modal-dialog-content';
 
-    const Component = () => {
+    function Component() {
       return (
         <button
           onClick={async () => {
@@ -126,7 +130,7 @@ describe('overlay object', () => {
           {overlayTriggerContent}
         </button>
       );
-    };
+    }
 
     const { user } = renderWithUser(<Component />, { wrapper });
 

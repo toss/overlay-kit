@@ -138,4 +138,54 @@ describe('overlay object', () => {
       expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
     });
   });
+
+  it('should not cause Typescript errors.', () => {
+    overlay.openAsync(({ close, unmount }) => {
+      close();
+      unmount();
+      //@ts-expect-error
+      close(undefined);
+      return null;
+    });
+
+    overlay.openAsync<boolean>(({ close, unmount }) => {
+      close(true);
+      unmount();
+      //@ts-expect-error
+      close();
+      return null;
+    });
+
+    overlay.openAsync<void>(({ close, unmount }) => {
+      close();
+      unmount();
+
+      //@ts-expect-error
+      close(undefined);
+      return null;
+    });
+
+    overlay.openAsync<undefined>(({ close, unmount }) => {
+      close();
+      unmount();
+
+      //@ts-expect-error
+      close(undefined);
+      return null;
+    });
+
+    overlay.openAsync<null>(({ close, unmount }) => {
+      close(null);
+      unmount();
+      return null;
+    });
+
+    overlay.openAsync<{ name: string }>(({ close, unmount }) => {
+      close({ name: 'test' });
+      unmount();
+      //@ts-expect-error
+      close();
+      return null;
+    });
+  });
 });

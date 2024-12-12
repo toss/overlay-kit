@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useEffect, type PropsWithChildren } from 'react';
+import React, { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { OverlayProvider } from './context/provider';
 import { overlay } from './event';
@@ -11,7 +11,7 @@ const wrapper = ({ children }: PropsWithChildren) => <OverlayProvider>{children}
  *
  * @description Utility functions to perform render and userEvent.setup
  */
-const renderWithUser = <T extends JSX.Element>(Component: T, options?: Parameters<typeof render>[1]) => {
+const renderWithUser = <T extends React.JSX.Element>(Component: T, options?: Parameters<typeof render>[1]) => {
   const user = userEvent.setup();
   return { ...render(Component, { wrapper, ...options }), user };
 };

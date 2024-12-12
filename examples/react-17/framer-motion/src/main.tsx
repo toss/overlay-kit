@@ -1,7 +1,7 @@
 import { OverlayProvider } from 'overlay-kit';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Demo } from './demo';
+import { Demo } from './demo.jsx';
 
 ReactDOM.render(
   <React.StrictMode>

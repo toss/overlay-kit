@@ -1,6 +1,6 @@
 import { overlay } from 'overlay-kit';
 import { useState } from 'react';
-import { Modal } from './components/modal.jsx';
+import { Modal } from './components/modal.tsx';
 
 export function Demo() {
   return (

@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        command:
+          [
+            'yarn workspace overlay-kit run test',
+            'yarn workspace overlay-kit run build',
+            'yarn lint',
+            'yarn workspace @overlay-kit/framer-motion-react-16 run build',
+            'yarn workspace @overlay-kit/framer-motion-react-17 run build',
+            'yarn workspace @overlay-kit/framer-motion-react-18 run build',
+            'yarn workspace @overlay-kit/framer-motion-react-19 run build',
+            'yarn workspace @overlay-kit/framer-motion-react-16 run lint',
+            'yarn workspace @overlay-kit/framer-motion-react-17 run lint',
+            'yarn workspace @overlay-kit/framer-motion-react-18 run lint',
+            'yarn workspace @overlay-kit/framer-motion-react-19 run lint',
+          ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Run command
+        run: ${{ matrix.command }}
+      - if: matrix.command == 'yarn workspace overlay-kit run test'
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

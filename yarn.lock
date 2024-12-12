@@ -1657,7 +1657,7 @@ __metadata:
     "@types/react-dom": "npm:^16.8"
     "@vitejs/plugin-react": "npm:^4.3.0"
     framer-motion: "npm:^6"
-    overlay-kit: "npm:overlay-kit@1.4.1"
+    overlay-kit: "workspace:*"
     react: "npm:^16.8"
     react-dom: "npm:^16.8"
     typescript: "npm:^5.4.5"
@@ -1673,7 +1673,7 @@ __metadata:
     "@types/react-dom": "npm:^17"
     "@vitejs/plugin-react": "npm:^4.3.0"
     framer-motion: "npm:^6"
-    overlay-kit: "npm:overlay-kit@1.4.1"
+    overlay-kit: "workspace:*"
     react: "npm:^17"
     react-dom: "npm:^17"
     typescript: "npm:^5.4.5"
@@ -1689,7 +1689,7 @@ __metadata:
     "@types/react-dom": "npm:^18.2.0"
     "@vitejs/plugin-react": "npm:^4.3.0"
     framer-motion: "npm:^11.2.10"
-    overlay-kit: "npm:overlay-kit@1.4.1"
+    overlay-kit: "workspace:*"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     typescript: "npm:^5.4.5"
@@ -6239,7 +6239,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"overlay-kit@npm:overlay-kit@1.4.1, overlay-kit@workspace:packages":
+"overlay-kit@workspace:*, overlay-kit@workspace:packages":
   version: 0.0.0-use.local
   resolution: "overlay-kit@workspace:packages"
   dependencies:

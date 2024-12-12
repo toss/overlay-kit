@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [main, beta]
   pull_request:
     types: [opened, synchronize, reopened]
 concurrency:

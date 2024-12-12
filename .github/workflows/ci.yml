@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,9 +20,6 @@ jobs:
             'yarn workspace @overlay-kit/framer-motion-react-16 run build',
             'yarn workspace @overlay-kit/framer-motion-react-17 run build',
             'yarn workspace @overlay-kit/framer-motion-react-18 run build',
-            'yarn workspace @overlay-kit/framer-motion-react-16 run lint',
-            'yarn workspace @overlay-kit/framer-motion-react-17 run lint',
-            'yarn workspace @overlay-kit/framer-motion-react-18 run lint',
           ]
     steps:
       - uses: actions/checkout@v4

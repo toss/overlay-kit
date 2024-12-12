@@ -41,7 +41,7 @@ jobs:
 
       - name: Run command
         run: ${{ matrix.command }}
-      - if: matrix.command == 'yarn workspace overlay-kit run test'
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # - if: matrix.command == 'yarn workspace overlay-kit run test'
+      #   uses: codecov/codecov-action@v4
+      #   env:
+      #     CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

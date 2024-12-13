@@ -3693,9 +3693,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"docs@workspace:docs":
+"docs-old@workspace:docs-old":
   version: 0.0.0-use.local
-  resolution: "docs@workspace:docs"
+  resolution: "docs-old@workspace:docs-old"
   dependencies:
     vitepress: "npm:^1.2.2"
   languageName: unknown

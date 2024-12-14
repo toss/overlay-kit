@@ -12,15 +12,15 @@
   },
   "dependencies": {
     "framer-motion": "^11.2.10",
-    "overlay-kit": "workspace:^",
+    "overlay-kit": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "@vitejs/plugin-react": "^4.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.4.5",
-    "vite": "^5.2.13"
+    "vite": "^6.0.3"
   }
 }

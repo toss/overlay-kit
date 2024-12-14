@@ -43,12 +43,15 @@
   },
   "scripts": {
     "build": "tsup",
-    "test": "vitest run"
+    "test": "vitest run --coverage --typecheck",
+    "test:attw": "attw --pack",
+    "test:publint": "publint"
   },
   "dependencies": {
     "use-sync-external-store": "^1.4.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",
@@ -57,13 +60,15 @@
     "@types/react-dom": "^19.0.2",
     "@types/use-sync-external-store": "^0.0.6",
     "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^2.1.8",
     "jsdom": "^25.0.1",
+    "publint": "^0.2.12",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
-    "vite": "^5.2.13",
-    "vitest": "^1.6.0"
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
   },
   "peerDependencies": {
     "react": "^16.8 || ^17 || ^18 || ^19",

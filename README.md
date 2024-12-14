@@ -1,6 +1,6 @@
 ![](./docs/public/og.png)
 
-# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE)
+# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit)
 
 English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
 
@@ -9,7 +9,7 @@ overlay-kit is a library that lets you manage overlays in a simple and declarati
 ```tsx
 import { overlay } from 'overlay-kit';
 
-<Button 
+<Button
   onClick={() => {
     overlay.open(({ isOpen, close }) => {
       return <Dialog open={isOpen} onClose={close} />;
@@ -26,7 +26,6 @@ Here are the features overlay-kit provides:
 - **Maximum Compatibility**: overlay-kit is compatible with the majority of overlay types. From Material UI to custom component libraries, overlay-kit can handle almost all types of overlays.
 - **Promise Integration**: overlay-kit is easy to use with promises when getting results from overlays.
 - **Robust Built-in Types**: overlay-kit offers robust types for all functions, ensuring type safety and enhancing the developer experience.
-
 
 ## License
 

@@ -1,0 +1,17 @@
+{
+  "name": "docs",
+  "private": true,
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@types/react": "^18.0.1",
+    "next": "^15.1.0",
+    "nextra": "^3.2.5",
+    "nextra-theme-docs": "^3.2.5",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  }
+}

@@ -1,5 +1,5 @@
 export default {
-  logo: <span>My Nextra Documentation</span>,
+  logo: <strong>overlay-kit</strong>,
   project: {
     link: 'https://github.com/toss/overlay-kit',
   },

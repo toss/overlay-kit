@@ -300,7 +300,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.26.0":
+"@babel/core@npm:^7.25.8, @babel/core@npm:^7.26.0":
   version: 7.26.0
   resolution: "@babel/core@npm:7.26.0"
   dependencies:
@@ -349,7 +349,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-module-imports@npm:^7.25.9":
+"@babel/helper-module-imports@npm:^7.22.15, @babel/helper-module-imports@npm:^7.25.9":
   version: 7.25.9
   resolution: "@babel/helper-module-imports@npm:7.25.9"
   dependencies:
@@ -507,7 +507,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.25.9":
+"@babel/traverse@npm:^7.25.7, @babel/traverse@npm:^7.25.9":
   version: 7.26.4
   resolution: "@babel/traverse@npm:7.26.4"
   dependencies:
@@ -533,7 +533,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.25.4, @babel/types@npm:^7.25.9, @babel/types@npm:^7.26.0, @babel/types@npm:^7.26.3":
+"@babel/types@npm:^7.25.4, @babel/types@npm:^7.25.8, @babel/types@npm:^7.25.9, @babel/types@npm:^7.26.0, @babel/types@npm:^7.26.3":
   version: 7.26.3
   resolution: "@babel/types@npm:7.26.3"
   dependencies:
@@ -2757,6 +2757,129 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stylexjs/babel-plugin@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "@stylexjs/babel-plugin@npm:0.9.3"
+  dependencies:
+    "@babel/core": "npm:^7.25.8"
+    "@babel/helper-module-imports": "npm:^7.22.15"
+    "@babel/traverse": "npm:^7.25.7"
+    "@babel/types": "npm:^7.25.8"
+    "@stylexjs/shared": "npm:0.9.3"
+    "@stylexjs/stylex": "npm:0.9.3"
+    esm-resolve: "npm:^1.0.11"
+  checksum: 10c0/037e1a665e7d5bbb3a80c5273dcf7781535c4cf685b939b2d56d6311f65057bc9b73e57cc6f0426aa1f4bd727a77837c43f40dd8fd9bbd5db438943f312df932
+  languageName: node
+  linkType: hard
+
+"@stylexjs/shared@npm:0.9.3":
+  version: 0.9.3
+  resolution: "@stylexjs/shared@npm:0.9.3"
+  dependencies:
+    postcss-value-parser: "npm:^4.1.0"
+  checksum: 10c0/d24332d64b3a57a44894232ea53bc10bec7942115d038b458c125b0e939c17ca35111a2f9e1ac1abb045d8c6d01f3be63c2ab0d3bc1d6fcc1f831043fd669b7c
+  languageName: node
+  linkType: hard
+
+"@stylexjs/stylex@npm:0.9.3, @stylexjs/stylex@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "@stylexjs/stylex@npm:0.9.3"
+  dependencies:
+    css-mediaquery: "npm:^0.1.2"
+    invariant: "npm:^2.2.4"
+    styleq: "npm:0.1.3"
+  checksum: 10c0/2c0aa2e0169c8099da863f45c59cc94a7657b63d9c02ec90c25d5d114cb36ac735c454fd3ca33c0616ef36edcd3c63156dfe8e3187acc05f4221eec8e1b3a789
+  languageName: node
+  linkType: hard
+
+"@stylexswc/nextjs-plugin@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/nextjs-plugin@npm:0.5.0"
+  peerDependencies:
+    next: ">=15.0.0"
+  checksum: 10c0/faf4bec121aa921df6ae7e3860af4dbeb4b58548e4f6427854dad818551ee97c1a0a81a755b33cf80ff4772ece9a4e1bda6d2036bcd7f37f20010ac2bf256251
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler-darwin-arm64@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler-darwin-arm64@npm:0.5.0"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler-darwin-x64@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler-darwin-x64@npm:0.5.0"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler-linux-arm64-gnu@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler-linux-arm64-gnu@npm:0.5.0"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler-linux-x64-gnu@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler-linux-x64-gnu@npm:0.5.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler-linux-x64-musl@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler-linux-x64-musl@npm:0.5.0"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler-win32-x64-msvc@npm:0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler-win32-x64-msvc@npm:0.5.0"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@stylexswc/rs-compiler@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/rs-compiler@npm:0.5.0"
+  dependencies:
+    "@stylexswc/rs-compiler-darwin-arm64": "npm:0.5.0"
+    "@stylexswc/rs-compiler-darwin-x64": "npm:0.5.0"
+    "@stylexswc/rs-compiler-linux-arm64-gnu": "npm:0.5.0"
+    "@stylexswc/rs-compiler-linux-x64-gnu": "npm:0.5.0"
+    "@stylexswc/rs-compiler-linux-x64-musl": "npm:0.5.0"
+    "@stylexswc/rs-compiler-win32-x64-msvc": "npm:0.5.0"
+  dependenciesMeta:
+    "@stylexswc/rs-compiler-darwin-arm64":
+      optional: true
+    "@stylexswc/rs-compiler-darwin-x64":
+      optional: true
+    "@stylexswc/rs-compiler-linux-arm64-gnu":
+      optional: true
+    "@stylexswc/rs-compiler-linux-x64-gnu":
+      optional: true
+    "@stylexswc/rs-compiler-linux-x64-musl":
+      optional: true
+    "@stylexswc/rs-compiler-win32-x64-msvc":
+      optional: true
+  checksum: 10c0/1df280d06e1dbc577a9838ed94c44e0b455bc3fd718943951123f3e96494c0be0ea46ee36dbbd28246c6be374004b325bccafdaeef422c971143adb5f9c5fd02
+  languageName: node
+  linkType: hard
+
+"@stylexswc/webpack-plugin@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "@stylexswc/webpack-plugin@npm:0.5.0"
+  dependencies:
+    "@stylexjs/babel-plugin": "npm:^0.9.3"
+    loader-utils: "npm:^3.3.1"
+  checksum: 10c0/ee4606aa91bea700aa84af817371e6bd3aa2a4f0fc853a8853b865f6fc43de208375873de490b863705e440987f60e8a1c74f9c4b8f917ee08833872ce5b2067
+  languageName: node
+  linkType: hard
+
 "@swc/counter@npm:0.1.3":
   version: 0.1.3
   resolution: "@swc/counter@npm:0.1.3"
@@ -4975,6 +5098,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-mediaquery@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "css-mediaquery@npm:0.1.2"
+  checksum: 10c0/b7825a78f52ce8a8198e004fcad0d7be1d3c9a0463ecd05ba31a0f2c94fb81468ad6f4d7bf715a6ca775696e7a17500c2a339b5216a6d0f789cbf78f9454d048
+  languageName: node
+  linkType: hard
+
 "css.escape@npm:^1.5.1":
   version: 1.5.1
   resolution: "css.escape@npm:1.5.1"
@@ -5599,6 +5729,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "docs@workspace:docs"
   dependencies:
+    "@stylexjs/stylex": "npm:^0.9.3"
+    "@stylexswc/nextjs-plugin": "npm:^0.5.0"
     "@types/node": "npm:22.10.2"
     "@types/react": "npm:^18"
     "@types/react-dom": "npm:^18"
@@ -6384,6 +6516,13 @@ __metadata:
   bin:
     eslint: bin/eslint.js
   checksum: 10c0/00bb96fd2471039a312435a6776fe1fd557c056755eaa2b96093ef3a8508c92c8775d5f754768be6b1dddd09fdd3379ddb231eeb9b6c579ee17ea7d68000a529
+  languageName: node
+  linkType: hard
+
+"esm-resolve@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "esm-resolve@npm:1.0.11"
+  checksum: 10c0/c57bba8a2156e99f76433f24687da710fc366024870e2d2a5aa5c357973956d63c306595d97028eeb329a90ee6e6e9f4a4ca26a529c4f949ed3d66aff3d1d2ee
   languageName: node
   linkType: hard
 
@@ -7721,6 +7860,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"invariant@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "invariant@npm:2.2.4"
+  dependencies:
+    loose-envify: "npm:^1.0.0"
+  checksum: 10c0/5af133a917c0bcf65e84e7f23e779e7abc1cd49cb7fdc62d00d1de74b0d8c1b5ee74ac7766099fb3be1b05b26dfc67bab76a17030d2fe7ea2eef867434362dfc
+  languageName: node
+  linkType: hard
+
 "ip-address@npm:^9.0.5":
   version: 9.0.5
   resolution: "ip-address@npm:9.0.5"
@@ -8408,6 +8556,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"loader-utils@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "loader-utils@npm:3.3.1"
+  checksum: 10c0/f2af4eb185ac5bf7e56e1337b666f90744e9f443861ac521b48f093fb9e8347f191c8960b4388a3365147d218913bc23421234e7788db69f385bacfefa0b4758
+  languageName: node
+  linkType: hard
+
 "local-pkg@npm:^0.5.1":
   version: 0.5.1
   resolution: "local-pkg@npm:0.5.1"
@@ -8478,7 +8633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -10573,6 +10728,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"postcss-value-parser@npm:^4.1.0":
+  version: 4.2.0
+  resolution: "postcss-value-parser@npm:4.2.0"
+  checksum: 10c0/f4142a4f56565f77c1831168e04e3effd9ffcc5aebaf0f538eee4b2d465adfd4b85a44257bb48418202a63806a7da7fe9f56c330aebb3cac898e46b4cbf49161
+  languageName: node
+  linkType: hard
+
 "postcss@npm:8.4.31":
   version: 8.4.31
   resolution: "postcss@npm:8.4.31"
@@ -12216,6 +12378,13 @@ __metadata:
     babel-plugin-macros:
       optional: true
   checksum: 10c0/ace50e7ea5ae5ae6a3b65a50994c51fca6ae7df9c7ecfd0104c36be0b4b3a9c5c1a2374d16e2a11e256d0b20be6d47256d768ecb4f91ab390f60752a075780f5
+  languageName: node
+  linkType: hard
+
+"styleq@npm:0.1.3":
+  version: 0.1.3
+  resolution: "styleq@npm:0.1.3"
+  checksum: 10c0/975d951792e65052f1f6e41aaad46492642ce4922b3dc36d4b49b37c8509f9a776794d8f275360f00116a5e6ab1e31514bdcd5840656c4e3213da6803fa12941
   languageName: node
   linkType: hard
 

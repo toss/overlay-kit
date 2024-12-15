@@ -49,29 +49,30 @@
     "test:publint": "publint"
   },
   "dependencies": {
-    "use-sync-external-store": "^1.2.2"
+    "use-sync-external-store": "^1.4.0"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.17.1",
-    "@testing-library/dom": "^10.3.2",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^15.0.5",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
     "@types/use-sync-external-store": "^0.0.6",
+    "@vitejs/plugin-react": "^4.3.4",
     "@vitest/coverage-v8": "^2.1.8",
-    "jsdom": "^24.0.0",
+    "jsdom": "^25.0.1",
     "publint": "^0.2.12",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "tsup": "^8.1.0",
     "typescript": "^5.4.5",
     "vite": "^6.0.3",
     "vitest": "^2.1.8"
   },
   "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
+    "react": "^16.8 || ^17 || ^18 || ^19",
+    "react-dom": "^16.8 || ^17 || ^18 || ^19"
   }
 }

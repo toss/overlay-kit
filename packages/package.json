@@ -10,7 +10,7 @@
   "bugs": "https://github.com/toss/overlay-kit/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/toss/overlay-kit.git",
+    "url": "git+https://github.com/toss/overlay-kit.git",
     "directory": "packages"
   },
   "license": "MIT",

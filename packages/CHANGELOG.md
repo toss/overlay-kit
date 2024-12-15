@@ -1,5 +1,17 @@
 # overlay-kit
 
+## 1.5.0
+
+### Minor Changes
+
+- [#95](https://github.com/toss/overlay-kit/pull/95) [`59f2917`](https://github.com/toss/overlay-kit/commit/59f29179fd61de0d64df94d54cd7110c9cc0e47c) Thanks [@manudeli](https://github.com/manudeli)! - feat: support react 19
+
+### Patch Changes
+
+- [#97](https://github.com/toss/overlay-kit/pull/97) [`a04c030`](https://github.com/toss/overlay-kit/commit/a04c03075bafc8192487c8cc1b837aaf73991760) Thanks [@manudeli](https://github.com/manudeli)! - feat: esm first (support cjs by exports field of package.json)
+
+- [#98](https://github.com/toss/overlay-kit/pull/98) [`725264a`](https://github.com/toss/overlay-kit/commit/725264abad4813bd33eefb559e869caaa329c33c) Thanks [@manudeli](https://github.com/manudeli)! - fix: update pkg.repository.url
+
 ## 1.4.1
 
 ### Patch Changes

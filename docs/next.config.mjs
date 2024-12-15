@@ -1,3 +1,4 @@
+import stylexPlugin from '@stylexswc/nextjs-plugin';
 import nextra from 'nextra';
 
 const withNextra = nextra({
@@ -5,9 +6,13 @@ const withNextra = nextra({
   themeConfig: './theme.config.tsx',
 });
 
-export default withNextra({
-  i18n: {
-    locales: ['en', 'ko'],
-    defaultLocale: 'en',
-  },
-});
+export default stylexPlugin({
+  useCSSLayers: true,
+})(
+  withNextra({
+    i18n: {
+      locales: ['en', 'ko'],
+      defaultLocale: 'en',
+    },
+  })
+);

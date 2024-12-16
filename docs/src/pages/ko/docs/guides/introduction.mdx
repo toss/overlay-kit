@@ -1,0 +1,117 @@
+import { Sandpack } from '@/components';
+
+# overlay-kit 소개
+
+overlay-kit은 React 애플리케이션에서 <b>오버레이(모달, 팝업, 다이얼로그 등)</b>을 선언적으로 관리하기 위한 라이브러리입니다.
+
+복잡한 상태 관리와 이벤트 핸들링을 제거하고 **Declarative Overlay Pattern**을 통해 더 명확하고 효율적으로 오버레이를 구현할 수 있습니다.
+
+## 기능 모아보기
+
+### 선언적 API
+
+- 오버레이 UI와 동작을 선언적으로 정의하세요.
+- 복잡한 상태 관리와 이벤트 핸들링을 제거하세요.
+
+### Promise 기반 API
+
+- 오버레이의 결과를 Promise로 반환할 수 있습니다.
+- 사용자의 입력 결과를 반환하거나, 비동기 로직에 결합해 체이닝할 수 있습니다.
+
+### 확장 가능한 컴포넌트
+
+- UI 컴포넌트에 제약을 받지 않습니다.
+- 다양한 UI 컴포넌트를 overlay-kit과 함께 사용해보세요.
+
+## overlay-kit을 사용하는 이유
+
+### 기존 오버레이 관리의 문제점
+
+1. **상태 관리의 복잡성**: `useState`와 같은 상태 관리 로직이 코드에 섞여 가독성이 저하됩니다.
+2. **이벤트 핸들링의 반복**: 열기, 닫기, 결과 반환 등의 핸들링 로직이 중복됩니다.
+3. **재사용성 부족**: 오버레이 로직과 UI가 결합되어 있어 재사용이 어렵습니다.
+
+### overlay-kit의 접근 방식
+
+**Declarative Overlay Pattern**을 도입하여 UI와 동작을 선언적으로 정의합니다.
+라이브러리 내부에서 상태를 관리하므로 개발자는 오버레이의 동작에만 집중할 수 있습니다.
+
+## overlay-kit 사용하기
+
+`overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있습니다.
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function App() {
+  return (
+    <Button
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => {
+          return (
+            <Dialog open={isOpen} onClose={close}>
+              <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+              <DialogActions>
+                <Button onClick={close}>아니요</Button>
+                <Button onClick={close}>네</Button>
+              </DialogActions>
+            </Dialog>
+          );
+        });
+      }}
+    >
+      Alert Dialog 열기
+    </Button>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+</Sandpack>
+
+## 이상적인 사용 사례
+
+overlay-kit은 다양한 프로젝트에서 잘 동작합니다. 그러나 다음 사례에서 더욱 효과적으로 사용할 수 있습니다.
+
+### 복잡한 사용자 플로우
+
+overlay-kit은 Promise를 지원합니다.
+
+체크아웃 과정, 설정 마법사, 단계별 입력 폼과 같은 **여러 단계로 나누어진 오버레이**를 쉽게 관리할 수 있습니다.
+
+### 간단한 다이얼로그
+
+오버레이의 상태 관리 없이 **간단한 다이얼로그**를 열고 닫는 작업이 가능합니다.
+
+불필요한 상태 로직을 제거해 코드의 가독성을 높입니다.
+
+### 성능 최적화가 필요한 오버레이
+
+overlay-kit은 오버레이의 최초 로딩이 무거울 때 이를 최적화하기 위해서 활용할 수 있습니다.
+
+오버레이를 닫을 때 `close` 함수를 사용하면 오버레이는 닫히지만, 오버레이의 정보는 메모리에 그대로 남아있습니다.
+이 점을 이용해서 오버레이를 다시 열 때 더욱 빠르게 열 수 있습니다.
+
+오버레이가 더이상 필요하지 않다면 `unmount` 함수를 사용하여 오버레이를 메모리에서 제거할 수 있습니다.
+
+### 재사용 가능한 UI 컴포넌트
+
+overlay-kit의 이점은 재사용 가능한 UI 컴포넌트와 잘 어울린다는 것입니다.
+
+서비스마다 필요한 UI 컴포넌트가 다르고 디자인 시스템 또한 다릅니다.
+그렇기 때문에 overlay-kit은 컴포넌트를 제한하지 않는 '헤드리스' 방식으로 설계되었습니다.

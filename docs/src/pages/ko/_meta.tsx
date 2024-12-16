@@ -6,4 +6,8 @@ export default {
       layout: 'full',
     },
   },
+  docs: {
+    type: 'page',
+    title: '문서보기',
+  },
 };

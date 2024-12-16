@@ -18,7 +18,7 @@ export function Main({ title, description, navButtonText, items }: MainProps) {
         <h1 {...stylex.props(styles.title)}>{title}</h1>
         <h2 {...stylex.props(styles.description)}>{description}</h2>
         <nav {...stylex.props(styles.navigationRoot)}>
-          <Link href={`/${router.locale}`} {...stylex.props(styles.navigation)}>
+          <Link href={`/${router.locale}/docs/guides/introduction`} {...stylex.props(styles.navigation)}>
             {navButtonText}
           </Link>
         </nav>

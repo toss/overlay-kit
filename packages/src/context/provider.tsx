@@ -1,6 +1,6 @@
 import { type FC, useEffect, useRef, type PropsWithChildren } from 'react';
 import { OverlayContextProvider } from './context';
-import { dispatchOverlay } from './store';
+import { type OverlayItem, dispatchOverlay } from './store';
 import { useSyncOverlayStore } from './use-sync-overlay-store';
 import { overlay } from '../event';
 
@@ -16,22 +16,22 @@ export function OverlayProvider({ children }: PropsWithChildren) {
   return (
     <OverlayContextProvider value={overlayState}>
       {children}
-      {overlayState.overlayOrderList.map((item) => {
-        const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
+      {overlayState.orderIds.map((orderId) => {
+        const { id: currentId, isOpen, controller: currentController } = overlayState.data[orderId];
 
         return (
           <ContentOverlayController
-            key={currentOverlayId}
+            key={currentId}
             isOpen={isOpen}
-            current={overlayState.current}
-            overlayId={currentOverlayId}
+            currentId={overlayState.currentId}
+            overlayId={currentId}
             onMounted={() => {
               requestAnimationFrame(() => {
-                dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
+                dispatchOverlay({ type: 'OPEN', overlayId: currentId });
               });
             }}
-            onCloseModal={() => overlay.close(currentOverlayId)}
-            onExitModal={() => overlay.unmount(currentOverlayId)}
+            onCloseModal={() => overlay.close(currentId)}
+            onExitModal={() => overlay.unmount(currentId)}
             controller={currentController}
           />
         );
@@ -56,8 +56,8 @@ export type OverlayAsyncControllerComponent<T> = FC<OverlayAsyncControllerProps<
 
 type ContentOverlayControllerProps = {
   isOpen: boolean;
-  current: string | null;
-  overlayId: string;
+  currentId: OverlayItem['id'] | null;
+  overlayId: OverlayItem['id'];
   onMounted: () => void;
   onCloseModal: () => void;
   onExitModal: () => void;
@@ -66,23 +66,23 @@ type ContentOverlayControllerProps = {
 
 function ContentOverlayController({
   isOpen,
-  current,
+  currentId,
   overlayId,
   onMounted,
   onCloseModal,
   onExitModal,
   controller: Controller,
 }: ContentOverlayControllerProps) {
-  const prevCurrent = useRef(current);
+  const prevCurrentId = useRef(currentId);
   const onMountedRef = useRef(onMounted);
 
   /**
    * @description Executes when closing and reopening an overlay without unmounting.
    */
-  if (prevCurrent.current !== current) {
-    prevCurrent.current = current;
+  if (prevCurrentId.current !== currentId) {
+    prevCurrentId.current = currentId;
 
-    if (current === overlayId) {
+    if (currentId === overlayId) {
       onMountedRef.current();
     }
   }

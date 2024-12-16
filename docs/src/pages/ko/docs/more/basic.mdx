@@ -1,0 +1,107 @@
+import { Sandpack } from '@/components';
+
+# 오버레이 열기
+
+## 간단한 오버레이 열기
+
+`overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있습니다.
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function App() {
+  return (
+    <Button
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => {
+          return (
+            <Dialog open={isOpen} onClose={close}>
+              <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+              <DialogActions>
+                <Button onClick={close}>아니요</Button>
+                <Button onClick={close}>네</Button>
+              </DialogActions>
+            </Dialog>
+          );
+        });
+      }}
+    >
+      Alert Dialog 열기
+    </Button>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+</Sandpack>
+
+## 비동기 오버레이 열기
+
+`overlay.openAsync`을 사용하면 오버레이의 결과를 처리할 수 있습니다.
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { useState } from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function App() {
+  const [result, setResult] = useState<boolean>();
+
+  return (
+    <div>
+      <Button
+        onClick={async () => {
+          const result = await overlay.openAsync<boolean>(({ isOpen, close }) => {
+            return (
+              <Dialog open={isOpen} onClose={() => close(false)}>
+                <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+                <DialogActions>
+                  <Button onClick={() => close(false)}>아니요</Button>
+                  <Button onClick={() => close(true)}>네</Button>
+                </DialogActions>
+              </Dialog>
+            );
+          });
+
+          setResult(result);
+        }}
+      >
+        Alert Dialog 열기
+      </Button>
+      <p>result: {result ? 'Y' : 'N'}</p>
+    </div>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+</Sandpack>

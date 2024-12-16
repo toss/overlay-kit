@@ -6061,6 +6061,7 @@ __metadata:
     nextra-theme-docs: "npm:^3.2.5"
     react: "npm:^18.0.0"
     react-dom: "npm:^18.0.0"
+    remark-sandpack: "npm:^0.0.5"
     typescript: "npm:^5"
   languageName: unknown
   linkType: soft
@@ -7036,6 +7037,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"estree-util-value-to-estree@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "estree-util-value-to-estree@npm:2.1.0"
+  dependencies:
+    "@types/estree": "npm:^1.0.0"
+    is-plain-obj: "npm:^4.0.0"
+  checksum: 10c0/7d4a22aff7830ded054a2bbc5007ce6ecb949b99a23b727d9575c50f89cb46694e9c1365593dfbcc4b3cd33b68a69d7cfee997928eb81f4daa534b8b2b883acb
+  languageName: node
+  linkType: hard
+
 "estree-util-value-to-estree@npm:^3.0.1":
   version: 3.2.1
   resolution: "estree-util-value-to-estree@npm:3.2.1"
@@ -7473,6 +7484,13 @@ __metadata:
   dependencies:
     minipass: "npm:^7.0.3"
   checksum: 10c0/63e80da2ff9b621e2cb1596abcb9207f1cf82b968b116ccd7b959e3323144cce7fb141462200971c38bbf2ecca51695069db45265705bed09a7cd93ae5b89f94
+  languageName: node
+  linkType: hard
+
+"fs-readdir-recursive@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "fs-readdir-recursive@npm:1.1.0"
+  checksum: 10c0/7e190393952143e674b6d1ad4abcafa1b5d3e337fcc21b0cb051079a7140a54617a7df193d562ef9faf21bd7b2148a38601b3d5c16261fa76f278d88dc69989c
   languageName: node
   linkType: hard
 
@@ -11789,6 +11807,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"remark-sandpack@npm:^0.0.5":
+  version: 0.0.5
+  resolution: "remark-sandpack@npm:0.0.5"
+  dependencies:
+    estree-util-value-to-estree: "npm:^2.0.0"
+    fs-readdir-recursive: "npm:^1.1.0"
+    unist-util-visit: "npm:^4.1.1"
+  checksum: 10c0/b9da1ff8694cf9df6afbdf87d74e0254429a25487622bef461919d6d2c51ff68a372bfa83c58216c38cd82af0b88a771116ab4fa1941902fab4d09a533d4d870
+  languageName: node
+  linkType: hard
+
 "remark-smartypants@npm:^3.0.0":
   version: 3.0.2
   resolution: "remark-smartypants@npm:3.0.2"
@@ -13611,6 +13640,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"unist-util-visit-parents@npm:^5.1.1":
+  version: 5.1.3
+  resolution: "unist-util-visit-parents@npm:5.1.3"
+  dependencies:
+    "@types/unist": "npm:^2.0.0"
+    unist-util-is: "npm:^5.0.0"
+  checksum: 10c0/f6829bfd8f2eddf63a32e2c302cd50978ef0c194b792c6fe60c2b71dfd7232415a3c5941903972543e9d34e6a8ea69dee9ccd95811f4a795495ed2ae855d28d0
+  languageName: node
+  linkType: hard
+
 "unist-util-visit-parents@npm:^6.0.0":
   version: 6.0.1
   resolution: "unist-util-visit-parents@npm:6.0.1"
@@ -13629,6 +13668,17 @@ __metadata:
     unist-util-is: "npm:^5.0.0"
     unist-util-visit-parents: "npm:^4.0.0"
   checksum: 10c0/9b92ea4e6debadbb77f2c7a0ab8c8b7c63781b2f2050563c971687df368f6f6fe932d864442347a685f0dc56b570a55e5d7ffeb87a452489100640cf280dc8da
+  languageName: node
+  linkType: hard
+
+"unist-util-visit@npm:^4.1.1":
+  version: 4.1.2
+  resolution: "unist-util-visit@npm:4.1.2"
+  dependencies:
+    "@types/unist": "npm:^2.0.0"
+    unist-util-is: "npm:^5.0.0"
+    unist-util-visit-parents: "npm:^5.1.1"
+  checksum: 10c0/56a1f49a4d8e321e75b3c7821d540a45165a031dd06324bb0e8c75e7737bc8d73bdddbf0b0ca82000f9708a4c36861c6ebe88d01f7cf00e925f5d75f13a3a017
   languageName: node
   linkType: hard
 

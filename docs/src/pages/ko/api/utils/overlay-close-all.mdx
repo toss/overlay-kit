@@ -1,0 +1,45 @@
+# overlay.closeAll
+
+열려있는 모든 오버레이를 닫습니다.
+
+```ts
+overlay.closeAll();
+```
+
+## 레퍼런스
+
+`overlay.close()`
+
+열려있는 모든 오버레이를 닫을 때 `overlay.closeAll`을 호출하세요.
+
+```tsx
+overlay.closeAll();
+```
+
+### 주의사항
+
+이 함수를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있습니다.
+오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 `overlay.unmountAll`을 호출하세요.
+
+## 인터페이스
+
+```tsx
+function closeAll(): void;
+```
+
+## 사용법
+
+```tsx {12}
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+// 위 세 개의 오버레이를 모두 닫습니다.
+overlay.closeAll();
+```

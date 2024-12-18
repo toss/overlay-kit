@@ -34,7 +34,7 @@ function App() {
         });
       }}
     >
-      Alert Dialog 열기
+      Confirm Dialog 열기
     </Button>
   );
 }
@@ -88,7 +88,7 @@ function App() {
           setResult(result);
         }}
       >
-        Alert Dialog 열기
+        Confirm Dialog 열기
       </Button>
       <p>result: {result ? 'Y' : 'N'}</p>
     </div>
@@ -102,6 +102,80 @@ export const Example = () => {
     </OverlayProvider>
   );
 };
+```
+
+</Sandpack>
+
+## 오버레이 메모리 해제하기
+
+`unmount`를 사용하여 오버레이를 메모리에서 해제할 수 있습니다.
+
+`unmount`를 바로 사용하면 오버레이 닫기 애니메이션이 보이지 않는 등의 문제가 발생할 수 있습니다.
+애니메이션이 있는 경우, `close`를 사용해서 오버레이를 먼저 닫아주세요.
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { ConfirmDialog } from './confirm-dialog';
+
+function App() {
+  return (
+    <>
+      <Button
+        onClick={() => {
+          overlay.open(({ isOpen, close, unmount }) => {
+            return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+          });
+        }}
+      >
+        Confirm Dialog 열기
+      </Button>
+    </>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+```tsx confirm-dialog.tsx
+import { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close, onExit }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    return () => onExit();
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+
+      <DialogContent>
+        <p>count: {count}</p>
+        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
 ```
 
 </Sandpack>

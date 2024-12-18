@@ -1,0 +1,88 @@
+import { Sandpack } from '@/components';
+
+# React 외부에서 오버레이 열기
+
+overlay-kit을 사용하면 React 바깥에서도 오버레이를 열 수 있어요.
+
+예를 들어 API 오류가 발생했을 때 오버레이를 열고 싶다면 다음과 같이 코드를 작성할 수 있어요.
+Status Code가 400 이상이라면, `<ErrorDialog />` 오버레이가 렌더링되는 코드예요.
+
+```tsx {7-11}
+import ky from 'ky';
+import { overlay } from 'overlay-kit';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        console.log('test:: response', response);
+        if (response.status >= 400) {
+          overlay.open(({ isOpen, close }) => <ErrorDialog open={isOpen} onClose={close} />);
+        }
+      },
+    ],
+  },
+});
+```
+
+아래 예제는 위 코드를 응용해 API 응답 이후 오버레이를 열어보는 예제예요.
+
+<br />
+
+<Sandpack dependencies={{ ky: 'latest' }}>
+
+```tsx Example.tsx active
+import ky from 'ky';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { Alert } from './alert';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        overlay.open(({ isOpen, close, unmount }) => {
+          return <Alert isOpen={isOpen} close={close} onExit={unmount} />;
+        });
+      },
+    ],
+  },
+});
+
+function App() {
+  return <Button onClick={() => api('/api')}>API 요청</Button>;
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+```tsx alert.tsx
+import { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function Alert({ isOpen, close, onExit }) {
+  useEffect(() => {
+    return () => onExit();
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
+      <DialogTitle>API 응답을 받았어요</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>닫기</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+</Sandpack>

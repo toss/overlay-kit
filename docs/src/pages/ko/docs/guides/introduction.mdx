@@ -2,9 +2,9 @@ import { Sandpack } from '@/components';
 
 # overlay-kit 소개
 
-overlay-kit은 React 애플리케이션에서 <b>오버레이(모달, 팝업, 다이얼로그 등)</b>을 선언적으로 관리하기 위한 라이브러리입니다.
+overlay-kit은 React에서 <b>오버레이(모달, 팝업, 다이얼로그 등)</b>을 선언적으로 관리하기 위한 라이브러리입니다.
 
-복잡한 상태 관리와 이벤트 핸들링을 제거하고 **Declarative Overlay Pattern**을 통해 더 명확하고 효율적으로 오버레이를 구현할 수 있습니다.
+복잡한 상태 관리와 불필요한 이벤트 핸들링을 제거함으로서 효율적으로 오버레이를 구현할 수 있습니다.
 
 ## 기능 모아보기
 
@@ -20,55 +20,61 @@ overlay-kit은 React 애플리케이션에서 <b>오버레이(모달, 팝업, �
 
 ### 확장 가능한 컴포넌트
 
-- UI 컴포넌트에 제약을 받지 않습니다.
+- 오버레이 컴포넌트를 자유롭게 정의해보세요.
 - 다양한 UI 컴포넌트를 overlay-kit과 함께 사용해보세요.
-
-## overlay-kit을 사용하는 이유
-
-### 기존 오버레이 관리의 문제점
-
-1. **상태 관리의 복잡성**: `useState`와 같은 상태 관리 로직이 코드에 섞여 가독성이 저하됩니다.
-2. **이벤트 핸들링의 반복**: 열기, 닫기, 결과 반환 등의 핸들링 로직이 중복됩니다.
-3. **재사용성 부족**: 오버레이 로직과 UI가 결합되어 있어 재사용이 어렵습니다.
-
-### overlay-kit의 접근 방식
-
-**Declarative Overlay Pattern**을 도입하여 UI와 동작을 선언적으로 정의합니다.
-라이브러리 내부에서 상태를 관리하므로 개발자는 오버레이의 동작에만 집중할 수 있습니다.
 
 ## overlay-kit 사용하기
 
-`overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있습니다.
+간단한 예시를 살펴보면서 overlay-kit의 사용법을 알아보겠습니다.
+
+### 오버레이
+
+화면 위에 렌더링되는 컴포넌트라면 무엇이든 오버레이가 될 수 있습니다.
+
+MUI Dialog 컴포넌트를 사용해 간단한 컨펌 다이얼로그를 정의해보겠습니다.
+
+```tsx filename="confirm-dialog.tsx"
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close }) {
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+### 오버레이 열기
+
+`overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있습니다. 위에서 정의한 ConfirmDialog를 열어보겠습니다.
+
+<br />
 
 <Sandpack>
 
 ```tsx Example.tsx active
 import { OverlayProvider, overlay } from 'overlay-kit';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { ConfirmDialog } from './confirm-dialog';
 
 function App() {
   return (
     <Button
       onClick={() => {
         overlay.open(({ isOpen, close }) => {
-          return (
-            <Dialog open={isOpen} onClose={close}>
-              <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
-              <DialogActions>
-                <Button onClick={close}>아니요</Button>
-                <Button onClick={close}>네</Button>
-              </DialogActions>
-            </Dialog>
-          );
+          return <ConfirmDialog isOpen={isOpen} close={close} />;
         });
       }}
     >
-      Alert Dialog 열기
+      Confirm Dialog 열기
     </Button>
   );
 }
@@ -82,36 +88,309 @@ export const Example = () => {
 };
 ```
 
+```tsx confirm-dialog.tsx
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close }) {
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
 </Sandpack>
 
-## 이상적인 사용 사례
+### 비동기 오버레이
 
-overlay-kit은 다양한 프로젝트에서 잘 동작합니다. 그러나 다음 사례에서 더욱 효과적으로 사용할 수 있습니다.
+ConfirmDialog의 경우, 사용자가 어떤 값을 선택했는지 알 수 있어야 합니다.
 
-### 복잡한 사용자 플로우
+confirm props를 추가하여 사용자가 '네'를 선택했을 때 다른 동작을 할 수 있도록 수정하였습니다.
 
-overlay-kit은 Promise를 지원합니다.
+```tsx filename="confirm-dialog.tsx" {6,12}
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
 
-체크아웃 과정, 설정 마법사, 단계별 입력 폼과 같은 **여러 단계로 나누어진 오버레이**를 쉽게 관리할 수 있습니다.
+export function ConfirmDialog({ isOpen, close, confirm }) {
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={confirm}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
 
-### 간단한 다이얼로그
+### 비동기 오버레이 열기
 
-오버레이의 상태 관리 없이 **간단한 다이얼로그**를 열고 닫는 작업이 가능합니다.
+`overlay.openAsync`를 사용하면 오버레이가 반환하는 값을 Promise로 관리할 수 있습니다.
 
-불필요한 상태 로직을 제거해 코드의 가독성을 높입니다.
+아래 예제는 사용자가 ConfirmDialog에서 '네'를 선택했을 때 `true`를 반환함으로서 동작의 흐름대로 코드를 읽을 수 있습니다.
 
-### 성능 최적화가 필요한 오버레이
+<br />
 
-overlay-kit은 오버레이의 최초 로딩이 무거울 때 이를 최적화하기 위해서 활용할 수 있습니다.
+<Sandpack>
 
-오버레이를 닫을 때 `close` 함수를 사용하면 오버레이는 닫히지만, 오버레이의 정보는 메모리에 그대로 남아있습니다.
-이 점을 이용해서 오버레이를 다시 열 때 더욱 빠르게 열 수 있습니다.
+```tsx Example.tsx active
+import { useState } from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { ConfirmDialog } from './confirm-dialog';
 
-오버레이가 더이상 필요하지 않다면 `unmount` 함수를 사용하여 오버레이를 메모리에서 제거할 수 있습니다.
+function App() {
+  const [result, setResult] = useState<boolean>();
 
-### 재사용 가능한 UI 컴포넌트
+  return (
+    <>
+      <p>result: {result ? 'Y' : 'N'}</p>
+      <Button
+        onClick={async () => {
+          const result = await overlay.openAsync(({ isOpen, close }) => {
+            return <ConfirmDialog isOpen={isOpen} close={() => close(false)} confirm={() => close(true)} />;
+          });
 
-overlay-kit의 이점은 재사용 가능한 UI 컴포넌트와 잘 어울린다는 것입니다.
+          setResult(result);
+        }}
+      >
+        Confirm Dialog 열기
+      </Button>
+    </>
+  );
+}
 
-서비스마다 필요한 UI 컴포넌트가 다르고 디자인 시스템 또한 다릅니다.
-그렇기 때문에 overlay-kit은 컴포넌트를 제한하지 않는 '헤드리스' 방식으로 설계되었습니다.
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+```tsx confirm-dialog.tsx
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close, confirm }) {
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={confirm}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+</Sandpack>
+
+### 오버레이 닫기
+
+`overlay.open`과 `overlay.openAsync`는 callback 함수의 인자로 `close` 함수와 `unmount` 함수를 제공합니다.
+이 두 함수는 모두 오버레이를 닫는 역할을 하지만 동작이 조금 다릅니다.
+
+이를 확인하기 위해 `overlayId`를 사용하겠습니다. `overlayId`를 지정하면 다시 열더라도 같은 오버레이가 열리게 됩니다.
+
+> `overlayId`는 오버레이의 식별자로 사용되며, 같은 `overlayId`를 가진 오버레이는 하나만 열립니다.
+
+<br />
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { ConfirmDialog } from './confirm-dialog';
+
+function App() {
+  return (
+    <>
+      <Button
+        onClick={() => {
+          overlay.open(
+            ({ isOpen, close }) => {
+              return <ConfirmDialog isOpen={isOpen} close={close} />;
+            },
+            { overlayId: 'close-overlay' }
+          );
+        }}
+      >
+        close로 오버레이 닫기
+      </Button>
+      <Button
+        onClick={() => {
+          overlay.open(
+            ({ isOpen, unmount }) => {
+              return <ConfirmDialog isOpen={isOpen} close={unmount} />;
+            },
+            { overlayId: 'unmount-overlay' }
+          );
+        }}
+      >
+        unmount로 오버레이 닫기
+      </Button>
+    </>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+```tsx confirm-dialog.tsx
+import { useState } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close }) {
+  const [count, setCount] = useState(0);
+  return (
+    <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+
+      <DialogContent>
+        <p>count: {count}</p>
+        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+</Sandpack>
+
+위 예시를 보면 오버레이가 닫힐 때 `close`는 닫는 애니메이션이 정상적으로 보이지만, `unmount`는 바로 닫힙니다.
+또한, `close`로 닫는다면 다시 열었을 때 `count`가 유지되는 반면, `unmount`로 닫는다면 `count`가 초기화됩니다.
+
+이는 `close`를 사용할 때 오버레이가 닫히는 애니메이션을 보여주기 위해서 메모리에서 해제하지 않고 계속 남겨두기 때문입니다.
+그렇기 때문에 닫기 애니메이션이 필요하다면 `close` 함수를 사용해야 합니다.
+
+### 오버레이 메모리 해제
+
+`close` 함수는 오버레이 정보를 메모리에서 해제하지 않습니다. 그렇기 때문에 오버레이가 많아질수록 메모리 누수를 발생시킬 수 있습니다.
+
+닫기 애니메이션이 종료되었다면 `unmount`를 사용해서 오버레이를 메모리에서 해제해야 합니다.
+`useEffect`의 cleanup 함수를 사용하면 손쉽게 오버레이가 닫힐 때 자동으로 메모리에서 해제할 수 있습니다.
+
+```tsx filename="confirm-dialog.tsx" {8-10}
+import { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close, onExit }) {
+  useEffect(() => {
+    return () => onExit();
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+<br />
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { ConfirmDialog } from './confirm-dialog';
+
+function App() {
+  return (
+    <>
+      <Button
+        onClick={() => {
+          overlay.open(({ isOpen, close, unmount }) => {
+            return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+          });
+        }}
+      >
+        Confirm Dialog 열기
+      </Button>
+    </>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+```
+
+```tsx confirm-dialog.tsx
+import { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close, onExit }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    return () => onExit();
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+
+      <DialogContent>
+        <p>count: {count}</p>
+        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+</Sandpack>

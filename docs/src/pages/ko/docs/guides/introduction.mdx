@@ -52,6 +52,29 @@ export function ConfirmDialog({ isOpen, close }) {
 }
 ```
 
+### 오버레이 위치 지정
+
+overlay-kit으로 오버레이를 열려면 먼저 오버레이가 렌더링될 곳을 지정해야 합니다.
+일반적으로 다른 요소 위에 오버레이가 보이도록 애플리케이션 루트에 오버레이를 렌더링하는 게 일반적입니다.
+
+오버레이의 위치를 잡기 위해서는 `OverlayProvider`를 사용하면 됩니다. 애플리케이션 루트에 `OverlayProvider`를 추가해보겠습니다.
+
+```tsx filename="Example.tsx"
+import { OverlayProvider } from 'overlay-kit';
+import { createRoot } from 'react-dom/client';
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+
+const root = createRoot(document.getElementById('root'));
+root.render(<Example />);
+```
+
 ### 오버레이 열기
 
 `overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있습니다. 위에서 정의한 ConfirmDialog를 열어보겠습니다.

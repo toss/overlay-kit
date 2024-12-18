@@ -10,4 +10,8 @@ export default {
     type: 'page',
     title: '문서보기',
   },
+  api: {
+    type: 'page',
+    title: 'API',
+  },
 };

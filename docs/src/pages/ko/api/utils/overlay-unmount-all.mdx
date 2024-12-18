@@ -1,0 +1,61 @@
+# overlay.unmountAll
+
+열려있는 모든 오버레이를 메모리에서 해제합니다.
+
+```ts
+overlay.unmountAll();
+```
+
+## 레퍼런스
+
+`overlay.unmountAll()`
+
+특정 오버레이의 메모리를 해제할 때 `overlay.unmountAll`를 호출하세요.
+
+```tsx
+overlay.unmountAll();
+```
+
+### 주의사항
+
+이 함수를 호출하면 즉시 메모리를 해제하기 때문에 오버레이 닫기 애니메이션이 보이지 않을 수 있습니다.
+애니메이션이 끝난 후에 메모리를 해제하려면 `overlay.closeAll`를 먼저 사용하세요.
+
+## 인터페이스
+
+```tsx
+function unmountAll(): void;
+```
+
+## 사용법
+
+### 자동으로 생성된 ID를 사용하는 경우
+
+```tsx {12}
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+// 위 세 개의 오버레이를 모두 닫습니다.
+overlay.unmountAll();
+```
+
+### 애니메이션이 있는 경우
+
+```tsx {7-9}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.closeAll(overlayId);
+
+setTimeout(() => {
+  overlay.unmountAll();
+}, 1000);
+```

@@ -1,0 +1,67 @@
+# overlay.unmount
+
+overlayId를 전달받아 메모리에서 해제합니다.
+
+```ts
+overlay.unmount(overlayId);
+```
+
+## 레퍼런스
+
+`overlay.unmount(overlayId)`
+
+특정 오버레이의 메모리를 해제할 때 `overlay.unmount`를 호출하세요.
+
+```tsx
+overlay.unmount(overlayId);
+```
+
+### 매개변수
+
+- `overlayId`: 닫을 오버레이의 ID를 전달합니다.
+
+### 주의사항
+
+이 함수를 호출하면 즉시 메모리를 해제하기 때문에 오버레이 닫기 애니메이션이 보이지 않을 수 있습니다.
+애니메이션이 끝난 후에 메모리를 해제하려면 `overlay.close`를 먼저 사용하세요.
+
+## 사용법
+
+### 자동으로 생성된 ID를 사용하는 경우
+
+```tsx {5}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.unmount(overlayId);
+```
+
+### 고유한 ID를 사용하는 경우
+
+```tsx {10}
+const overlayId = 'unique-id';
+
+overlay.open(
+  ({ isOpen, close, unmount }) => {
+    return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+  },
+  { id: overlayId }
+);
+
+overlay.unmount(overlayId);
+```
+
+### 애니메이션이 있는 경우
+
+```tsx {7-9}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.close(overlayId);
+
+setTimeout(() => {
+  overlay.unmount(overlayId);
+}, 1000);
+```

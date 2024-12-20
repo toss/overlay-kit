@@ -102,8 +102,8 @@ const MixedControlledCamera: React.FC = () => {
     const x = (event.clientX / innerWidth - 0.5) * 2; // -1 ~ 1
     const y = -(event.clientY / innerHeight - 0.5) * 2; // -1 ~ 1
 
-    camera.rotation.y = x * 0.05; // 마우스 좌우 회전
-    camera.rotation.x = y * 0.05; // 마우스 상하 회전
+    camera.rotation.y = x * 0.2; // 마우스 좌우 회전
+    camera.rotation.x = y * 0.2; // 마우스 상하 회전
     camera.position.z = 3;
   };
 
@@ -196,7 +196,7 @@ export function Main({ navButtonText, items }: MainProps) {
                 layout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 5 } }}
-                style={{ fontSize: 80, fontWeight: 700, zIndex: 100 }}
+                style={{ fontSize: 80, fontWeight: 700, zIndex: 10 }}
               >
                 Declarative Overlay Pattern
               </motion.span>
@@ -334,7 +334,7 @@ const LineCircle: React.FC = () => {
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" count={vertices.length / 3} array={vertices} itemSize={3} />
       </bufferGeometry>
-      <lineBasicMaterial color="#e5e5e5" />
+      <lineBasicMaterial color="#c2c2c2" />
     </lineSegments>
   );
 };

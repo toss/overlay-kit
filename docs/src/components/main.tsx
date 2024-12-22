@@ -268,8 +268,6 @@ const styles = stylex.create({
     },
     fontWeight: 700,
     zIndex: 10,
-    filter:
-      'drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5))',
   },
   title2: {
     fontSize: {

@@ -16,7 +16,7 @@
     "@suspensive/react": "^2.18.10",
     "codehike": "^1.0.4",
     "motion": "^11.15.0",
-    "next": "^15.1.0",
+    "next": "^15.1.2",
     "nextra": "^3.2.5",
     "nextra-theme-docs": "^3.2.5",
     "react": "^18.0.0",

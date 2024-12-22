@@ -1,6 +1,6 @@
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as stylex from '@stylexjs/stylex';
-import { Delay } from '@suspensive/react';
+import { ClientOnly, Delay } from '@suspensive/react';
 import { motion } from 'motion/react';
 import { useRouter } from 'nextra/hooks';
 import { Link } from 'nextra-theme-docs';
@@ -102,16 +102,16 @@ const MixedControlledCamera: React.FC = () => {
     const x = (event.clientX / innerWidth - 0.5) * 2; // -1 ~ 1
     const y = -(event.clientY / innerHeight - 0.5) * 2; // -1 ~ 1
 
-    camera.rotation.y = x * 0.2; // 마우스 좌우 회전
-    camera.rotation.x = y * 0.2; // 마우스 상하 회전
+    camera.rotation.y = x * 0.1; // 마우스 좌우 회전
+    camera.rotation.x = y * 0.1; // 마우스 상하 회전
     camera.position.z = 3;
   };
 
   const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
     const { beta, gamma } = event; // 자이로스코프 값
     if (beta !== null && gamma !== null) {
-      camera.rotation.x += THREE.MathUtils.degToRad((beta - 45) * 0.001); // 자이로스코프 상하
-      camera.rotation.y += THREE.MathUtils.degToRad(gamma * 0.001); // 자이로스코프 좌우
+      camera.rotation.x += THREE.MathUtils.degToRad((beta - 45) * 0.0005); // 자이로스코프 상하
+      camera.rotation.y += THREE.MathUtils.degToRad(gamma * 0.0005); // 자이로스코프 좌우
       camera.position.z = 3;
     }
   };
@@ -150,7 +150,7 @@ export function Main({ navButtonText, items }: MainProps) {
               left: 0,
               right: 0,
               bottom: 0,
-              filter: 'blur(10px)',
+              filter: 'blur(10px) saturate(0.8)',
               pointerEvents: 'none',
             }}
             camera={{ position: [0, 0, 3], fov: 75 }}
@@ -162,14 +162,7 @@ export function Main({ navButtonText, items }: MainProps) {
           </Canvas>
         </motion.div>
         <Canvas
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            pointerEvents: 'none',
-          }}
+          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none' }}
           camera={{ position: [0, 0, 3], fov: 75 }}
         >
           <MixedControlledCamera />
@@ -178,6 +171,9 @@ export function Main({ navButtonText, items }: MainProps) {
           <LineCircle />
         </Canvas>
         <StarCanvasFar />
+        <ClientOnly>
+          <StarCanvasClose />
+        </ClientOnly>
         <motion.div
           layout
           style={{
@@ -196,23 +192,33 @@ export function Main({ navButtonText, items }: MainProps) {
                 layout
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1, transition: { duration: 5 } }}
-                style={{ fontSize: 80, fontWeight: 700, zIndex: 10 }}
+                {...stylex.props(styles.title1)}
               >
-                Declarative Overlay Pattern
+                <div>Declarative</div>
+                <div>Overlay</div>
+                <div>Pattern</div>
               </motion.span>
             }
           >
             <motion.span
               layout
               animate={{ transition: { duration: 10, ease: 'linear' } }}
-              style={{ fontSize: 60, fontWeight: 700 }}
+              {...stylex.props(styles.title2)}
             >
               overlay-kit
+            </motion.span>
+            <motion.span
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { ease: 'linear', delay: 0.4 } }}
+              style={{ fontSize: 20, opacity: 0.8, marginBottom: 16 }}
+            >
+              npm install overlay-kit
             </motion.span>
             <motion.nav
               layout
               initial={{ display: 'hidden', opacity: 0 }}
-              animate={{ display: 'block', opacity: 1, transition: { delay: 1 } }}
+              animate={{ display: 'block', opacity: 1, transition: { delay: 1.2 } }}
               style={{ marginTop: 16 }}
               whileHover={{ scale: 1.2 }}
             >
@@ -244,23 +250,33 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
   },
-  mainRoot: {
+  title1: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: {
+      default: 'row',
+      '@media (max-width: 800px)': 'column',
+    },
+    lineHeight: 1,
+    gap: {
+      default: 12,
+      '@media (max-width: 800px)': 4,
+    },
+    textAlign: 'center',
+    fontSize: {
+      default: 80,
+      '@media (max-width: 800px)': 60,
+    },
+    fontWeight: 700,
+    zIndex: 10,
+    filter:
+      'drop-shadow(0 0 1px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.5))',
   },
-  title: {
-    fontSize: 48,
-    fontWeight: 600,
-  },
-  description: {
-    fontSize: 28,
-    fontWeight: 500,
-    whiteSpace: 'pre-line',
-  },
-  navigationRoot: {
-    display: 'flex',
-    paddingTop: 64,
-    gap: 24,
+  title2: {
+    fontSize: {
+      default: 60,
+      '@media (max-width: 800px)': 40,
+    },
+    fontWeight: 700,
   },
   navigation: {
     padding: '12px 28px',
@@ -272,6 +288,10 @@ const styles = stylex.create({
     color: 'white',
   },
   cardRoot: {
+    flexDirection: {
+      default: 'row',
+      '@media (max-width: 800px)': 'column',
+    },
     maxWidth: 1440,
     padding: '66px 16px',
     display: 'flex',
@@ -305,11 +325,10 @@ const backtickToCodeBlock = (text: string) =>
 const formatCodeBlocks = (desc: string) => backtickToCodeBlock(escapeHtml(desc));
 
 const LineCircle: React.FC = () => {
-  const lineCount = 60000; // 선분의 개수
-  const radius = 2; // 원의 반지름
-
   // 각 선분의 시작점과 끝점을 계산
   const vertices = React.useMemo<THREE.TypedArray>(() => {
+    const lineCount = 60000; // 선분의 개수
+    const radius = 2; // 원의 반지름
     const positions = [];
     for (let i = 0; i < lineCount; i++) {
       const angle = (i / lineCount) * Math.PI * 2; // 현재 각도
@@ -327,7 +346,7 @@ const LineCircle: React.FC = () => {
       positions.push(x2, y2, Math.random() * 0.8); // 끝점
     }
     return new Float32Array(positions);
-  }, [lineCount, radius]);
+  }, []);
 
   return (
     <lineSegments>
@@ -344,6 +363,7 @@ interface Vertex {
   velocity: number[];
   distance: number;
   size: number;
+  backgroundColor: { r: number; g: number; b: number };
 }
 
 const TILE = 16;
@@ -369,7 +389,6 @@ const StarCanvasFar = () => {
     function getVertex(sx: number, sy: number): Vertex {
       const id = `${sx}x${sy}`;
 
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!vertexMap[id]) {
         const x = TILE * sx + TILE * 1.5 * Math.random() - TILE * OFFSET_FACTOR;
         const y = TILE * sy + TILE * 1.5 * Math.random() - TILE * OFFSET_FACTOR;
@@ -384,6 +403,7 @@ const StarCanvasFar = () => {
           velocity: [vx, vy],
           size,
           distance,
+          backgroundColor: { r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255 },
         };
       }
       return vertexMap[id];
@@ -401,7 +421,7 @@ const StarCanvasFar = () => {
 
       for (let sx = 0; sx <= maxSX; ++sx) {
         for (let sy = 0; sy <= maxSY; ++sy) {
-          const { velocity, distance, pos, size } = getVertex(sx, sy);
+          const { velocity, distance, pos, size, backgroundColor } = getVertex(sx, sy);
           const scalar = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]);
           const totalDistance = (distTime * scalar) / 1000;
           const isReverse = Math.floor(totalDistance / distance) % 2 !== 0;
@@ -415,8 +435,7 @@ const StarCanvasFar = () => {
           const a = 1 - pos[2];
 
           ctx?.beginPath();
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          ctx!.fillStyle = `rgba(255, 255, 255, ${a})`;
+          ctx!.fillStyle = `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${a})`;
           ctx?.arc(x, y, size, 0, 2 * Math.PI);
           ctx?.fill();
         }
@@ -436,7 +455,6 @@ const StarCanvasFar = () => {
         }
       });
     });
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     parentElement && observer.observe(parentElement);
 
     return () => {
@@ -466,7 +484,145 @@ const StarCanvasFar = () => {
   return (
     <canvas
       ref={canvasRef}
-      style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none' }}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: 'none',
+        zIndex: -10,
+        filter: 'saturate(0.4)',
+      }}
+    />
+  );
+};
+
+const TILE_CLOSE = 400;
+
+const StarCanvasClose = () => {
+  const animationFrameIdRef = useRef<number | null>(null);
+  const resizeAnimationFrameIdRef = useRef(0);
+  const onRenderRef = useRef<VoidFunction | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const parentElement = canvas?.parentElement;
+    const ctx = canvas?.getContext('2d');
+    const vertexMap: Record<string, Vertex> = {};
+    const startTime = Date.now();
+
+    function getVertex(sx: number, sy: number): Vertex {
+      const id = `${sx}x${sy}`;
+
+      if (!vertexMap[id]) {
+        const x = TILE_CLOSE * sx + TILE_CLOSE * 1.5 * Math.random() - TILE_CLOSE * 0.75;
+        const y = TILE_CLOSE * sy + TILE_CLOSE * 1.5 * Math.random() - TILE_CLOSE * 0.75;
+        const z = Number(Math.random());
+        const vx = 1 + Math.random() * 200;
+        const vy = 1 + Math.random() * 200;
+        const distance = 1000 + Math.random() * 1000;
+        const size = 100 + Math.random() * 100;
+
+        vertexMap[id] = {
+          pos: [x, y, z],
+          velocity: [vx, vy],
+          size,
+          distance,
+          backgroundColor: Math.random() > 0.3 ? { r: 255, g: 0, b: 255 } : { r: 0, g: 0, b: 255 },
+        };
+      }
+      return vertexMap[id];
+    }
+
+    onRenderRef.current = () => {
+      const width = canvas?.width ?? 0;
+      const height = canvas?.height ?? 0;
+      const distTime = Date.now() - startTime;
+
+      ctx?.clearRect(0, 0, width, height);
+
+      const maxSX = Math.ceil(width / TILE_CLOSE);
+      const maxSY = Math.ceil(height / TILE_CLOSE);
+
+      for (let sx = 0; sx <= maxSX; ++sx) {
+        for (let sy = 0; sy <= maxSY; ++sy) {
+          const { velocity, distance, pos, size, backgroundColor } = getVertex(sx, sy);
+          const scalar = Math.sqrt(velocity[0] * velocity[0] + velocity[1] * velocity[1]);
+          const totalDistance = (distTime * scalar) / 1000;
+          const isReverse = Math.floor(totalDistance / distance) % 2 !== 0;
+          let nextDistance = totalDistance % distance;
+
+          if (isReverse) {
+            nextDistance = distance - nextDistance;
+          }
+          const x = pos[0] + (nextDistance / scalar) * velocity[0];
+          const y = pos[1] + (nextDistance / scalar) * velocity[1];
+          const a = 1 - pos[2];
+
+          ctx?.beginPath();
+          ctx!.fillStyle = `rgba(${backgroundColor.r}, ${backgroundColor.g}, ${backgroundColor.b}, ${a})`;
+          ctx?.arc(x, y, size, 0, 2 * Math.PI);
+          ctx?.fill();
+        }
+      }
+    };
+    const observer = new ResizeObserver(() => {
+      const inlineSize = parentElement?.offsetWidth ?? 0;
+      const blockSize = parentElement?.offsetHeight ?? 0;
+
+      cancelAnimationFrame(resizeAnimationFrameIdRef.current);
+      resizeAnimationFrameIdRef.current = requestAnimationFrame(() => {
+        if (canvas) {
+          canvas.width = inlineSize;
+          canvas.height = blockSize;
+          canvas.style.cssText += `width: ${inlineSize}px; height: ${blockSize}px; filter: blur(100px); opacity: 0.15;`;
+          onRenderRef.current?.();
+        }
+      });
+    });
+    parentElement && observer.observe(parentElement);
+
+    return () => {
+      cancelAnimationFrame(resizeAnimationFrameIdRef.current);
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const requestAnimation = () => {
+      onRenderRef.current?.();
+      animationFrameIdRef.current = requestAnimationFrame(requestAnimation);
+    };
+
+    if (animationFrameIdRef.current === null) {
+      animationFrameIdRef.current = requestAnimationFrame(requestAnimation);
+    }
+
+    return () => {
+      if (animationFrameIdRef.current !== null) {
+        cancelAnimationFrame(animationFrameIdRef.current);
+        animationFrameIdRef.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        pointerEvents: 'none',
+        zIndex: -10,
+        opacity: 0,
+        transitionProperty: 'opacity',
+        transitionDuration: '100ms',
+      }}
     />
   );
 };

@@ -222,7 +222,11 @@ export function Main({ navButtonText, items }: MainProps) {
               style={{ marginTop: 16 }}
               whileHover={{ scale: 1.2 }}
             >
-              <Link href={`/${router.locale}/docs/guides/introduction`} {...stylex.props(styles.navigation)}>
+              <Link
+                href={`/${router.locale}/docs/guides/introduction`}
+                {...stylex.props(styles.navigation)}
+                style={{ color: 'white', textDecoration: 'none' }}
+              >
                 {navButtonText}
               </Link>
             </motion.nav>
@@ -283,7 +287,6 @@ const styles = stylex.create({
     fontSize: 16,
     fontWeight: 700,
     textDecoration: 'none',
-    color: 'white',
   },
   cardRoot: {
     flexDirection: {

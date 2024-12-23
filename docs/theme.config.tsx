@@ -21,10 +21,6 @@ const config: DocsThemeConfig = {
     { locale: 'en', name: 'English' },
     { locale: 'ko', name: '한국어' },
   ],
-  darkMode: false,
-  nextThemes: {
-    forcedTheme: 'dark',
-  },
   main: function Main({ children }: { children: React.ReactNode }) {
     const router = useRouter();
 

@@ -142,6 +142,17 @@ export function Main({ navButtonText, items }: MainProps) {
   return (
     <section {...stylex.props(styles.root)}>
       <div style={{ position: 'relative', height: '60vh' }}>
+        <div
+          style={{
+            position: 'absolute',
+            backgroundColor: '#111111',
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
+            zIndex: -10,
+          }}
+        />
         <motion.div initial={{ opacity: 1 }} animate={{ opacity: 0, transition: { duration: 2, delay: 12 } }}>
           <Canvas
             style={{
@@ -162,7 +173,14 @@ export function Main({ navButtonText, items }: MainProps) {
           </Canvas>
         </motion.div>
         <Canvas
-          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none' }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            pointerEvents: 'none',
+          }}
           camera={{ position: [0, 0, 3], fov: 75 }}
         >
           <MixedControlledCamera />

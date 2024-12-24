@@ -42,6 +42,8 @@ function ModalContent({ children, isOpen }: PropsWithChildren<ModalProps>) {
         justifyContent: 'center',
       }}
     >
+      {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+      {/** @ts-expect-error */}
       <motion.section
         variants={MODAL_CONTENT_VARIANTS}
         initial="hidden"

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
 const importPlugin = require('eslint-plugin-import');
 const eslintPluginPrettierRecommended = require('eslint-plugin-prettier/recommended');
 const unicorn = require('eslint-plugin-unicorn');
 const unusedImports = require('eslint-plugin-unused-imports');
+const tseslint = require('typescript-eslint');
 
 module.exports = tseslint.config(
   {

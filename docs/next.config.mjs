@@ -18,5 +18,6 @@ export default stylexPlugin({
       locales: ['en', 'ko'],
       defaultLocale: 'en',
     },
+    eslint: { ignoreDuringBuilds: true },
   })
 );

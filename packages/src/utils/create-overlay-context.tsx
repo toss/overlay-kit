@@ -1,12 +1,11 @@
 import { createOverlayProvider } from '../context/provider';
 import { createRegisterOverlaysStore } from '../context/store';
-import { createOverlay } from '../event';
+
+export const { overlay, OverlayProvider, useCurrentOverlay, useOverlayData } = experimental_createOverlayContext();
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export function experimental_createOverlayContext() {
   const localOverlayStore = createRegisterOverlaysStore();
-  const overlay = createOverlay(localOverlayStore);
-  const { OverlayProvider, useCurrentOverlay, useOverlayData } = createOverlayProvider(localOverlayStore);
 
-  return { overlay, OverlayProvider, useCurrentOverlay, useOverlayData };
+  return createOverlayProvider(localOverlayStore);
 }

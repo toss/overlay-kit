@@ -2,7 +2,7 @@ import {
   type OverlayAsyncControllerComponent,
   type OverlayControllerComponent,
 } from './context/provider/content-overlay-controller';
-import { type OverlayStore, globalOverlayStore } from './context/store';
+import { type OverlayStore } from './context/store';
 import { randomId } from './utils/random-id';
 
 type OpenOverlayOptions = {
@@ -66,5 +66,3 @@ export function createOverlay(overlayStore: OverlayStore) {
     openAsync,
   };
 }
-
-export const overlay = createOverlay(globalOverlayStore);

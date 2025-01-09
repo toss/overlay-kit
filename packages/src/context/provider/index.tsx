@@ -1,13 +1,12 @@
 import { useEffect, type PropsWithChildren } from 'react';
 import { ContentOverlayController } from './content-overlay-controller';
 import { useSyncOverlayStore } from './use-sync-overlay-store';
-import { overlay } from '../../event';
+import { createOverlay } from '../../event';
 import { createOverlaySafeContext } from '../context';
-import { type OverlayStore, globalOverlayStore } from '../store';
-
-export const { OverlayProvider, useCurrentOverlay, useOverlayData } = createOverlayProvider(globalOverlayStore);
+import { type OverlayStore } from '../store';
 
 export function createOverlayProvider(overlayStore: OverlayStore) {
+  const overlay = createOverlay(overlayStore);
   const { OverlayContextProvider, useCurrentOverlay, useOverlayData } = createOverlaySafeContext();
 
   function OverlayProvider({ children }: PropsWithChildren) {
@@ -46,5 +45,5 @@ export function createOverlayProvider(overlayStore: OverlayStore) {
     );
   }
 
-  return { OverlayProvider, useCurrentOverlay, useOverlayData };
+  return { overlay, OverlayProvider, useCurrentOverlay, useOverlayData };
 }

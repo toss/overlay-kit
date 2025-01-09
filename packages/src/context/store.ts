@@ -16,11 +16,6 @@ export type OverlayData = {
 export type OverlayStore = ReturnType<typeof createRegisterOverlaysStore>;
 
 /**
- * @description default overlay store
- */
-export const globalOverlayStore = createRegisterOverlaysStore();
-
-/**
  * @description for useSyncExternalStorage
  */
 export function createRegisterOverlaysStore() {
@@ -37,11 +32,6 @@ export function createRegisterOverlaysStore() {
     }
   }
 
-  function dispatchOverlay(action: OverlayReducerAction) {
-    overlays = overlayReducer(overlays, action);
-    emitChangeListener();
-  }
-
   const registerOverlaysStore = {
     subscribe(listener: () => void) {
       listeners = [...listeners, listener];
@@ -55,8 +45,12 @@ export function createRegisterOverlaysStore() {
     },
   };
 
-  return {
-    registerOverlaysStore,
-    dispatchOverlay,
-  };
+  function dispatchOverlay(action: OverlayReducerAction) {
+    console.log('test:: dispatchOverlay Before', action, overlays);
+    overlays = overlayReducer(overlays, action);
+    console.log('test:: dispatchOverlay After', action, overlays);
+    emitChangeListener();
+  }
+
+  return { registerOverlaysStore, dispatchOverlay };
 }

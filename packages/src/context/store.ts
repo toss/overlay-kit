@@ -13,36 +13,50 @@ export type OverlayData = {
   overlayData: Record<OverlayId, OverlayItem>;
 };
 
-let overlays: OverlayData = {
-  current: null,
-  overlayOrderList: [],
-  overlayData: {},
-};
-let listeners: Array<() => void> = [];
+export type OverlayStore = ReturnType<typeof createRegisterOverlaysStore>;
 
-function emitChangeListener() {
-  for (const listener of listeners) {
-    listener();
-  }
-}
-
-export function dispatchOverlay(action: OverlayReducerAction) {
-  overlays = overlayReducer(overlays, action);
-  emitChangeListener();
-}
+/**
+ * @description default overlay store
+ */
+export const globalOverlayStore = createRegisterOverlaysStore();
 
 /**
  * @description for useSyncExternalStorage
  */
-export const registerOverlaysStore = {
-  subscribe(listener: () => void) {
-    listeners = [...listeners, listener];
+export function createRegisterOverlaysStore() {
+  let overlays: OverlayData = {
+    current: null,
+    overlayOrderList: [],
+    overlayData: {},
+  };
+  let listeners: Array<() => void> = [];
 
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    };
-  },
-  getSnapshot() {
-    return overlays;
-  },
-};
+  function emitChangeListener() {
+    for (const listener of listeners) {
+      listener();
+    }
+  }
+
+  function dispatchOverlay(action: OverlayReducerAction) {
+    overlays = overlayReducer(overlays, action);
+    emitChangeListener();
+  }
+
+  const registerOverlaysStore = {
+    subscribe(listener: () => void) {
+      listeners = [...listeners, listener];
+
+      return () => {
+        listeners = listeners.filter((l) => l !== listener);
+      };
+    },
+    getSnapshot() {
+      return overlays;
+    },
+  };
+
+  return {
+    registerOverlaysStore,
+    dispatchOverlay,
+  };
+}

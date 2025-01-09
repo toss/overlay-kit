@@ -1,5 +1,5 @@
 import { type OverlayAsyncControllerComponent, type OverlayControllerComponent } from './context/provider';
-import { dispatchOverlay } from './context/store';
+import { globalOverlayStore } from './context/store';
 import { randomId } from './utils';
 
 type OpenOverlayOptions = {
@@ -9,7 +9,7 @@ type OpenOverlayOptions = {
 function open(controller: OverlayControllerComponent, options?: OpenOverlayOptions) {
   const overlayId = options?.overlayId ?? randomId();
 
-  dispatchOverlay({
+  globalOverlayStore.dispatchOverlay({
     type: 'ADD',
     overlay: {
       id: overlayId,
@@ -41,16 +41,16 @@ async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, opti
 }
 
 function close(overlayId: string) {
-  dispatchOverlay({ type: 'CLOSE', overlayId });
+  globalOverlayStore.dispatchOverlay({ type: 'CLOSE', overlayId });
 }
 function unmount(overlayId: string) {
-  dispatchOverlay({ type: 'REMOVE', overlayId });
+  globalOverlayStore.dispatchOverlay({ type: 'REMOVE', overlayId });
 }
 function closeAll() {
-  dispatchOverlay({ type: 'CLOSE_ALL' });
+  globalOverlayStore.dispatchOverlay({ type: 'CLOSE_ALL' });
 }
 function unmountAll() {
-  dispatchOverlay({ type: 'REMOVE_ALL' });
+  globalOverlayStore.dispatchOverlay({ type: 'REMOVE_ALL' });
 }
 
 export const overlay = { open, close, unmount, closeAll, unmountAll, openAsync };

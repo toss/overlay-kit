@@ -3,7 +3,7 @@ import {
   type OverlayControllerComponent,
 } from './context/provider/content-overlay-controller';
 import { type OverlayStore, globalOverlayStore } from './context/store';
-import { randomId } from './utils';
+import { randomId } from './utils/random-id';
 
 type OpenOverlayOptions = {
   overlayId?: string;

@@ -1,10 +1,10 @@
 import { useSyncExternalStore } from 'use-sync-external-store/shim/index.js';
-import { globalOverlayStore } from './store';
+import { type OverlayStore } from './store';
 
-export function useSyncOverlayStore() {
+export function useSyncOverlayStore(overlayStore: OverlayStore) {
   const {
     registerOverlaysStore: { subscribe, getSnapshot },
-  } = globalOverlayStore;
+  } = overlayStore;
 
   return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }

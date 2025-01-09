@@ -1,44 +1,48 @@
 import { type FC, useEffect, useRef, type PropsWithChildren } from 'react';
 import { OverlayContextProvider } from './context';
-import { globalOverlayStore } from './store';
+import { type OverlayStore, globalOverlayStore } from './store';
 import { useSyncOverlayStore } from './use-sync-overlay-store';
 import { overlay } from '../event';
 
-export function OverlayProvider({ children }: PropsWithChildren) {
-  const overlayState = useSyncOverlayStore();
+function createOverlayProvider(overlayStore: OverlayStore) {
+  return function OverlayProvider({ children }: PropsWithChildren) {
+    const overlayState = useSyncOverlayStore(overlayStore);
 
-  useEffect(() => {
-    return () => {
-      globalOverlayStore.dispatchOverlay({ type: 'REMOVE_ALL' });
-    };
-  }, []);
+    useEffect(() => {
+      return () => {
+        overlayStore.dispatchOverlay({ type: 'REMOVE_ALL' });
+      };
+    }, []);
 
-  return (
-    <OverlayContextProvider value={overlayState}>
-      {children}
-      {overlayState.overlayOrderList.map((item) => {
-        const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
+    return (
+      <OverlayContextProvider value={overlayState}>
+        {children}
+        {overlayState.overlayOrderList.map((item) => {
+          const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
 
-        return (
-          <ContentOverlayController
-            key={currentOverlayId}
-            isOpen={isOpen}
-            current={overlayState.current}
-            overlayId={currentOverlayId}
-            onMounted={() => {
-              requestAnimationFrame(() => {
-                globalOverlayStore.dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
-              });
-            }}
-            onCloseModal={() => overlay.close(currentOverlayId)}
-            onExitModal={() => overlay.unmount(currentOverlayId)}
-            controller={currentController}
-          />
-        );
-      })}
-    </OverlayContextProvider>
-  );
+          return (
+            <ContentOverlayController
+              key={currentOverlayId}
+              isOpen={isOpen}
+              current={overlayState.current}
+              overlayId={currentOverlayId}
+              onMounted={() => {
+                requestAnimationFrame(() => {
+                  overlayStore.dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
+                });
+              }}
+              onCloseModal={() => overlay.close(currentOverlayId)}
+              onExitModal={() => overlay.unmount(currentOverlayId)}
+              controller={currentController}
+            />
+          );
+        })}
+      </OverlayContextProvider>
+    );
+  };
 }
+
+export const OverlayProvider = createOverlayProvider(globalOverlayStore);
 
 type OverlayControllerProps = {
   overlayId: string;

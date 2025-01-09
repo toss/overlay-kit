@@ -1,6 +1,6 @@
 import { type FC, useEffect, useRef, type PropsWithChildren } from 'react';
 import { OverlayContextProvider } from './context';
-import { dispatchOverlay } from './store';
+import { globalOverlayStore } from './store';
 import { useSyncOverlayStore } from './use-sync-overlay-store';
 import { overlay } from '../event';
 
@@ -9,7 +9,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     return () => {
-      dispatchOverlay({ type: 'REMOVE_ALL' });
+      globalOverlayStore.dispatchOverlay({ type: 'REMOVE_ALL' });
     };
   }, []);
 
@@ -27,7 +27,7 @@ export function OverlayProvider({ children }: PropsWithChildren) {
             overlayId={currentOverlayId}
             onMounted={() => {
               requestAnimationFrame(() => {
-                dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
+                globalOverlayStore.dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
               });
             }}
             onCloseModal={() => overlay.close(currentOverlayId)}

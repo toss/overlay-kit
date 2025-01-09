@@ -6,7 +6,7 @@ import { createOverlay } from '../event';
 export function experimental_createOverlayContext() {
   const localOverlayStore = createRegisterOverlaysStore();
   const overlay = createOverlay(localOverlayStore);
-  const OverlayProvider = createOverlayProvider(localOverlayStore);
+  const { OverlayProvider, useCurrentOverlay, useOverlayData } = createOverlayProvider(localOverlayStore);
 
-  return { overlay, OverlayProvider };
+  return { overlay, OverlayProvider, useCurrentOverlay, useOverlayData };
 }

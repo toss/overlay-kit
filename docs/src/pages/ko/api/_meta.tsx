@@ -1,7 +1,4 @@
 export default {
-  index: {
-    title: 'Reference',
-  },
   components: {
     title: '컴포넌트',
   },

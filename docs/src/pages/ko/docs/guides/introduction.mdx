@@ -323,8 +323,10 @@ export function ConfirmDialog({ isOpen, close }) {
 
 `close` 함수는 닫기 애니메이션을 보여준 뒤에도 메모리에 오버레이 정보가 남아있어요. 이런 이유로 많은 오버레이를 동시에 열고 닫는 경우 메모리 누수가 발생할 수 있어요.
 
-이를 방지하려면 닫기 애니메이션이 끝난 뒤 `unmount`를 호출해 오버레이를 메모리에서 해제하세요.
-`useEffect`의 `cleanup` 함수를 사용하면 손쉽게 오버레이가 닫힐 때 자동으로 메모리에서 해제할 수 있어요.
+이를 방지하려면 닫기 애니메이션이 끝난 뒤 `unmount`를 호출해 오버레이를 메모리에서 해제해야 해요.
+`onExit` prop과 같이 오버레이가 종료된 후 실행되는 콜백 함수가 있다면 `unmount` 함수를 전달해서 메모리를 해제할 수 있어요.
+
+MUI는 `onExit` prop을 제공하지 않지만, React의 `useEffect`의 `cleanup` 함수를 사용하면 손쉽게 오버레이가 닫힐 때 자동으로 메모리에서 해제할 수 있어요.
 
 ```tsx filename="confirm-dialog.tsx" {8-10}
 import { useEffect } from 'react';

@@ -132,11 +132,12 @@ const MixedControlledCamera: React.FC = () => {
 type MainProps = {
   title: string;
   description: string;
+  subDescription: string;
   navButtonText: string;
   items: Array<{ title: string; description: string }>;
 };
 
-export function Main({ navButtonText, items }: MainProps) {
+export function Main({ title, description, subDescription, navButtonText, items }: MainProps) {
   const router = useRouter();
 
   return (
@@ -212,9 +213,7 @@ export function Main({ navButtonText, items }: MainProps) {
                 animate={{ opacity: 1, transition: { duration: 5 } }}
                 {...stylex.props(styles.title1)}
               >
-                <div>Declarative</div>
-                <div>Overlay</div>
-                <div>Pattern</div>
+                {description}
               </motion.span>
             }
           >
@@ -223,7 +222,7 @@ export function Main({ navButtonText, items }: MainProps) {
               animate={{ transition: { duration: 10, ease: 'linear' } }}
               {...stylex.props(styles.title2)}
             >
-              overlay-kit
+              {title}
             </motion.span>
             <motion.span
               layout
@@ -231,7 +230,7 @@ export function Main({ navButtonText, items }: MainProps) {
               animate={{ opacity: 1, transition: { ease: 'linear', delay: 0.4 } }}
               style={{ fontSize: 20, opacity: 0.8, marginBottom: 16 }}
             >
-              npm install overlay-kit
+              {subDescription}
             </motion.span>
             <motion.nav
               layout

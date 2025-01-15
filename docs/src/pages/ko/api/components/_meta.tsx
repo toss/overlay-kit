@@ -1,5 +1,5 @@
 export default {
   'overlay-provider': {
-    title: 'OverlayProvider',
+    title: '<OverlayProvider>',
   },
 };

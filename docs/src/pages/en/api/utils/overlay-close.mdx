@@ -1,0 +1,61 @@
+# overlay.close
+
+`overlay.close`는 지정한 `overlayId`를 사용해 특정 오버레이를 닫는 함수예요.
+
+화면에서 오버레이를 제거하지만, 메모리에서 완전히 삭제하지는 않아요.
+
+```ts
+overlay.close(overlayId);
+```
+
+## 레퍼런스
+
+`overlay.close(overlayId)`
+
+특정 오버레이를 닫을 때 `overlay.close`를 호출하세요.
+
+```tsx
+overlay.close(overlayId);
+```
+
+### 매개변수
+
+- `overlayId`: 닫을 오버레이의 고유 ID예요.
+  - 이 ID는 `overlay.open` 호출 시 반환되거나, `options` 객체에서 `overlayId`를 직접 지정할 수 있어요.
+
+### 주의사항
+
+이 함수를 호출하면 화면에서 오버레이가 사라지지만, 오버레이는 여전히 메모리와 React 요소 트리에 남아 있어요.
+
+오버레이를 완전히 제거하려면 애니메이션이 끝난 후에 `overlay.unmount`를 추가로 호출해야 해요.
+
+## 사용법
+
+### 자동 생성된 ID로 오버레이 닫기
+
+`overlay.open`이 반환한 ID를 사용해 오버레이를 닫는 방법이에요.
+
+```tsx {5}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.close(overlayId);
+```
+
+### 고유한 ID를 사용하는 경우
+
+`overlay.open` 또는 `overlay.openAsync` 호출 시 고유한 ID를 직접 지정할 수도 있어요.
+
+```tsx {10}
+const overlayId = 'unique-id';
+
+overlay.open(
+  ({ isOpen, close, unmount }) => {
+    return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+  },
+  { id: overlayId }
+);
+
+overlay.close(overlayId);
+```

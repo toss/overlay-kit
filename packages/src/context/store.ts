@@ -1,4 +1,4 @@
-import { type OverlayControllerComponent } from './provider';
+import { type OverlayControllerComponent } from './provider/content-overlay-controller';
 import { type OverlayReducerAction, overlayReducer } from './reducer';
 
 type OverlayId = string;
@@ -13,36 +13,44 @@ export type OverlayData = {
   overlayData: Record<OverlayId, OverlayItem>;
 };
 
-let overlays: OverlayData = {
-  current: null,
-  overlayOrderList: [],
-  overlayData: {},
-};
-let listeners: Array<() => void> = [];
-
-function emitChangeListener() {
-  for (const listener of listeners) {
-    listener();
-  }
-}
-
-export function dispatchOverlay(action: OverlayReducerAction) {
-  overlays = overlayReducer(overlays, action);
-  emitChangeListener();
-}
+export type OverlayStore = ReturnType<typeof createRegisterOverlaysStore>;
 
 /**
  * @description for useSyncExternalStorage
  */
-export const registerOverlaysStore = {
-  subscribe(listener: () => void) {
-    listeners = [...listeners, listener];
+export function createRegisterOverlaysStore() {
+  let overlays: OverlayData = {
+    current: null,
+    overlayOrderList: [],
+    overlayData: {},
+  };
+  let listeners: Array<() => void> = [];
 
-    return () => {
-      listeners = listeners.filter((l) => l !== listener);
-    };
-  },
-  getSnapshot() {
-    return overlays;
-  },
-};
+  function emitChangeListener() {
+    for (const listener of listeners) {
+      listener();
+    }
+  }
+
+  const registerOverlaysStore = {
+    subscribe(listener: () => void) {
+      listeners = [...listeners, listener];
+
+      return () => {
+        listeners = listeners.filter((l) => l !== listener);
+      };
+    },
+    getSnapshot() {
+      return overlays;
+    },
+  };
+
+  function dispatchOverlay(action: OverlayReducerAction) {
+    console.log('test:: dispatchOverlay Before', action, overlays);
+    overlays = overlayReducer(overlays, action);
+    console.log('test:: dispatchOverlay After', action, overlays);
+    emitChangeListener();
+  }
+
+  return { registerOverlaysStore, dispatchOverlay };
+}

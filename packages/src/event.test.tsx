@@ -2,8 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { OverlayProvider } from './context/provider';
-import { overlay } from './event';
+import { OverlayProvider, overlay } from './utils/create-overlay-context';
 
 function wrapper({ children }: PropsWithChildren) {
   return <OverlayProvider>{children}</OverlayProvider>;

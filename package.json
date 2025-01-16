@@ -6,6 +6,7 @@
     ".",
     "packages",
     "docs",
+    "docs-old",
     "examples/**/**"
   ],
   "scripts": {

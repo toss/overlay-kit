@@ -1,18 +1,18 @@
 # overlay.open
 
-`overlay.open`은 경고창(Alert) 또는 알림(Notification)과 같은 오버레이를 열기 위해 사용해요.
+`overlay.open` is used to open overlays such as Alerts or Notifications.
 
-이 함수는 오버레이의 상태와 제어를 위한 유틸리티를 제공해요.
+This function provides utilities for controlling and managing the overlay's state.
 
 ```ts
 const overlayId = overlay.open(controller, options);
 ```
 
-## 레퍼런스
+## Reference
 
 `overlay.open(controller, options?)`
 
-오버레이를 열 때 `overlay.open`을 호출하세요.
+Call `overlay.open` when you need to open an overlay.
 
 ```tsx
 overlay.open(({ isOpen, close, unmount }) => {
@@ -20,28 +20,28 @@ overlay.open(({ isOpen, close, unmount }) => {
 });
 ```
 
-### 매개변수
+### Parameters
 
-- `controller`: 오버레이 컨트롤러 함수예요. 오버레이를 렌더링할 JSX를 반환하며, 오버레이의 상태와 제어 함수들을 매개변수로 받아요.
-  - `isOpen`: 오버레이가 열렸는지 여부를 나타내는 값이에요.
-  - `close`: 오버레이를 닫는 함수예요. <br/>오버레이 닫기 애니메이션 등을 보여주기 위해서 오버레이 정보는 메모리에 계속 남아있어요. 이것을 완전히 제거하려면 `unmount` 함수를 호출하세요.
-  - `unmount`: 오버레이를 제거하는 함수예요. <br/>오버레이 닫기 애니메이션이 있을 때 `unmount`를 바로 호출하면 오버레이가 닫히기 전에 컴포넌트가 제거되어 애니메이션이 제대로 표시되지 않을 수 있어요.
-- **optional** `options`: 오버레이를 열 때 추가 정보를 전달받는 객체예요.
-  - `overlayId`: 오버레이를 열 때 고유한 ID를 지정해요. 이 ID는 오버레이를 식별하는 데 사용돼요.
+- `controller`: The overlay controller function. Returns JSX to render the overlay and receives parameters for overlay state and control functions.
+  - `isOpen`: A value indicating whether the overlay is open.
+  - `close`: Function to close the overlay. <br/>The overlay information remains in memory to show closing animations. Call `unmount` to completely remove it.
+  - `unmount`: Function to remove the overlay. <br/>If called immediately with a closing animation, the component may be removed before the animation completes.
+- **optional** `options`: Object for passing additional information when opening an overlay.
+  - `overlayId`: Specify a unique ID when opening the overlay. This ID is used to identify the overlay.
 
-### 반환값
+### Return Value
 
-오버레이의 고유한 ID를 문자열로 반환해요. 만약 `overlayId`를 지정하지 않았다면 랜덤한 문자열이 반환돼요.
+Returns a unique ID for the overlay as a string. If `overlayId` is not specified, a random string is returned.
 
-### 주의사항
+### Important Notes
 
-수동으로 ID를 지정할 때는 다른 오버레이와 중복되지 않도록 주의하세요. 중복된 ID로 여러 오버레이를 열면 의도치 않은 동작이 발생할 수 있어요.
+When manually specifying an ID, be careful not to duplicate IDs with other overlays. Opening multiple overlays with duplicate IDs may cause unexpected behavior.
 
-## 사용법
+## Usage
 
-### 오버레이 열기
+### Opening an Overlay
 
-아래 예시는 경고창(Alert)을 열고 닫는 간단한 사용법을 보여줘요.
+Here's a simple example of opening and closing an Alert.
 
 ```tsx
 overlay.open(({ isOpen, close, unmount }) => {
@@ -49,9 +49,9 @@ overlay.open(({ isOpen, close, unmount }) => {
 });
 ```
 
-### 고유한 ID를 가진 오버레이 열기
+### Opening an Overlay with a Unique ID
 
-고유한 ID를 지정하면 특정 오버레이를 식별하거나 특정 오버레이를 닫을 때 유용해요.
+Specifying a unique ID is useful for identifying or closing specific overlays.
 
 ```tsx
 const overlayId = 'unique-overlay-id';

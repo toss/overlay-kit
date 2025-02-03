@@ -1,38 +1,38 @@
 # overlay.unmount
 
-`overlay.unmount`는 특정 오버레이를 메모리에서 완전히 제거하는 함수예요.
+`overlay.unmount` is a function that completely removes a specific overlay from memory.
 
-이 함수를 호출하면 지정한 `overlayId`에 해당하는 오버레이가 React 요소 트리와 메모리에서 삭제돼요.
+When this function is called, the overlay with the specified `overlayId` is removed from both the React element tree and memory.
 
 ```ts
 overlay.unmount(overlayId);
 ```
 
-## 레퍼런스
+## Reference
 
 `overlay.unmount(overlayId)`
 
-특정 오버레이의 메모리를 해제할 때 `overlay.unmount`를 호출하세요.
+Call `overlay.unmount` when you need to free up memory for a specific overlay.
 
 ```tsx
 overlay.unmount(overlayId);
 ```
 
-### 매개변수
+### Parameters
 
-- `overlayId`: 닫을 오버레이의 고유 ID예요.
-  - 이 ID는 `overlay.open` 호출 시 반환되거나, `options` 객체에서 `overlayId`를 직접 지정할 수 있어요.
+- `overlayId`: The unique ID of the overlay to remove.
+  - This ID is either returned from `overlay.open` or can be directly specified in the `options` object.
 
-### 주의사항
+### Important Notes
 
-- 이 함수를 호출하면 즉시 메모리를 해제하기 때문에 오버레이 닫기 애니메이션이 보이지 않을 수 있어요.
-- 애니메이션이 있는 오버레이의 경우, `overlay.close`를 호출하고 닫기 애니메이션이 끝난 후 `overlay.unmount`를 호출해야 자연스러운 사용자 경험을 제공할 수 있어요.
+- When this function is called, the overlay is immediately removed from memory, which may cause closing animations to not be displayed.
+- For overlays with animations, you should call `overlay.close` first and then call `overlay.unmount` after the closing animation completes to provide a smooth user experience.
 
-## 사용법
+## Usage
 
-### 자동으로 생성된 ID를 사용하는 경우
+### Using Auto-generated ID
 
-`overlay.open`이 반환한 ID를 사용해 오버레이를 메모리에서 제거하는 방법이에요.
+Here's a simple example of opening an overlay and removing it using `overlay.unmount`.
 
 ```tsx {5}
 const overlayId = overlay.open(({ isOpen, close, unmount }) => {
@@ -42,9 +42,9 @@ const overlayId = overlay.open(({ isOpen, close, unmount }) => {
 overlay.unmount(overlayId);
 ```
 
-### 고유한 ID를 사용하는 경우
+### Using a Custom ID
 
-`overlay.open` 호출 시 ID를 명시적으로 지정할 수 있어요.
+You can explicitly specify an ID when calling `overlay.open`.
 
 ```tsx {10}
 const overlayId = 'unique-id';
@@ -59,9 +59,9 @@ overlay.open(
 overlay.unmount(overlayId);
 ```
 
-### 애니메이션이 있는 경우
+### With Animation
 
-닫기 애니메이션이 있는 오버레이를 메모리에서 제거하려면 애니메이션이 끝난 후에 `overlay.unmount`를 호출해야 해요.
+To remove an overlay with a closing animation from memory, you should call `overlay.unmount` after the animation ends.
 
 ```tsx {7-9}
 const overlayId = overlay.open(({ isOpen, close, unmount }) => {

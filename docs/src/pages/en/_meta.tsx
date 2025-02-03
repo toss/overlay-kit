@@ -8,7 +8,7 @@ export default {
   },
   docs: {
     type: 'page',
-    title: '문서보기',
+    title: 'Documentation',
   },
   api: {
     type: 'page',

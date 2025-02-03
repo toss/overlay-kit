@@ -1,8 +1,8 @@
 export default {
   components: {
-    title: '컴포넌트',
+    title: 'Components',
   },
   utils: {
-    title: '유틸',
+    title: 'Utils',
   },
 };

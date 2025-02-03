@@ -1,37 +1,37 @@
 # overlay.unmountAll
 
-`overlay.unmountAll`은 열려 있는 모든 오버레이를 React 요소 트리와 메모리에서 완전히 제거하는 함수예요.
+`overlay.unmountAll` is a function that completely removes all open overlays from both the React element tree and memory.
 
 ```ts
 overlay.unmountAll();
 ```
 
-## 레퍼런스
+## Reference
 
 `overlay.unmountAll()`
 
-특정 오버레이의 메모리를 해제할 때 `overlay.unmountAll`를 호출하세요.
+Call `overlay.unmountAll` when you need to free up memory for all overlays.
 
 ```tsx
 overlay.unmountAll();
 ```
 
-### 주의사항
+### Important Notes
 
-- 이 함수를 호출하면 즉시 메모리를 해제하기 때문에 오버레이 닫기 애니메이션이 보이지 않을 수 있어요.
-- 애니메이션이 있는 오버레이의 경우, `overlay.closeAll`을 호출하고 닫기 애니메이션이 끝난 후 `overlay.unmountAll`을 호출해야 자연스러운 사용자 경험을 제공할 수 있어요.
+- When this function is called, overlays are immediately removed from memory, which may cause closing animations to not be displayed.
+- For overlays with animations, you should call `overlay.closeAll` first and then call `overlay.unmountAll` after the closing animations complete to provide a smooth user experience.
 
-## 인터페이스
+## Interface
 
 ```tsx
 function unmountAll(): void;
 ```
 
-## 사용법
+## Usage
 
-### 자동으로 생성된 ID를 사용하는 경우
+### Using Auto-generated IDs
 
-아래는 여러 개의 오버레이를 열고, `overlay.unmountAll`을 사용해 모두 제거하는 간단한 예제예요.
+Here's a simple example of opening multiple overlays and removing them all using `overlay.unmountAll`.
 
 ```tsx {12}
 overlay.open(({ isOpen, close, unmount }) => {
@@ -44,13 +44,13 @@ overlay.open(({ isOpen, close, unmount }) => {
   return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
 });
 
-// 위 세 개의 오버레이를 모두 닫습니다.
+// Removes all three overlays above
 overlay.unmountAll();
 ```
 
-### 애니메이션이 있는 경우
+### With Animations
 
-애니메이션이 적용된 경우에는 닫기 애니메이션이 끝난 후 `overlay.unmountAll`을 호출해야 자연스러운 사용자 경험을 제공할 수 있어요.
+For overlays with animations, you should call `overlay.unmountAll` after the closing animations complete to provide a natural user experience.
 
 ```tsx {7-9}
 const overlayId = overlay.open(({ isOpen, close, unmount }) => {

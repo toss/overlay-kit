@@ -1,9 +1,9 @@
 export default {
   introduction: {
-    title: '시작하기',
+    title: 'Getting Started',
   },
   'think-in-overlay-kit': {
-    title: 'overlay-kit으로 생각하기',
+    title: 'Think in overlay-kit',
   },
   faq: {
     title: 'FAQ',

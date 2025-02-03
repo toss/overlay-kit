@@ -1,6 +1,6 @@
 # \<OverlayProvider\>
 
-`OverlayProvider`는 React 애플리케이션에서 오버레이가 렌더링되는 위치를 결정해요.
+`OverlayProvider` determines where overlays are rendered in your React application.
 
 ```tsx
 <OverlayProvider>
@@ -8,9 +8,9 @@
 </OverlayProvider>
 ```
 
-## 레퍼런스
+## Reference
 
-일반적으로 오버레이는 다른 요소 위에 렌더링되므로 애플리케이션의 루트에 배치해요.
+Since overlays are typically rendered above other elements, they should be placed at the root of your application.
 
 ```tsx
 <OverlayProvider>
@@ -18,15 +18,15 @@
 </OverlayProvider>
 ```
 
-### 주의 사항
+### Important Notes
 
-- `OverlayProvider`는 React 애플리케이션 전체에서 **단 한 번만** 렌더링해야 해요. 중복 렌더링 시 컨텍스트가 올바르게 전달되지 않아 오버레이가 작동하지 않을 수 있어요.
+- `OverlayProvider` should be rendered **only once** in your React application. Multiple instances may prevent overlays from working correctly due to context propagation issues.
 
-## 사용법
+## Usage
 
-`<OverlayProvider />`는 모든 오버레이를 렌더링할 수 있는 컨텍스트를 제공해요.
+`<OverlayProvider />` provides the context needed to render all overlays.
 
-오버레이를 렌더링하는 컴포넌트는 모두 `<OverlayProvider />` 컴포넌트 아래에 있어야 해요.
+Any component that renders overlays must be placed under the `<OverlayProvider />` component.
 
 ```tsx {18-21}
 import React from 'react';
@@ -37,7 +37,7 @@ function App() {
   const notify = () =>
     overlay.open(({ isOpen, close, unmount }) => (
       <Modal isOpen={isOpen} onClose={close} onExit={unmount}>
-        {/* 모달 내용 */}
+        {/* Modal content */}
       </Modal>
     ));
 
@@ -48,7 +48,7 @@ export function Root() {
   return (
     <OverlayProvider>
       <App />
-      {/* 모든 오버레이는 이곳에 렌더링됩니다. */}
+      {/* All overlays will be rendered here */}
     </OverlayProvider>
   );
 }

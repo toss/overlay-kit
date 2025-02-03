@@ -1,8 +1,8 @@
 export default {
   guides: {
-    title: '가이드',
+    title: 'Guides',
   },
   more: {
-    title: '더 알아보기',
+    title: 'Learn More',
   },
 };

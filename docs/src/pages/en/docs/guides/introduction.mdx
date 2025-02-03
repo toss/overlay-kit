@@ -1,37 +1,37 @@
 import { Sandpack } from '@/components';
 
-# overlay-kit 소개
+# Introduction to overlay-kit
 
-`overlay-kit`은 React에서 **모달, 팝업, 다이얼로그** 같은 오버레이를 선언적으로 관리하기 위한 라이브러리예요.
+`overlay-kit` is a library for declaratively managing overlays like **modals, popups, and dialogs** in React.
 
-복잡한 상태 관리나 불필요한 이벤트 핸들링 없이, 효율적으로 오버레이를 구현할 수 있어요.
+You can efficiently implement overlays without complex state management or unnecessary event handling.
 
-## 기능 모아보기
+## Key Features
 
-### 선언적 API
+### Declarative API
 
-- 오버레이 UI와 동작을 간단한 코드로 선언적으로 정의할 수 있어요.
-- 상태 관리와 이벤트 핸들링 코드가 줄어들어 개발이 더 쉬워져요.
+- Define overlay UI and behavior declaratively with simple code.
+- Reduce state management and event handling code for easier development.
 
-### Promise 기반 API
+### Promise-based API
 
-- 오버레이의 결과를 `Promise`로 반환할 수 있어요.
-- 사용자의 입력 결과를 처리하거나, 비동기 로직과 결합할 수 있어요.
+- Return overlay results as `Promises`.
+- Handle user input results or combine with asynchronous logic.
 
-### 확장 가능한 컴포넌트
+### Extensible Components
 
-- 원하는 오버레이 컴포넌트를 자유롭게 정의할 수 있어요.
-- 다양한 UI 라이브러리와 함께 활용할 수 있어요.
+- Freely define your desired overlay components.
+- Use with various UI libraries.
 
-## overlay-kit 사용하기
+## Using overlay-kit
 
-간단한 예시로 `overlay-kit`의 사용법을 알아볼게요.
+Let's learn how to use `overlay-kit` with a simple example.
 
-### 오버레이
+### Overlays
 
-화면 위에 렌더링되는 컴포넌트라면 무엇이든 오버레이가 될 수 있어요.
+Any component that renders above the screen can be an overlay.
 
-MUI의 `Dialog` 컴포넌트를 활용해 간단한 확인 다이얼로그를 만들어볼게요.
+Let's create a simple confirmation dialog using MUI's `Dialog` component.
 
 ```tsx filename="confirm-dialog.tsx"
 import Button from '@mui/material/Button';
@@ -42,21 +42,21 @@ import DialogActions from '@mui/material/DialogActions';
 export function ConfirmDialog({ isOpen, close }) {
   return (
     <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
 }
 ```
 
-### 오버레이 위치 설정
+### Setting Overlay Position
 
-오버레이는 화면에 적절한 위치에서 렌더링돼야 해요. 일반적으로 앱 루트에 렌더링하는 것이 좋아요.
+Overlays should be rendered in an appropriate position on the screen. Generally, it's best to render at the app root.
 
-`OverlayProvider`를 사용해 렌더링 위치를 지정할 수 있어요.
+You can specify the rendering position using `OverlayProvider`.
 
 ```tsx filename="Example.tsx"
 import { OverlayProvider } from 'overlay-kit';
@@ -74,9 +74,9 @@ const root = createRoot(document.getElementById('root'));
 root.render(<Example />);
 ```
 
-### 오버레이 열기
+### Opening Overlays
 
-overlay.open을 사용하면 오버레이를 쉽게 열고 닫을 수 있어요. 위에서 정의한 `ConfirmDialog`를 열어볼게요.
+You can easily open and close overlays using overlay.open. Let's open the `ConfirmDialog` we defined above.
 
 <br />
 
@@ -96,7 +96,7 @@ function App() {
         });
       }}
     >
-      Confirm Dialog 열기
+      Open Confirm Dialog
     </Button>
   );
 }
@@ -119,10 +119,10 @@ import DialogActions from '@mui/material/DialogActions';
 export function ConfirmDialog({ isOpen, close }) {
   return (
     <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
@@ -131,9 +131,9 @@ export function ConfirmDialog({ isOpen, close }) {
 
 </Sandpack>
 
-### 비동기 오버레이 열기
+### Opening Asynchronous Overlays
 
-`overlay.openAsync`는 `Promise`로 결과를 반환해요. 사용자가 다이얼로그에서 "네"를 선택했을 때 결과를 반환하도록 수정해볼게요.
+`overlay.openAsync` returns results as a `Promise`. Let's modify it to return a result when the user selects "Yes" in the dialog.
 
 ```tsx filename="confirm-dialog.tsx" {6,12}
 import Button from '@mui/material/Button';
@@ -144,17 +144,17 @@ import DialogActions from '@mui/material/DialogActions';
 export function ConfirmDialog({ isOpen, close, confirm }) {
   return (
     <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={confirm}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={confirm}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
 }
 ```
 
-`overlay.openAsync`를 사용해 비동기 동작을 처리해볼게요.
+Let's handle asynchronous operations using `overlay.openAsync`.
 
 <br />
 
@@ -181,7 +181,7 @@ function App() {
           setResult(result);
         }}
       >
-        Confirm Dialog 열기
+        Open Confirm Dialog
       </Button>
     </>
   );
@@ -205,10 +205,10 @@ import DialogActions from '@mui/material/DialogActions';
 export function ConfirmDialog({ isOpen, close, confirm }) {
   return (
     <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={confirm}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={confirm}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
@@ -217,15 +217,15 @@ export function ConfirmDialog({ isOpen, close, confirm }) {
 
 </Sandpack>
 
-### 오버레이 닫기
+### Closing Overlays
 
-`overlay.open`과 `overlay.openAsync`는 콜백 함수의 인자로 `close`와 `unmount` 함수를 제공해요.
+`overlay.open` and `overlay.openAsync` provide `close` and `unmount` functions as arguments to the callback function.
 
-이 두 함수는 모두 오버레이를 닫는 역할을 하지만, 동작 방식에 차이가 있어요.
+These two functions both close the overlay, but they work differently.
 
-#### `close`와 `unmount` 차이점
+#### `close` and `unmount` difference
 
-예제를 통해 동작 차이를 확인해볼게요.
+Let's see the difference with an example.
 
 <br />
 
@@ -249,7 +249,7 @@ function App() {
           );
         }}
       >
-        close로 오버레이 닫기
+        Close overlay using close
       </Button>
       <Button
         onClick={() => {
@@ -261,7 +261,7 @@ function App() {
           );
         }}
       >
-        unmount로 오버레이 닫기
+        Close overlay using unmount
       </Button>
     </>
   );
@@ -288,16 +288,16 @@ export function ConfirmDialog({ isOpen, close }) {
   const [count, setCount] = useState(0);
   return (
     <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
 
       <DialogContent>
         <p>count: {count}</p>
-        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+        <Button onClick={() => setCount(count + 1)}>Increase count</Button>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
@@ -306,27 +306,25 @@ export function ConfirmDialog({ isOpen, close }) {
 
 </Sandpack>
 
-1. close를 사용한 경우
+1. Using `close`
 
-   - 닫기 애니메이션이 실행되고, 상태(count)가 유지돼요.
-   - 다시 열었을 때 이전 상태가 복원됩돼요.
+   - The close animation runs, and the state (count) is retained.
+   - When reopened, the previous state is restored.
 
-2. unmount를 사용한 경우
+2. Using `unmount`
 
-   - 즉시 메모리에서 제거되며, 닫기 애니메이션은 생략돼요.
-   - 다시 열었을 때 상태가 초기화돼요.
+   - It's immediately removed from memory, skipping the close animation.
+   - When reopened, the state is reset.
 
-이러한 차이가 발생하는 이유는 `close`를 사용할 때 오버레이가 닫히는 애니메이션을 보여주기 위해서 메모리에 계속 남겨두기 때문이에요.
-닫기 애니메이션이 필요하다면 `close` 함수를 먼저 사용 후, `unmount` 함수를 사용해야 해요.
+The reason for this difference is that `close` retains the overlay information in memory so that the close animation can be shown. If a close animation is needed, `close` should be used first, then `unmount` should be used.
 
-### 오버레이 메모리 해제
+### Releasing Overlay Memory
 
-`close` 함수는 닫기 애니메이션을 보여준 뒤에도 메모리에 오버레이 정보가 남아있어요. 이런 이유로 많은 오버레이를 동시에 열고 닫는 경우 메모리 누수가 발생할 수 있어요.
+`close` retains the overlay information in memory after the close animation. For this reason, if many overlays are opened and closed at the same time, memory leaks may occur.
 
-이를 방지하려면 닫기 애니메이션이 끝난 뒤 `unmount`를 호출해 오버레이를 메모리에서 해제해야 해요.
-`onExit` prop과 같이 오버레이가 종료된 후 실행되는 콜백 함수가 있다면 `unmount` 함수를 전달해서 메모리를 해제할 수 있어요.
+To avoid this, you should call `unmount` after the close animation ends to release memory. If there's a callback function that runs after the overlay ends, such as the `onExit` prop, you can pass the `unmount` function to release memory.
 
-MUI는 `onExit` prop을 제공하지 않지만, React의 `useEffect`의 `cleanup` 함수를 사용하면 손쉽게 오버레이가 닫힐 때 자동으로 메모리에서 해제할 수 있어요.
+MUI doesn't provide the `onExit` prop, but you can use React's `useEffect` cleanup function to automatically release memory when the overlay closes.
 
 ```tsx filename="confirm-dialog.tsx" {8-10}
 import { useEffect } from 'react';
@@ -342,10 +340,10 @@ export function ConfirmDialog({ isOpen, close, onExit }) {
 
   return (
     <Dialog open={isOpen} onClose={close}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
@@ -371,7 +369,7 @@ function App() {
           });
         }}
       >
-        Confirm Dialog 열기
+        Open Confirm Dialog
       </Button>
     </>
   );
@@ -403,16 +401,16 @@ export function ConfirmDialog({ isOpen, close, onExit }) {
 
   return (
     <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
 
       <DialogContent>
         <p>count: {count}</p>
-        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+        <Button onClick={() => setCount(count + 1)}>Increase count</Button>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );

@@ -1,10 +1,10 @@
 import { Sandpack } from '@/components';
 
-# 오버레이 열기
+# Opening Overlays
 
-## 간단한 오버레이 열기
+## Opening Simple Overlays
 
-`overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있어요.
+You can easily open and close overlays using `overlay.open`.
 
 <br />
 
@@ -26,17 +26,17 @@ function App() {
         overlay.open(({ isOpen, close }) => {
           return (
             <Dialog open={isOpen} onClose={close}>
-              <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+              <DialogTitle>Are you sure you want to continue?</DialogTitle>
               <DialogActions>
-                <Button onClick={close}>아니요</Button>
-                <Button onClick={close}>네</Button>
+                <Button onClick={close}>No</Button>
+                <Button onClick={close}>Yes</Button>
               </DialogActions>
             </Dialog>
           );
         });
       }}
     >
-      Confirm Dialog 열기
+      Open Confirm Dialog
     </Button>
   );
 }
@@ -52,9 +52,9 @@ export const Example = () => {
 
 </Sandpack>
 
-## 비동기 오버레이 열기
+## Opening Asynchronous Overlays
 
-`overlay.openAsync`를 사용하면 오버레이의 결과를 `Promise`로 처리할 수 있어요.
+You can handle overlay results as a `Promise` using `overlay.openAsync`.
 
 <br />
 
@@ -80,10 +80,10 @@ function App() {
           const result = await overlay.openAsync<boolean>(({ isOpen, close }) => {
             return (
               <Dialog open={isOpen} onClose={() => close(false)}>
-                <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+                <DialogTitle>Are you sure you want to continue?</DialogTitle>
                 <DialogActions>
-                  <Button onClick={() => close(false)}>아니요</Button>
-                  <Button onClick={() => close(true)}>네</Button>
+                  <Button onClick={() => close(false)}>No</Button>
+                  <Button onClick={() => close(true)}>Yes</Button>
                 </DialogActions>
               </Dialog>
             );
@@ -92,7 +92,7 @@ function App() {
           setResult(result);
         }}
       >
-        Confirm Dialog 열기
+        Open Confirm Dialog
       </Button>
       <p>result: {result ? 'Y' : 'N'}</p>
     </div>
@@ -110,16 +110,16 @@ export const Example = () => {
 
 </Sandpack>
 
-## 오버레이 메모리 해제하기
+## Releasing Overlay Memory
 
-`unmount`를 사용하면 오버레이를 메모리에서 완전히 제거할 수 있어요.
+You can completely remove overlays from memory using `unmount`.
 
-하지만 닫기 애니메이션이 있는 경우, `unmount`를 바로 호출하면 애니메이션이 보이지 않을 수 있어요.
-이럴 때는 `close`를 호출한 후, 애니메이션이 완료된 뒤 `unmount`를 실행하세요.
+However, if there's a closing animation, calling `unmount` immediately might prevent the animation from showing.
+In this case, call `close` first, then execute `unmount` after the animation completes.
 
-### `onExit` prop 사용하기
+### Using the `onExit` prop
 
-오버레이가 닫히는 애니메이션이 종료되었다는 `onExit` prop을 구현하면 애니메이션이 끝난 직후 오버레이를 제거할 수 있어요.
+By implementing the `onExit` prop that indicates the closing animation has finished, you can remove the overlay immediately after the animation ends.
 
 <br />
 
@@ -140,7 +140,7 @@ function App() {
           });
         }}
       >
-        Confirm Dialog 열기
+        Open Confirm Dialog
       </Button>
     </>
   );
@@ -172,16 +172,16 @@ export function ConfirmDialog({ isOpen, close, onExit }) {
 
   return (
     <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
 
       <DialogContent>
         <p>count: {count}</p>
-        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+        <Button onClick={() => setCount(count + 1)}>Increase count</Button>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );
@@ -190,12 +190,12 @@ export function ConfirmDialog({ isOpen, close, onExit }) {
 
 </Sandpack>
 
-### `setTimeout` 사용하기
+### Using `setTimeout`
 
-`onExit` prop이 없다면, `setTimeout`을 사용해서 애니메이션이 종료된 후에 오버레이를 제거할 수 있어요.
-애니메이션 지속 시간에 맞춰 적절한 시간을 설정하세요.
+If there's no `onExit` prop, you can use `setTimeout` to remove the overlay after the animation ends.
+Set an appropriate time according to the animation duration.
 
-다음 코드에서 `close` 함수는 오버레이를 닫고, `setTimeout`을 사용해 600ms 후에 `unmount` 함수를 호출해요.
+In the following code, the `close` function closes the overlay and uses `setTimeout` to call the `unmount` function after 600ms.
 
 <br />
 
@@ -217,8 +217,6 @@ function App() {
                 isOpen={isOpen}
                 close={() => {
                   close();
-                  // `unmount`는 600ms 이후에 실행돼요.
-                  // 애니메이션 재생 시간에 맞춰서 적절하게 타이밍을 조정하세요.
                   setTimeout(unmount, 600);
                 }}
               />
@@ -226,7 +224,7 @@ function App() {
           });
         }}
       >
-        Confirm Dialog 열기
+        Open Confirm Dialog
       </Button>
     </>
   );
@@ -254,16 +252,16 @@ export function ConfirmDialog({ isOpen, close }) {
 
   return (
     <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
-      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogTitle>Are you sure you want to continue?</DialogTitle>
 
       <DialogContent>
         <p>count: {count}</p>
-        <Button onClick={() => setCount(count + 1)}>카운트 증가</Button>
+        <Button onClick={() => setCount(count + 1)}>Increase count</Button>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={close}>아니요</Button>
-        <Button onClick={close}>네</Button>
+        <Button onClick={close}>No</Button>
+        <Button onClick={close}>Yes</Button>
       </DialogActions>
     </Dialog>
   );

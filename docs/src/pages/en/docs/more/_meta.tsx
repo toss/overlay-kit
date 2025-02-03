@@ -1,8 +1,8 @@
 export default {
   basic: {
-    title: '오버레이 열기',
+    title: 'Opening Overlays',
   },
   'open-outside-react': {
-    title: 'React 외부에서 오버레이 열기',
+    title: 'Opening Overlays Outside React',
   },
 };

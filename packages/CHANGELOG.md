@@ -1,5 +1,18 @@
 # overlay-kit
 
+## 1.6.0
+
+### Minor Changes
+
+- [#102](https://github.com/toss/overlay-kit/pull/102) [`becbd90`](https://github.com/toss/overlay-kit/commit/becbd90fa111419c3bcf4088edebc6ce743fdf40) Thanks [@jungpaeng](https://github.com/jungpaeng)! - feat: Add local overlay context support
+
+  - Add `experimental_createOverlayContext` function to create isolated overlay contexts
+  - Refactor context management to support multiple overlay instances
+  - Move overlay provider and controller logic into separate files
+  - Update store management to support local state
+  - Add documentation for new context creation API
+  - Improve type definitions and exports
+
 ## 1.5.0
 
 ### Minor Changes

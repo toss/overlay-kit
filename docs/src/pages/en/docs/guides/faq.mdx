@@ -1,0 +1,137 @@
+# FAQ (Frequently Asked Questions)
+
+Here are common questions and answers about using `overlay-kit`.
+
+If you have additional questions or find topics not covered in the documentation, please leave your feedback in [GitHub Issues](https://github.com/toss/overlay-kit/issues).
+
+## Q. When is overlay-kit most useful?
+
+**A:**
+`overlay-kit` is particularly useful in these situations:
+
+- **Complex Overlay Management**: Easily manage chained dialogs and nested overlays.
+- **Alignment with React Philosophy**: Define UI declaratively instead of managing state.
+- **Performance Optimization**: Efficiently handle heavy overlays that frequently open and close.
+- **Large Applications**: Provide consistent overlay management across the entire team.
+
+## Q. What's the difference between `overlay.open` and `overlay.openAsync`?
+
+**A:**
+These methods differ in how they handle overlays:
+
+- **`overlay.open`**: Handles basic overlay opening and closing operations.
+- **`overlay.openAsync`**: Returns a Promise for handling results asynchronously.
+
+**Comparison Example**:
+
+```tsx
+// overlay.open
+overlay.open(({ isOpen, close }) => (
+  <Dialog open={isOpen} onClose={close}>
+    <p>Simple overlay</p>
+  </Dialog>
+));
+
+// overlay.openAsync
+const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+  <Dialog open={isOpen} onClose={() => close(false)}>
+    <Button onClick={() => close(true)}>Confirm</Button>
+  </Dialog>
+));
+
+console.log(result ? 'Yes' : 'No');
+```
+
+## Q. What's the difference between `close` and `unmount`?
+
+**A:**
+Both close overlays but handle memory differently:
+
+- **`close`**: Closes the overlay but keeps state in memory. Previous state is restored when reopened.
+- **`unmount`**: Completely removes the overlay from memory. Starts with initial state when reopened.
+
+**Use Cases**:
+
+- **`close`**: Use for performance optimization with frequently opened/closed overlays.
+- **`unmount`**: Use to prevent memory leaks by removing overlays no longer needed.
+
+## Q. What's the difference between `overlay.closeAll` and `overlay.unmountAll`?
+
+**A:**
+
+- **`overlay.closeAll`**: Closes all open overlays but keeps state in memory.
+- **`overlay.unmountAll`**: Completely removes all overlays from memory.
+
+**Comparison Example**:
+
+```tsx
+// Close all overlays
+overlay.closeAll();
+
+// Remove all overlays
+overlay.unmountAll();
+```
+
+## Q. Why does state persist when reopening a closed overlay?
+
+**A:**
+`close` keeps state in memory when closing an overlay. To reset state, use `unmount` to completely remove it from memory.
+
+## Q. When should I use `unmount`?
+
+**A:**
+
+- Generally, using just `close` is sufficient if the overlay doesn't maintain heavy data.
+- Use `unmount` or `unmountAll` when overlays are no longer needed or you need to free up memory.
+
+## Q. Which UI libraries can I use with overlay-kit?
+
+**A:**
+`overlay-kit` is not tied to any specific UI library and works with any React-based UI library.
+
+For example:
+
+- **Material-UI**
+- **Chakra UI**
+- **Ant Design**
+
+## Q. Does overlay-kit support TypeScript?
+
+**A:**
+Yes, `overlay-kit` has full TypeScript support.
+
+**Example**:
+
+```tsx
+const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+  <Dialog open={isOpen} onClose={() => close(false)}>
+    <Button onClick={() => close(true)}>Confirm</Button>
+  </Dialog>
+));
+```
+
+## Q. Why isn't my closing animation showing?
+
+**A:**
+Calling `unmount` immediately skips the closing animation.
+To maintain the closing animation, call `close` first, then call `unmount` after the animation completes.
+
+**Example**:
+
+```tsx
+overlay.open(({ isOpen, close, unmount }) => (
+  <Dialog
+    open={isOpen}
+    onClose={() => {
+      close(); // Run closing animation
+      setTimeout(() => unmount(), 300); // Remove from memory after animation
+    }}
+  >
+    <p>Maintain animation</p>
+  </Dialog>
+));
+```
+
+## Additional Questions
+
+If you have additional questions or find topics that should be covered in the documentation, please leave your feedback in [GitHub Issues](https://github.com/toss/overlay-kit/issues).

@@ -1,0 +1,66 @@
+# overlay.openAsync
+
+`overlay.openAsync` is used when you need to receive user input (e.g., confirm or cancel) from an overlay.
+
+```ts
+const result = await overlay.openAsync(controller, options);
+```
+
+## Reference
+
+`overlay.openAsync(controller, options?)`
+
+Call `overlay.openAsync` when you need to open an overlay that returns a value.
+
+```tsx
+overlay.openAsync(({ isOpen, close, unmount }) => {
+  function confirm() {
+    close(true);
+  }
+  function cancel() {
+    close(false);
+  }
+
+  return <ConfirmDialog isOpen={isOpen} confirm={confirm} close={cancel} onExit={unmount} />;
+});
+```
+
+### Parameters
+
+- `controller`: The overlay controller function. Returns JSX to render the overlay and receives parameters for overlay state and control functions.
+  - `isOpen`: A value indicating whether the overlay is open.
+  - `close`: Function to close the overlay. When called, returns the passed value as a `Promise` and closes the overlay. <br/>The overlay information remains in memory for closing animations. Call `unmount` to completely remove it.
+  - `unmount`: Function to remove the overlay. <br/>If called immediately with a closing animation, the component may be removed before the animation completes.
+- **optional** `options`: Overlay options.
+  - `overlayId`: Specify a unique ID when opening the overlay.
+
+### Return Value
+
+Returns the value passed to the `close` function.
+
+### Important Notes
+
+When manually specifying an ID, be careful not to duplicate IDs with other overlays. Opening multiple overlays with duplicate IDs may cause unexpected behavior.
+
+## Usage
+
+Below is an example of opening a confirmation dialog (ConfirmDialog) and handling different actions based on user input.
+
+```tsx
+const result = await overlay.openAsync(({ isOpen, close, unmount }) => {
+  function confirm() {
+    close(true);
+  }
+  function cancel() {
+    close(false);
+  }
+
+  return <ConfirmDialog isOpen={isOpen} confirm={confirm} close={cancel} onExit={unmount} />;
+});
+
+if (result === true) {
+  console.log('User selected confirm.');
+} else {
+  console.log('User selected cancel.');
+}
+```

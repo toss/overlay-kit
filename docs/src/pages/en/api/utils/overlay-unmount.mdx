@@ -1,0 +1,76 @@
+# overlay.unmount
+
+`overlay.unmount` is a function that completely removes a specific overlay from memory.
+
+When this function is called, the overlay with the specified `overlayId` is removed from both the React element tree and memory.
+
+```ts
+overlay.unmount(overlayId);
+```
+
+## Reference
+
+`overlay.unmount(overlayId)`
+
+Call `overlay.unmount` when you need to free up memory for a specific overlay.
+
+```tsx
+overlay.unmount(overlayId);
+```
+
+### Parameters
+
+- `overlayId`: The unique ID of the overlay to remove.
+  - This ID is either returned from `overlay.open` or can be directly specified in the `options` object.
+
+### Important Notes
+
+- When this function is called, the overlay is immediately removed from memory, which may cause closing animations to not be displayed.
+- For overlays with animations, you should call `overlay.close` first and then call `overlay.unmount` after the closing animation completes to provide a smooth user experience.
+
+## Usage
+
+### Using Auto-generated ID
+
+Here's a simple example of opening an overlay and removing it using `overlay.unmount`.
+
+```tsx {5}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.unmount(overlayId);
+```
+
+### Using a Custom ID
+
+You can explicitly specify an ID when calling `overlay.open`.
+
+```tsx {10}
+const overlayId = 'unique-id';
+
+overlay.open(
+  ({ isOpen, close, unmount }) => {
+    return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+  },
+  { id: overlayId }
+);
+
+overlay.unmount(overlayId);
+```
+
+### With Animation
+
+To remove an overlay with a closing animation from memory, you should call `overlay.unmount` after the animation ends.
+
+```tsx {7-9}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.close(overlayId);
+
+setTimeout(() => {
+  overlay.unmount(overlayId);
+}, 1000);
+```

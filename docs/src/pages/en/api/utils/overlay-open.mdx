@@ -1,0 +1,65 @@
+# overlay.open
+
+`overlay.open` is used to open overlays such as Alerts or Notifications.
+
+This function provides utilities for controlling and managing the overlay's state.
+
+```ts
+const overlayId = overlay.open(controller, options);
+```
+
+## Reference
+
+`overlay.open(controller, options?)`
+
+Call `overlay.open` when you need to open an overlay.
+
+```tsx
+overlay.open(({ isOpen, close, unmount }) => {
+  return <Alert isOpen={isOpen} close={close} onExit={unmount} />;
+});
+```
+
+### Parameters
+
+- `controller`: The overlay controller function. Returns JSX to render the overlay and receives parameters for overlay state and control functions.
+  - `isOpen`: A value indicating whether the overlay is open.
+  - `close`: Function to close the overlay. <br/>The overlay information remains in memory to show closing animations. Call `unmount` to completely remove it.
+  - `unmount`: Function to remove the overlay. <br/>If called immediately with a closing animation, the component may be removed before the animation completes.
+- **optional** `options`: Object for passing additional information when opening an overlay.
+  - `overlayId`: Specify a unique ID when opening the overlay. This ID is used to identify the overlay.
+
+### Return Value
+
+Returns a unique ID for the overlay as a string. If `overlayId` is not specified, a random string is returned.
+
+### Important Notes
+
+When manually specifying an ID, be careful not to duplicate IDs with other overlays. Opening multiple overlays with duplicate IDs may cause unexpected behavior.
+
+## Usage
+
+### Opening an Overlay
+
+Here's a simple example of opening and closing an Alert.
+
+```tsx
+overlay.open(({ isOpen, close, unmount }) => {
+  return <Alert isOpen={isOpen} close={close} onExit={unmount} />;
+});
+```
+
+### Opening an Overlay with a Unique ID
+
+Specifying a unique ID is useful for identifying or closing specific overlays.
+
+```tsx
+const overlayId = 'unique-overlay-id';
+
+overlay.open(
+  ({ isOpen, close, unmount }) => {
+    return <Alert isOpen={isOpen} close={close} onExit={unmount} />;
+  },
+  { overlayId }
+);
+```

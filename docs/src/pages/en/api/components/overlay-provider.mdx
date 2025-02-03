@@ -1,0 +1,55 @@
+# \<OverlayProvider\>
+
+`OverlayProvider` determines where overlays are rendered in your React application.
+
+```tsx
+<OverlayProvider>
+  <App />
+</OverlayProvider>
+```
+
+## Reference
+
+Since overlays are typically rendered above other elements, they should be placed at the root of your application.
+
+```tsx
+<OverlayProvider>
+  <App />
+</OverlayProvider>
+```
+
+### Important Notes
+
+- `OverlayProvider` should be rendered **only once** in your React application. Multiple instances may prevent overlays from working correctly due to context propagation issues.
+
+## Usage
+
+`<OverlayProvider />` provides the context needed to render all overlays.
+
+Any component that renders overlays must be placed under the `<OverlayProvider />` component.
+
+```tsx {18-21}
+import React from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Modal } from '@src/components';
+
+function App() {
+  const notify = () =>
+    overlay.open(({ isOpen, close, unmount }) => (
+      <Modal isOpen={isOpen} onClose={close} onExit={unmount}>
+        {/* Modal content */}
+      </Modal>
+    ));
+
+  return <button onClick={notify}>open modal</button>;
+}
+
+export function Root() {
+  return (
+    <OverlayProvider>
+      <App />
+      {/* All overlays will be rendered here */}
+    </OverlayProvider>
+  );
+}
+```

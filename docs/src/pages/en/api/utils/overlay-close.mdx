@@ -1,0 +1,61 @@
+# overlay.close
+
+`overlay.close` is a function that closes a specific overlay using the provided `overlayId`.
+
+It removes the overlay from the screen but doesn't completely delete it from memory.
+
+```ts
+overlay.close(overlayId);
+```
+
+## Reference
+
+`overlay.close(overlayId)`
+
+Call `overlay.close` when you need to close a specific overlay.
+
+```tsx
+overlay.close(overlayId);
+```
+
+### Parameters
+
+- `overlayId`: The unique ID of the overlay to close.
+  - This ID is either returned from `overlay.open` or can be directly specified in the `options` object.
+
+### Important Notes
+
+When this function is called, the overlay disappears from the screen but remains in memory and the React element tree.
+
+To completely remove the overlay, you need to additionally call `overlay.unmount` after the animation ends.
+
+## Usage
+
+### Closing an Overlay with Auto-generated ID
+
+Here's how to close an overlay using the ID returned by `overlay.open`.
+
+```tsx {5}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.close(overlayId);
+```
+
+### Using a Custom ID
+
+You can also specify a unique ID when calling `overlay.open` or `overlay.openAsync`.
+
+```tsx {10}
+const overlayId = 'unique-id';
+
+overlay.open(
+  ({ isOpen, close, unmount }) => {
+    return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+  },
+  { id: overlayId }
+);
+
+overlay.close(overlayId);
+```

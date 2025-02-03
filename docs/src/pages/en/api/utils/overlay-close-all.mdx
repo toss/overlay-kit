@@ -1,0 +1,44 @@
+# overlay.closeAll
+
+`overlay.closeAll` is a function that closes all currently open overlays.
+
+It removes overlays from the screen but doesn't completely delete them from memory.
+
+```ts
+overlay.closeAll();
+```
+
+## Reference
+
+`overlay.close()`
+
+Call `overlay.closeAll` when you need to close all open overlays.
+
+```tsx
+overlay.closeAll();
+```
+
+### Important Notes
+
+When this function is called, overlays disappear from the screen but remain in memory and the React element tree.
+
+To completely remove overlays, you need to additionally call `overlay.unmountAll` after the animations end.
+
+## Usage
+
+You can open multiple overlays and close them all at once using `overlay.closeAll`.
+
+```tsx {12}
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+// Closes all three overlays above
+overlay.closeAll();
+```

@@ -1,0 +1,12 @@
+{
+  "name": "docs-old",
+  "private": true,
+  "devDependencies": {
+    "vitepress": "^1.2.2"
+  },
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  }
+}

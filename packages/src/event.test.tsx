@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { OverlayProvider, overlay } from './utils/create-overlay-context';
+import { OverlayProvider, overlay, useCurrentOverlay } from './utils/create-overlay-context';
 
 function wrapper({ children }: PropsWithChildren) {
   return <OverlayProvider>{children}</OverlayProvider>;
@@ -24,16 +24,8 @@ describe('overlay object', () => {
 
     function Component() {
       useEffect(() => {
-        overlay.open(({ overlayId }) => {
-          return (
-            <button
-              onClick={() => {
-                overlay.unmount(overlayId);
-              }}
-            >
-              {overlayDialogContent}
-            </button>
-          );
+        overlay.open(({ isOpen, overlayId }) => {
+          return isOpen && <button onClick={() => overlay.unmount(overlayId)}>{overlayDialogContent}</button>;
         });
       }, []);
 
@@ -41,10 +33,11 @@ describe('overlay object', () => {
     }
 
     const { user } = renderWithUser(<Component />);
-
     await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
 
-    expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+    });
   });
 
   it('should be able to open multiple overlays via overlay.open', async () => {
@@ -55,17 +48,17 @@ describe('overlay object', () => {
 
     function Component() {
       useEffect(() => {
-        overlay.open(() => {
-          return <p>{testContent1}</p>;
+        overlay.open(({ isOpen }) => {
+          return isOpen && <p>{testContent1}</p>;
         });
-        overlay.open(() => {
-          return <p>{testContent2}</p>;
+        overlay.open(({ isOpen }) => {
+          return isOpen && <p>{testContent2}</p>;
         });
-        overlay.open(() => {
-          return <p>{testContent3}</p>;
+        overlay.open(({ isOpen }) => {
+          return isOpen && <p>{testContent3}</p>;
         });
-        overlay.open(() => {
-          return <p>{testContent4}</p>;
+        overlay.open(({ isOpen }) => {
+          return isOpen && <p>{testContent4}</p>;
         });
       }, []);
 
@@ -73,10 +66,13 @@ describe('overlay object', () => {
     }
 
     render(<Component />, { wrapper });
-    expect(screen.queryByText(testContent1)).toBeInTheDocument();
-    expect(screen.queryByText(testContent2)).toBeInTheDocument();
-    expect(screen.queryByText(testContent3)).toBeInTheDocument();
-    expect(screen.queryByText(testContent4)).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.queryByText(testContent1)).toBeInTheDocument();
+      expect(screen.queryByText(testContent2)).toBeInTheDocument();
+      expect(screen.queryByText(testContent3)).toBeInTheDocument();
+      expect(screen.queryByText(testContent4)).toBeInTheDocument();
+    });
   });
 
   it('The value passed as an argument to close is passed to resolve. overlay.openAsync', async () => {
@@ -88,9 +84,9 @@ describe('overlay object', () => {
       return (
         <button
           onClick={async () => {
-            const result = await overlay.openAsync<boolean>(({ close }) => (
-              <button onClick={() => close(true)}>{overlayDialogContent}</button>
-            ));
+            const result = await overlay.openAsync<boolean>(
+              ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>
+            );
 
             if (result) {
               mockFn(result);
@@ -103,9 +99,7 @@ describe('overlay object', () => {
     }
 
     const { user } = renderWithUser(<Component />);
-
     await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
-
     await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
 
     await waitFor(() => {
@@ -121,8 +115,8 @@ describe('overlay object', () => {
       return (
         <button
           onClick={async () => {
-            overlay.openAsync<boolean>(({ isOpen, close }) =>
-              isOpen ? <button onClick={() => close(true)}>{overlayDialogContent}</button> : null
+            overlay.openAsync<boolean>(
+              ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>
             );
           }}
         >
@@ -132,13 +126,129 @@ describe('overlay object', () => {
     }
 
     const { user } = renderWithUser(<Component />, { wrapper });
-
     await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
-
     await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
 
     await waitFor(() => {
       expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle current overlay correctly when unmounting overlays in different orders', async () => {
+    const contents = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+      third: 'overlay-content-3',
+      fourth: 'overlay-content-4',
+    };
+
+    let overlayIds: string[] = [];
+
+    function Component() {
+      useEffect(() => {
+        // Open 4 overlays sequentially
+        overlayIds = [
+          overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>),
+          overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>),
+          overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-3">{contents.third}</div>),
+          overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-4">{contents.fourth}</div>),
+        ];
+      }, []);
+
+      return <div>Base Component</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for all overlays to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-3')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-4')).toBeInTheDocument();
+    });
+
+    // Remove middle overlay (2)
+    overlay.unmount(overlayIds[1]);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('overlay-3')).toBeVisible();
+      expect(screen.getByTestId('overlay-4')).toBeVisible();
+    });
+
+    // Remove last overlay (4)
+    overlay.unmount(overlayIds[3]);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('overlay-4')).not.toBeInTheDocument();
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('overlay-3')).toBeVisible();
+    });
+
+    // Remove overlay 3
+    overlay.unmount(overlayIds[2]);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('overlay-3')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('overlay-4')).not.toBeInTheDocument();
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+    });
+
+    // Remove overlay 1
+    overlay.unmount(overlayIds[0]);
+    await waitFor(() => {
+      expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    });
+  });
+
+  it('should track current overlay state correctly', async () => {
+    const overlayIdMap = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+    };
+
+    function Component() {
+      const current = useCurrentOverlay();
+
+      useEffect(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayIdMap.first}</div>, {
+          overlayId: overlayIdMap.first,
+        });
+      }, []);
+
+      return <div data-testid="current-overlay">{current}</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Test 1: Verify state after first overlay is opened
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.first);
+    });
+
+    // Test 2: Verify state is cleared after closing first overlay
+    overlay.close(overlayIdMap.first);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-1')).not.toBeInTheDocument();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+    });
+
+    // Test 3: Verify state after second overlay is opened
+    overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{overlayIdMap.second}</div>, {
+      overlayId: overlayIdMap.second,
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-2')).toBeVisible();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.second);
+    });
+
+    // Test 4: Verify state is cleared after unmounting second overlay
+    overlay.unmount(overlayIdMap.second);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
     });
   });
 });

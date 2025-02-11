@@ -141,4 +141,72 @@ describe('overlay object', () => {
       expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
     });
   });
+
+  it('should handle current overlay correctly when unmounting overlays in different orders', async () => {
+    const contents = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+      third: 'overlay-content-3',
+      fourth: 'overlay-content-4',
+    };
+
+    let overlayIds: string[] = [];
+
+    function Component() {
+      useEffect(() => {
+        // Open 4 overlays sequentially
+        overlayIds = [
+          overlay.open(() => <div data-testid="overlay-1">{contents.first}</div>),
+          overlay.open(() => <div data-testid="overlay-2">{contents.second}</div>),
+          overlay.open(() => <div data-testid="overlay-3">{contents.third}</div>),
+          overlay.open(() => <div data-testid="overlay-4">{contents.fourth}</div>),
+        ];
+      }, []);
+
+      return <div>Base Component</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for all overlays to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-3')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-4')).toBeInTheDocument();
+    });
+
+    // Remove middle overlay (2)
+    overlay.unmount(overlayIds[1]);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('overlay-3')).toBeVisible();
+      expect(screen.getByTestId('overlay-4')).toBeVisible();
+    });
+
+    // Remove last overlay (4)
+    overlay.unmount(overlayIds[3]);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('overlay-4')).not.toBeInTheDocument();
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('overlay-3')).toBeVisible();
+    });
+
+    // Remove overlay 3
+    overlay.unmount(overlayIds[2]);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('overlay-3')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('overlay-4')).not.toBeInTheDocument();
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+    });
+
+    // Remove overlay 1
+    overlay.unmount(overlayIds[0]);
+    await waitFor(() => {
+      expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    });
+  });
 });

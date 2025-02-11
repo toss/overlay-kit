@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { OverlayProvider, overlay } from './utils/create-overlay-context';
+import { OverlayProvider, overlay, useCurrentOverlay } from './utils/create-overlay-context';
 
 function wrapper({ children }: PropsWithChildren) {
   return <OverlayProvider>{children}</OverlayProvider>;
@@ -207,6 +207,52 @@ describe('overlay object', () => {
     overlay.unmount(overlayIds[0]);
     await waitFor(() => {
       expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    });
+  });
+
+  it('should track current overlay state correctly', async () => {
+    const overlayIdMap = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+    };
+
+    function Component() {
+      const current = useCurrentOverlay();
+
+      useEffect(() => {
+        overlay.open(() => <div data-testid="overlay-1">{overlayIdMap.first}</div>, {
+          overlayId: overlayIdMap.first,
+        });
+      }, []);
+
+      return <div data-testid="current-overlay">{current}</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Test 1: Verify state after first overlay is opened
+    await waitFor(() => {
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.first);
+    });
+
+    // Test 2: Verify state is cleared after closing first overlay
+    overlay.close(overlayIdMap.first);
+    await waitFor(() => {
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+    });
+
+    // Test 3: Verify state after second overlay is opened
+    overlay.open(() => <div data-testid="overlay-2">{overlayIdMap.second}</div>, {
+      overlayId: overlayIdMap.second,
+    });
+    await waitFor(() => {
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.second);
+    });
+
+    // Test 4: Verify state is cleared after unmounting second overlay
+    overlay.unmount(overlayIdMap.second);
+    await waitFor(() => {
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
     });
   });
 });

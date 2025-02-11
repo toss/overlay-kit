@@ -1,5 +1,18 @@
 # overlay-kit
 
+## 1.6.1
+
+### Patch Changes
+
+- [#113](https://github.com/toss/overlay-kit/pull/113) [`b57d15b`](https://github.com/toss/overlay-kit/commit/b57d15ba9b64c05d50224a09bd116266109d886c) Thanks [@jungpaeng](https://github.com/jungpaeng)! - Improve overlay unmount logic and add test cases
+
+  - Enhanced current overlay state management during unmount
+    - When unmounting a middle overlay with multiple overlays open, the last overlay becomes current
+    - When unmounting the last overlay, the previous overlay becomes current
+  - Added test cases
+    - Test for unmounting multiple overlays in different orders
+    - Test for tracking current overlay state using useCurrentOverlay hook
+
 ## 1.6.0
 
 ### Minor Changes

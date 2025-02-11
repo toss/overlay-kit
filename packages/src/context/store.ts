@@ -46,7 +46,6 @@ export function createRegisterOverlaysStore() {
   };
 
   function dispatchOverlay(action: OverlayReducerAction) {
-    console.log('test:: dispatchOverlay Before', action, overlays);
     overlays = overlayReducer(overlays, action);
     console.log('test:: dispatchOverlay After', action, overlays);
     emitChangeListener();

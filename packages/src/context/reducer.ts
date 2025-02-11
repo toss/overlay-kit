@@ -85,23 +85,28 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       const copiedOverlayData = { ...state.overlayData };
       delete copiedOverlayData[action.overlayId];
 
-      const current = state.current
-        ? remainingOverlays.includes(state.current)
-          ? /**
-             * @description If `unmount` was executed after `close`
-             */
-            state.current
-          : /**
-             * @description If you only run `unmount`, there is no `current` in `remainingOverlays`
-             */
-            remainingOverlays.at(-1) ?? null
-        : /**
-           * @description The case where `current` is `null`
-           */
-          null;
+      const openedOverlayOrderList = state.overlayOrderList.filter(
+        (orderedOverlayId) => state.overlayData[orderedOverlayId].isOpen === true
+      );
+      const targetIndexInOpenedList = openedOverlayOrderList.findIndex((item) => item === action.overlayId);
+
+      /**
+       * @description If unmounting the last overlay, specify the overlay before it.
+       * @description If unmounting intermediate overlays, specifies the last overlay.
+       *
+       * @example open - [1, 2, 3, 4]
+       * unmount 2 => current: 4
+       * unmount 4 => current: 3
+       * unmount 3 => current: 1
+       * unmount 1 => current: null
+       */
+      const currentOverlayId =
+        targetIndexInOpenedList === openedOverlayOrderList.length - 1
+          ? openedOverlayOrderList[targetIndexInOpenedList - 1] ?? null
+          : openedOverlayOrderList.at(-1) ?? null;
 
       return {
-        current,
+        current: currentOverlayId,
         overlayOrderList: remainingOverlays,
         overlayData: copiedOverlayData,
       };

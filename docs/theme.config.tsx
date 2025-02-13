@@ -37,7 +37,7 @@ const config: DocsThemeConfig = {
         <meta property="og:url" content={url} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content="/logo-dark.png" />
-        <link rel="icon" href="/favicon-100x100.ico" type="image/ico" />
+        <link rel="icon" href="/favicon.ico" type="image/ico" />
       </>
     );
   },

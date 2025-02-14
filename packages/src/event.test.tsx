@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { OverlayProvider, overlay, useCurrentOverlay } from './utils/create-overlay-context';
+import { OverlayProvider, overlay, useCurrentOverlay, useOverlayData } from './utils/create-overlay-context';
 
 function wrapper({ children }: PropsWithChildren) {
   return <OverlayProvider>{children}</OverlayProvider>;
@@ -249,6 +249,132 @@ describe('overlay object', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
       expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+    });
+  });
+
+  it('should be able to close all overlays', async () => {
+    const contents = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+    };
+
+    function Component() {
+      const data = useOverlayData();
+      const overlays = Object.values(data);
+      const hasOpenOverlay = overlays.some((overlay) => overlay.isOpen);
+
+      useEffect(() => {
+        // Open 2 overlays sequentially
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+      }, []);
+
+      return <div>{hasOpenOverlay && 'has Open overlay'}</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for all overlays to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    });
+
+    // close all overlays
+    overlay.closeAll();
+    await waitFor(() => {
+      expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+      expect(screen.queryByText('has Open overlay')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should be able to unmount all overlays', async () => {
+    const contents = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+    };
+
+    function Component() {
+      const data = useOverlayData();
+      const overlays = Object.values(data);
+      const hasOverlay = overlays.length !== 0;
+
+      useEffect(() => {
+        // Open 2 overlays sequentially
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+      }, []);
+
+      return <div>{hasOverlay && 'has overlay'}</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for all overlays to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    });
+
+    // Unmount all overlays
+    overlay.unmountAll();
+    await waitFor(() => {
+      expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+      expect(screen.queryByText('has overlay')).not.toBeInTheDocument();
+    });
+  });
+
+  it("Can't create overlay with the same overlayId", async () => {
+    const sameOverlayId = 'same-overlay-id';
+
+    function Component() {
+      useEffect(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1" />, { overlayId: sameOverlayId });
+      }, []);
+
+      return <div>Base Component</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for overlay to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    });
+
+    // Using the same overlayId causes an error
+    expect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2" />, { overlayId: sameOverlayId });
+    }).toThrowError("You can't open the multiple overlays with the same overlayId. Please set a different id.");
+  });
+
+  it('unmount function requires the exact id to be provided', async () => {
+    const overlayIdMap = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+    };
+
+    function Component() {
+      useEffect(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayIdMap.first}</div>, {
+          overlayId: overlayIdMap.first,
+        });
+      }, []);
+
+      return <div>Base Component</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for overlay to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    });
+
+    // Unmount second overlay
+    overlay.unmount(overlayIdMap.second);
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
     });
   });
 });

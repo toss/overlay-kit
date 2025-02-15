@@ -50,6 +50,9 @@ const config: DocsThemeConfig = {
       </motion.div>
     );
   },
+  footer: {
+    content: `MIT ${new Date().getFullYear()} © Viva Republica, Inc.`,
+  },
   project: {
     link: 'https://github.com/toss/overlay-kit',
   },

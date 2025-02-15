@@ -32,18 +32,33 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'OPEN': {
+      const overlay = state.overlayData[action.overlayId];
+
+      // ignore if the overlay don't exist or already open
+      if (overlay == null || overlay.isOpen) {
+        return state;
+      }
+
       return {
         ...state,
+        current: action.overlayId,
         overlayData: {
           ...state.overlayData,
           [action.overlayId]: {
-            ...state.overlayData[action.overlayId],
+            ...overlay,
             isOpen: true,
           },
         },
       };
     }
     case 'CLOSE': {
+      const overlay = state.overlayData[action.overlayId];
+
+      // ignore if the overlay don't exist or already closed
+      if (overlay == null || !overlay.isOpen) {
+        return state;
+      }
+
       const openedOverlayOrderList = state.overlayOrderList.filter(
         (orderedOverlayId) => state.overlayData[orderedOverlayId].isOpen === true
       );
@@ -77,6 +92,13 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'REMOVE': {
+      const overlay = state.overlayData[action.overlayId];
+
+      // ignore if the overlay don't exist
+      if (overlay == null) {
+        return state;
+      }
+
       const remainingOverlays = state.overlayOrderList.filter((item) => item !== action.overlayId);
       if (state.overlayOrderList.length === remainingOverlays.length) {
         return state;
@@ -112,8 +134,14 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       };
     }
     case 'CLOSE_ALL': {
+      // ignore if there is no overlay
+      if (Object.keys(state.overlayData).length === 0) {
+        return state;
+      }
+
       return {
         ...state,
+        current: null,
         overlayData: Object.keys(state.overlayData).reduce(
           (prev, curr) => ({
             ...prev,

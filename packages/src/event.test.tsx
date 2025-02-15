@@ -288,6 +288,39 @@ describe('overlay object', () => {
     });
   });
 
+  it('should not be able to get current overlay when all overlays are closed', async () => {
+    const contents = {
+      first: 'overlay-content-1',
+      second: 'overlay-content-2',
+    };
+
+    function Component() {
+      const current = useCurrentOverlay();
+
+      useEffect(() => {
+        // Open 2 overlays sequentially
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+      }, []);
+
+      return <div data-testid="current-overlay">{current}</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    // Wait for all overlays to be mounted
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    });
+
+    // close all overlays
+    overlay.closeAll();
+    await waitFor(() => {
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+    });
+  });
+
   it('should be able to unmount all overlays', async () => {
     const contents = {
       first: 'overlay-content-1',

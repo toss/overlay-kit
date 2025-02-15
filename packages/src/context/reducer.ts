@@ -114,6 +114,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
     case 'CLOSE_ALL': {
       return {
         ...state,
+        current: null,
         overlayData: Object.keys(state.overlayData).reduce(
           (prev, curr) => ({
             ...prev,

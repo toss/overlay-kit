@@ -5,6 +5,9 @@ export default {
   'think-in-overlay-kit': {
     title: 'Think in overlay-kit',
   },
+  'code-comparison': {
+    title: 'Code Comparison',
+  },
   faq: {
     title: 'FAQ',
   },

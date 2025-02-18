@@ -39,7 +39,7 @@ export function ContentOverlayController({
   /**
    * @description Executes when closing and reopening an overlay without unmounting.
    */
-  if (prevCurrent.current !== current && isOpen === false) {
+  if (prevCurrent.current !== current) {
     prevCurrent.current = current;
 
     if (current === overlayId) {

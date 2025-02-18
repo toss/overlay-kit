@@ -1,0 +1,64 @@
+# 코드 비교
+
+overlay-kit을 사용함으로써 리액트 오버레이 관리가 훨씬 쉬워졌어요. 예시 코드를 통해 변화를 살펴봐요.
+
+## Before: 기존 리액트 오버레이 구현
+
+overlay-kit을 사용하지 않았을 때의 코드는 다음과 같아요. 많은 보일러플레이트 코드가 필요하고, 리액트 훅의 규칙 때문에 상태 선언, 상태 변화, 렌더링 로직이 분리되어 코드 흐름을 파악하기가 어려웠어요. `isOpen` 상태 선언, `onClick` 상태 변화, 상태에 따라 렌더링되는 `<Dialog />` 컴포넌트가 멀리 떨어져 있어요.
+
+```tsx filename="MyPage.tsx" {4,10-12,17-22}
+import { useState } from 'react';
+
+function MyPage() {
+  const [isOpen, setIsOpen] = useState(false);
+  /* Other Hook calls... */
+  return (
+    <>
+      {/* Other components... */}
+      <Button
+        onClick={() => {
+          setIsOpen(true);
+        }}
+      >
+        Open
+      </Button>
+      {/* Other components... */}
+      <Dialog
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+      />
+    </>
+  );
+}
+```
+
+## After: overlay-kit 사용 이후
+
+반면, overlay-kit을 사용한 코드는 더 일관성 있고 직관적이에요. 버튼을 클릭하면 오버레이가 열리는 흐름이 명확하게 보여요.
+
+```tsx filename="MyPage.tsx" {10-14}
+import { overlay } from 'overlay-kit';
+
+function MyPage() {
+  /* Other Hook calls... */
+
+  return (
+    <>
+      {/* Other components... */}
+      <Button
+        onClick={() => {
+          overlay.open(({ isOpen, close }) => {
+            return <Dialog open={isOpen} onClose={close} />;
+          });
+        }}
+      >
+        Open
+      </Button>
+    </>
+  );
+}
+```
+
+보일러플레이트 코드가 크게 줄어들었어요. 이제 오버레이 상태를 직접 관리할 필요가 없어졌어요.

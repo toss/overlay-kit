@@ -41,7 +41,6 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
 
       return {
         ...state,
-        current: action.overlayId,
         overlayData: {
           ...state.overlayData,
           [action.overlayId]: {

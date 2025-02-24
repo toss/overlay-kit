@@ -1,5 +1,15 @@
 # overlay-kit
 
+## 1.6.2
+
+### Patch Changes
+
+- [#120](https://github.com/toss/overlay-kit/pull/120) [`3362bb7`](https://github.com/toss/overlay-kit/commit/3362bb7560a1a53e1b8d290a4fc1e849f607f730) Thanks [@ho991217](https://github.com/ho991217)! - fix: Enhance overlay reducer state management
+
+- [#123](https://github.com/toss/overlay-kit/pull/123) [`d02a36c`](https://github.com/toss/overlay-kit/commit/d02a36c3adb711144568fae19b96db52b17dc71d) Thanks [@yongsk0066](https://github.com/yongsk0066)! - fix: remove console log on dispatchOverlay
+
+- [#119](https://github.com/toss/overlay-kit/pull/119) [`a45f618`](https://github.com/toss/overlay-kit/commit/a45f6181294cab767569ad257c1901767f2d13aa) Thanks [@ho991217](https://github.com/ho991217)! - fix: initializing current overlay after close all overlays
+
 ## 1.6.1
 
 ### Patch Changes

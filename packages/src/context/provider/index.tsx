@@ -35,6 +35,7 @@ export function createOverlayProvider(overlayStore: OverlayStore) {
                   overlayStore.dispatchOverlay({ type: 'OPEN', overlayId: currentOverlayId });
                 });
               }}
+              context={overlayState.overlayData[currentOverlayId].context}
               onCloseModal={() => overlay.close(currentOverlayId)}
               onExitModal={() => overlay.unmount(currentOverlayId)}
               controller={currentController}

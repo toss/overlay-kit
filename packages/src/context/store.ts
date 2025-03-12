@@ -2,15 +2,20 @@ import { type OverlayControllerComponent } from './provider/content-overlay-cont
 import { type OverlayReducerAction, overlayReducer } from './reducer';
 
 type OverlayId = string;
-export type OverlayItem = {
+
+export type OverlayItemContext = Record<string, unknown>;
+
+export type OverlayItem<C extends OverlayItemContext> = {
   id: OverlayId;
   isOpen: boolean;
-  controller: OverlayControllerComponent;
+  controller: OverlayControllerComponent<C>;
+  context: C;
 };
+
 export type OverlayData = {
   current: OverlayId | null;
   overlayOrderList: OverlayId[];
-  overlayData: Record<OverlayId, OverlayItem>;
+  overlayData: Record<OverlayId, OverlayItem<OverlayItemContext>>;
 };
 
 export type OverlayStore = ReturnType<typeof createRegisterOverlaysStore>;

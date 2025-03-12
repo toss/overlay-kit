@@ -1,30 +1,33 @@
 import { type FC, useEffect, useRef } from 'react';
+import { type OverlayItemContext } from '../store';
 
-type OverlayControllerProps = {
+type OverlayControllerProps<C extends OverlayItemContext> = {
   overlayId: string;
   isOpen: boolean;
   close: () => void;
   unmount: () => void;
+  context: C;
 };
 
-type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close'> & {
+type OverlayAsyncControllerProps<T, C extends OverlayItemContext> = Omit<OverlayControllerProps<C>, 'close'> & {
   close: (param: T) => void;
 };
 
-export type OverlayControllerComponent = FC<OverlayControllerProps>;
-export type OverlayAsyncControllerComponent<T> = FC<OverlayAsyncControllerProps<T>>;
+export type OverlayControllerComponent<C extends OverlayItemContext> = FC<OverlayControllerProps<C>>;
+export type OverlayAsyncControllerComponent<T, C extends OverlayItemContext> = FC<OverlayAsyncControllerProps<T, C>>;
 
-type ContentOverlayControllerProps = {
+type ContentOverlayControllerProps<C extends OverlayItemContext> = {
   isOpen: boolean;
   current: string | null;
   overlayId: string;
   onMounted: () => void;
   onCloseModal: () => void;
   onExitModal: () => void;
-  controller: OverlayControllerComponent;
+  controller: OverlayControllerComponent<C>;
+  context: C;
 };
 
-export function ContentOverlayController({
+export function ContentOverlayController<C extends OverlayItemContext>({
   isOpen,
   current,
   overlayId,
@@ -32,7 +35,8 @@ export function ContentOverlayController({
   onCloseModal,
   onExitModal,
   controller: Controller,
-}: ContentOverlayControllerProps) {
+  context,
+}: ContentOverlayControllerProps<C>) {
   const prevCurrent = useRef(current);
   const onMountedRef = useRef(onMounted);
 
@@ -51,5 +55,7 @@ export function ContentOverlayController({
     onMountedRef.current();
   }, []);
 
-  return <Controller overlayId={overlayId} isOpen={isOpen} close={onCloseModal} unmount={onExitModal} />;
+  return (
+    <Controller overlayId={overlayId} isOpen={isOpen} close={onCloseModal} unmount={onExitModal} context={context} />
+  );
 }

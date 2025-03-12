@@ -1,10 +1,11 @@
-import { type OverlayData, type OverlayItem } from './store';
+import { type OverlayItemContext, type OverlayData, type OverlayItem } from './store';
 
 export type OverlayReducerAction =
-  | { type: 'ADD'; overlay: OverlayItem }
+  | { type: 'ADD'; overlay: OverlayItem<OverlayItemContext> }
   | { type: 'OPEN'; overlayId: string }
   | { type: 'CLOSE'; overlayId: string }
   | { type: 'REMOVE'; overlayId: string }
+  | { type: 'UPDATE_CONTEXT'; overlayId: string; context: OverlayItemContext }
   | { type: 'CLOSE_ALL' }
   | { type: 'REMOVE_ALL' };
 
@@ -147,14 +148,23 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
             [curr]: {
               ...state.overlayData[curr],
               isOpen: false,
-            } satisfies OverlayItem,
+            } satisfies OverlayItem<OverlayItemContext>,
           }),
-          {} satisfies Record<string, OverlayItem>
+          {} satisfies Record<string, OverlayItem<OverlayItemContext>>
         ),
       };
     }
     case 'REMOVE_ALL': {
       return { current: null, overlayOrderList: [], overlayData: {} };
+    }
+    case 'UPDATE_CONTEXT': {
+      return {
+        ...state,
+        overlayData: {
+          ...state.overlayData,
+          [action.overlayId]: { ...state.overlayData[action.overlayId], context: action.context },
+        },
+      };
     }
   }
 }

@@ -2,30 +2,39 @@ import {
   type OverlayAsyncControllerComponent,
   type OverlayControllerComponent,
 } from './context/provider/content-overlay-controller';
-import { type OverlayStore } from './context/store';
+import { type OverlayItemContext, type OverlayStore } from './context/store';
 import { randomId } from './utils/random-id';
 
-type OpenOverlayOptions = {
+type OpenOverlayOptions<C extends OverlayItemContext> = {
   overlayId?: string;
+  context?: C;
 };
 
 export function createOverlay(overlayStore: OverlayStore) {
-  function open(controller: OverlayControllerComponent, options?: OpenOverlayOptions) {
+  function open<C extends OverlayItemContext>(
+    controller: OverlayControllerComponent<C>,
+    options?: OpenOverlayOptions<C>
+  ) {
     const overlayId = options?.overlayId ?? randomId();
+    const context = options?.context;
 
     overlayStore.dispatchOverlay({
       type: 'ADD',
       overlay: {
         id: overlayId,
         isOpen: false,
-        controller: controller,
+        controller: controller as OverlayControllerComponent<OverlayItemContext>,
+        context: context ?? ({} as C),
       },
     });
 
     return overlayId;
   }
 
-  async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) {
+  async function openAsync<T, C extends OverlayItemContext>(
+    controller: OverlayAsyncControllerComponent<T, C>,
+    options?: OpenOverlayOptions<C>
+  ) {
     return new Promise<T>((resolve) => {
       open((overlayProps, ...deprecatedLegacyContext) => {
         /**
@@ -56,6 +65,9 @@ export function createOverlay(overlayStore: OverlayStore) {
   function unmountAll() {
     overlayStore.dispatchOverlay({ type: 'REMOVE_ALL' });
   }
+  function updateContext<C extends OverlayItemContext>(overlayId: string, context: C) {
+    overlayStore.dispatchOverlay({ type: 'UPDATE_CONTEXT', overlayId, context });
+  }
 
   return {
     open,
@@ -64,5 +76,6 @@ export function createOverlay(overlayStore: OverlayStore) {
     closeAll,
     unmountAll,
     openAsync,
+    updateContext,
   };
 }

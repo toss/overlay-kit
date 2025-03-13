@@ -56,6 +56,9 @@ const config: DocsThemeConfig = {
   project: {
     link: 'https://github.com/toss/overlay-kit',
   },
+  chat: {
+    link: 'https://discord.gg/vGXbVjP2nY',
+  },
   docsRepositoryBase: 'https://github.com/toss/overlay-kit/tree/main/docs',
   i18n: [
     { locale: 'en', name: 'English' },

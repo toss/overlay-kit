@@ -4,28 +4,81 @@
 
 English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
 
-overlay-kit is a library that lets you manage overlays in a simple and declarative way using React.
+overlay-kit is a library for declaratively managing overlays like modals, popups, and dialogs in React.
+
+You can efficiently implement overlays without complex state management or unnecessary event handling.
+
+```sh
+npm install overlay-kit
+```
+
+## Example
+
+### Opening Simple Overlays
+
+You can easily open and close overlays using `overlay.open`.
 
 ```tsx
 import { overlay } from 'overlay-kit';
 
 <Button
   onClick={() => {
-    overlay.open(({ isOpen, close }) => {
-      return <Dialog open={isOpen} onClose={close} />;
-    })
+    overlay.open(({ isOpen, close, unmount }) => (
+      <Dialog open={isOpen} onClose={close} onExit={unmount} />
+    ))
   }}
 >
   Open
 </Button>
 ```
 
-Here are the features overlay-kit provides:
+### Opening Asynchronous Overlays
 
-- **Hassle-free**: overlay-kit makes overlay management straightforward with a simple function call: just call `overlay.open(...)`. See [the code comparison](https://overlay-kit.slash.page/en/docs/guides/code-comparison) for details.
-- **Maximum Compatibility**: overlay-kit is compatible with the majority of overlay types. From Material UI to custom component libraries, overlay-kit can handle almost all types of overlays.
-- **Promise Integration**: overlay-kit is easy to use with promises when getting results from overlays.
-- **Robust Built-in Types**: overlay-kit offers robust types for all functions, ensuring type safety and enhancing the developer experience.
+You can handle overlay results as a `Promise` using `overlay.openAsync`.
+
+```tsx
+import { overlay } from 'overlay-kit';
+
+<Button
+  onClick={async () => {
+    const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+      <Dialog
+        open={isOpen}
+        onConfirm={() => close(true)}
+        onClose={() => close(false)}
+        onExit={unmount}
+      />
+    ))
+  }}
+>
+  Open
+</Button>
+```
+
+## Why use overlay-kit?
+
+### Problems with Traditional Overlay Management**
+
+1. Complexity of State Management
+   - Had to manage overlay state directly using useState or global state.
+   - Code became complex and less readable as state management mixed with UI logic.
+2. Repetitive Event Handling
+   - Had to repeatedly write event handling code for opening, closing, and returning results.
+   - This led to code duplication and degraded development experience.
+3. Lack of Reusability
+   - UI and logic were tightly coupled through callback functions to return values from overlays.
+   - This made it difficult to reuse components.
+
+### Goals of overlay-kit
+
+1. Design Following React Philosophy
+   - React favors declarative code.
+   - overlay-kit helps manage overlays declaratively.
+2. Improve Development Productivity
+   - By encapsulating state management and event handling, developers can focus solely on UI and business logic.
+3. Enhance Extensibility and Reusability
+   - Increased overlay reusability by separating UI and behavior, and returning Promises.
+
 
 ## License
 

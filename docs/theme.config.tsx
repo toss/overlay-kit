@@ -19,7 +19,7 @@ const config: DocsThemeConfig = {
     const { asPath, defaultLocale, locale } = useRouter();
 
     const title = config.title !== 'Index' ? `${config.title} - overlay-kit` : 'overlay-kit';
-    const description = config.frontMatter.description ?? 'Packages to use React Suspense easily';
+    const description = config.frontMatter.description ?? 'A library for handling overlays more easily in React';
     const url = 'https://overlay-kit.slash.page' + (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
 
     return (

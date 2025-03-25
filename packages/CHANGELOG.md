@@ -1,5 +1,13 @@
 # overlay-kit
 
+## 1.7.0
+
+### Minor Changes
+
+- [`8c4d54d`](https://github.com/toss/overlay-kit/commit/8c4d54da25e2609f79be388afeb3b5a40b8d93f5) Thanks [@jungpaeng](https://github.com/jungpaeng)! - feat: export types from content-overlay-controller
+
+  Export `OverlayControllerComponent` and `OverlayAsyncControllerComponent` types from content-overlay-controller module for better type accessibility in consumer projects.
+
 ## 1.6.2
 
 ### Patch Changes

@@ -36,7 +36,7 @@ export const baseTemplate = {
   dependencies: {
     '@emotion/react': 'latest',
     '@emotion/styled': 'latest',
-    '@mui/material': '6.4.8',
+    '@mui/material': '^6.4.8',
     'overlay-kit': 'latest',
   },
   devDependencies: {},

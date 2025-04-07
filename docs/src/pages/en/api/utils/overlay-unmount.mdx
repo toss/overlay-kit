@@ -53,7 +53,7 @@ overlay.open(
   ({ isOpen, close, unmount }) => {
     return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
   },
-  { id: overlayId }
+  { overlayId }
 );
 
 overlay.unmount(overlayId);

@@ -1,0 +1,317 @@
+# Testing
+테스트 코드를 작성하는 방법을 소개 할게요.
+
+# 사전 준비
+## Test Runner
+테스트 코드를 작성하기전, Test Runner를 세팅하세요. 세팅 방법은 아래 문서를 참고하세요.
+- Jest
+    - [Jest: 시작하기](https://jestjs.io/docs/getting-started)
+    - [Jest: 설정] (https://jestjs.io/docs/configuration#testenvironment-string)
+
+- Vitest
+    - [Vitest: 시작하기](https://vitest.dev/guide/#getting-started)
+    - [Vitest: 설정](https://vitest.dev/config/)
+
+## UI Testing Tools 
+UI 테스트를 쉽게 할 수 있도록 도와주는 UI Testing Tools를 세팅하세요. 세팅 방법은 아래 문서를 참고하세요.
+- [React Testing library](https://testing-library.com/docs/react-testing-library/intro/)
+
+# 시나리오별 테스트 방법
+## 오버레이 닫기
+
+`overlay.unmount` 함수를 이용했을 때, 오버레이가 정상적으로 닫히는지 검증할 수 있어요.
+<br />
+아래와 같이 오버레이가 DOM에서 제거 되는지 `waitFor`로 비동기 처리를 확인할 수 있어요.
+
+```tsx
+it('should be able to close an open overlay using overlay.unmount', async () => {
+  const overlayDialogContent = 'context-modal-overlay-dialog-content';
+
+  function Component() {
+    useEffect(() => {
+      overlay.open(({ isOpen, overlayId }) => {
+        return isOpen && <button onClick={() => overlay.unmount(overlayId)}>{overlayDialogContent}</button>;
+      });
+    }, []);
+
+    return <div>Empty</div>;
+  }
+
+  const { user } = renderWithUser(<Component />);
+  await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+  await waitFor(() => {
+    expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+  });
+});
+```
+
+## 다중 오버레이 열기
+
+다중 오버레이의 경우 각각 다른 오버레이가 정상적으로 동작 하는지 검증할 수 있어요.
+<br />
+아래와 같이 다중으로 렌더링된 오버레이의 경우에도 모두 DOM에 존재하는지 확인할 있어요.
+
+```tsx
+it('should be able to open multiple overlays via overlay.open', async () => {
+  const testContent1 = 'context-modal-test-content-1';
+  const testContent2 = 'context-modal-test-content-2';
+  const testContent3 = 'context-modal-test-content-3';
+  const testContent4 = 'context-modal-test-content-4';
+
+  function Component() {
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent1}</p>);
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent2}</p>);
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent3}</p>);
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent4}</p>);
+    }, []);
+
+    return <div>Empty</div>;
+  }
+
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.queryByText(testContent1)).toBeInTheDocument();
+    expect(screen.queryByText(testContent2)).toBeInTheDocument();
+    expect(screen.queryByText(testContent3)).toBeInTheDocument();
+    expect(screen.queryByText(testContent4)).toBeInTheDocument();
+  });
+});
+
+```
+
+## 비동기 오버레이 닫기 (overlay.openAsync)
+
+오버레이가 비동기로 열리고 닫힐 때, 닫을 때 전달한 값이 올바르게 반환 되는지 확인할 수 있어요.
+<br />
+아래와 같이 오버레이가 비동기로 열리고 닫힐 때 실행되는 함수를 mocking 하고, 그 결과를 확인할 수 있어요.
+
+```tsx
+it('The value passed as an argument to close is passed to resolve. overlay.openAsync', async () => {
+  const overlayDialogContent = 'context-modal-dialog-content';
+  const overlayTriggerContent = 'context-modal-overlay-trigger-content';
+  const mockFn = vi.fn();
+
+  function Component() {
+    return (
+      <button
+        onClick={async () => {
+          const result = await overlay.openAsync<boolean>(
+            ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>
+          );
+          if (result) {
+            mockFn(result);
+          }
+        }}
+      >
+        {overlayTriggerContent}
+      </button>
+    );
+  }
+
+  const { user } = renderWithUser(<Component />);
+  await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+  await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+  await waitFor(() => {
+    expect(mockFn).toHaveBeenCalledWith(true);
+  });
+});
+```
+
+## 오버레이 닫기/제거와 상태 검증
+
+현재 활성 오버레이 상태를 관리하는 `useCurrentOverlay`와 `useOverlayData` 훅을 사용한 코드에서, 오버레이 열기, 닫기, 순차 제거 등의 다양한 시나리오를 테스트할 수 있어요.
+
+```tsx
+it('should handle current overlay correctly when unmounting overlays in different orders', async () => {
+  const contents = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+    third: 'overlay-content-3',
+    fourth: 'overlay-content-4',
+  };
+  let overlayIds: string[] = [];
+
+  function Component() {
+    useEffect(() => {
+      overlayIds = [
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>),
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>),
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-3">{contents.third}</div>),
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-4">{contents.fourth}</div>),
+      ];
+    }, []);
+
+    return <div>Base Component</div>;
+  }
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-3')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-4')).toBeInTheDocument();
+  });
+
+  // 특정 순서로 오버레이 제거해요.
+  overlay.unmount(overlayIds[1]);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+    expect(screen.getByTestId('overlay-3')).toBeVisible();
+    expect(screen.getByTestId('overlay-4')).toBeVisible();
+  });
+
+  overlay.unmount(overlayIds[3]);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-4')).not.toBeInTheDocument();
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+    expect(screen.getByTestId('overlay-3')).toBeVisible();
+  });
+
+  overlay.unmount(overlayIds[2]);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-3')).not.toBeInTheDocument();
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+  });
+
+  overlay.unmount(overlayIds[0]);
+  await waitFor(() => {
+    expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+  });
+});
+
+```
+
+## 현재 활성 오버레이 상태 검증
+
+`useCurrentOverlay` 훅을 사용한 코드에서 현재 열려 있는 오버레이의 ID를 추적할 수 있어요.
+<br />
+아래와 같이 오버레이 열기, 닫기, unmount 후에 화면에 나타나는 상태 값이 예상대로 변하는지 확인할 수 있어요.
+
+```tsx
+it('should track current overlay state correctly', async () => {
+  const overlayIdMap = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+  };
+
+  function Component() {
+    const current = useCurrentOverlay();
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayIdMap.first}</div>, {
+        overlayId: overlayIdMap.first,
+      });
+    }, []);
+    return <div data-testid="current-overlay">{current}</div>;
+  }
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.first);
+  });
+
+  overlay.close(overlayIdMap.first);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-1')).not.toBeInTheDocument();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+  });
+
+  overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{overlayIdMap.second}</div>, {
+    overlayId: overlayIdMap.second,
+  });
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-2')).toBeVisible();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.second);
+  });
+
+  overlay.unmount(overlayIdMap.second);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+  });
+});
+
+```
+
+## 전체 오버레이 제어
+
+Overlay-kit에서는 모든 오버레이를 한 번에 닫거나 unmount할 수도 있어요.
+<br />
+**아래와 같이 closeAll 혹은, unmountAll 를 사용한 경우에도 테스트를 작성할 수 있어요.**
+
+- **closeAll**: 열려 있는 모든 오버레이를 닫아요.
+- **unmountAll**: 렌더링된 모든 오버레이를 완전히 제거해요.
+
+```tsx
+it('should be able to close all overlays', async () => {
+  const contents = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+  };
+
+  function Component() {
+    const data = useOverlayData();
+    const overlays = Object.values(data);
+    const hasOpenOverlay = overlays.some((overlay) => overlay.isOpen);
+
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+    }, []);
+
+    return <div>{hasOpenOverlay && 'has Open overlay'}</div>;
+  }
+
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+  });
+
+  overlay.closeAll();
+  await waitFor(() => {
+    expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    expect(screen.queryByText('has Open overlay')).not.toBeInTheDocument();
+  });
+});
+
+it('should be able to unmount all overlays', async () => {
+  const contents = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+  };
+
+  function Component() {
+    const data = useOverlayData();
+    const overlays = Object.values(data);
+    const hasOverlay = overlays.length !== 0;
+
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+    }, []);
+
+    return <div>{hasOverlay && 'has overlay'}</div>;
+  }
+
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+  });
+
+  overlay.unmountAll();
+  await waitFor(() => {
+    expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    expect(screen.queryByText('has overlay')).not.toBeInTheDocument();
+  });
+});
+
+```

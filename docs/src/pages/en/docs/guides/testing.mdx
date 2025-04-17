@@ -1,0 +1,313 @@
+# Testing
+Let me introduce how to write test code.
+
+# Prerequisites
+## Test Runner
+Before writing test code, set up a Test Runner. Refer to the following documents for setup instructions:
+- Jest
+    - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
+    - [Jest: Configuration](https://jestjs.io/docs/configuration#testenvironment-string)
+
+- Vitest
+    - [Vitest: Getting Started](https://vitest.dev/guide/#getting-started)
+    - [Vitest: Configuration](https://vitest.dev/config/)
+
+## UI Testing Tools
+Set up UI Testing Tools to help you test UI components easily. Refer to the following document for setup instructions:
+- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+
+# Testing Methods by Scenario
+## Closing Overlays
+
+You can verify if an overlay closes properly when using the `overlay.unmount` function.
+<br />
+You can check if the overlay is removed from the DOM using `waitFor` for asynchronous processing, as shown below:
+
+```tsx
+it('should be able to close an open overlay using overlay.unmount', async () => {
+  const overlayDialogContent = 'context-modal-overlay-dialog-content';
+
+  function Component() {
+    useEffect(() => {
+      overlay.open(({ isOpen, overlayId }) => {
+        return isOpen && <button onClick={() => overlay.unmount(overlayId)}>{overlayDialogContent}</button>;
+      });
+    }, []);
+
+    return <div>Empty</div>;
+  }
+
+  const { user } = renderWithUser(<Component />);
+  await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+  await waitFor(() => {
+    expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+  });
+});
+```
+
+## Opening Multiple Overlays
+
+For multiple overlays, you can verify if each overlay works correctly.
+<br />
+You can check if all overlays rendered in multiple layers exist in the DOM, as shown below:
+
+```tsx
+it('should be able to open multiple overlays via overlay.open', async () => {
+  const testContent1 = 'context-modal-test-content-1';
+  const testContent2 = 'context-modal-test-content-2';
+  const testContent3 = 'context-modal-test-content-3';
+  const testContent4 = 'context-modal-test-content-4';
+
+  function Component() {
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent1}</p>);
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent2}</p>);
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent3}</p>);
+      overlay.open(({ isOpen }) => isOpen && <p>{testContent4}</p>);
+    }, []);
+
+    return <div>Empty</div>;
+  }
+
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.queryByText(testContent1)).toBeInTheDocument();
+    expect(screen.queryByText(testContent2)).toBeInTheDocument();
+    expect(screen.queryByText(testContent3)).toBeInTheDocument();
+    expect(screen.queryByText(testContent4)).toBeInTheDocument();
+  });
+});
+```
+
+## Asynchronous Overlay Closing (overlay.openAsync)
+
+When an overlay opens and closes asynchronously, you can verify if the value passed when closing is returned correctly.
+<br />
+You can mock the function executed when the overlay opens and closes asynchronously and check its result, as shown below:
+
+```tsx
+it('The value passed as an argument to close is passed to resolve. overlay.openAsync', async () => {
+  const overlayDialogContent = 'context-modal-dialog-content';
+  const overlayTriggerContent = 'context-modal-overlay-trigger-content';
+  const mockFn = vi.fn();
+
+  function Component() {
+    return (
+      <button
+        onClick={async () => {
+          const result = await overlay.openAsync<boolean>(
+            ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>
+          );
+          if (result) {
+            mockFn(result);
+          }
+        }}
+      >
+        {overlayTriggerContent}
+      </button>
+    );
+  }
+
+  const { user } = renderWithUser(<Component />);
+  await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+  await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+  await waitFor(() => {
+    expect(mockFn).toHaveBeenCalledWith(true);
+  });
+});
+```
+
+## Verifying Overlay Closing/Removal and State
+
+In code that uses the `useCurrentOverlay` and `useOverlayData` hooks to manage the current active overlay state, you can test various scenarios such as opening overlays, closing them, and sequential removal.
+
+```tsx
+it('should handle current overlay correctly when unmounting overlays in different orders', async () => {
+  const contents = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+    third: 'overlay-content-3',
+    fourth: 'overlay-content-4',
+  };
+  let overlayIds: string[] = [];
+
+  function Component() {
+    useEffect(() => {
+      overlayIds = [
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>),
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>),
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-3">{contents.third}</div>),
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-4">{contents.fourth}</div>),
+      ];
+    }, []);
+
+    return <div>Base Component</div>;
+  }
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-3')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-4')).toBeInTheDocument();
+  });
+
+  // Remove overlays in a specific order
+  overlay.unmount(overlayIds[1]);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+    expect(screen.getByTestId('overlay-3')).toBeVisible();
+    expect(screen.getByTestId('overlay-4')).toBeVisible();
+  });
+
+  overlay.unmount(overlayIds[3]);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-4')).not.toBeInTheDocument();
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+    expect(screen.getByTestId('overlay-3')).toBeVisible();
+  });
+
+  overlay.unmount(overlayIds[2]);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-3')).not.toBeInTheDocument();
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+  });
+
+  overlay.unmount(overlayIds[0]);
+  await waitFor(() => {
+    expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+  });
+});
+```
+
+## Verifying Current Active Overlay State
+
+In code that uses the `useCurrentOverlay` hook, you can track the ID of the currently open overlay.
+<br />
+You can verify if the state value displayed on the screen changes as expected after opening, closing, and unmounting overlays, as shown below:
+
+```tsx
+it('should track current overlay state correctly', async () => {
+  const overlayIdMap = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+  };
+
+  function Component() {
+    const current = useCurrentOverlay();
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayIdMap.first}</div>, {
+        overlayId: overlayIdMap.first,
+      });
+    }, []);
+    return <div data-testid="current-overlay">{current}</div>;
+  }
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeVisible();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.first);
+  });
+
+  overlay.close(overlayIdMap.first);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-1')).not.toBeInTheDocument();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+  });
+
+  overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{overlayIdMap.second}</div>, {
+    overlayId: overlayIdMap.second,
+  });
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-2')).toBeVisible();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayIdMap.second);
+  });
+
+  overlay.unmount(overlayIdMap.second);
+  await waitFor(() => {
+    expect(screen.queryByTestId('overlay-2')).not.toBeInTheDocument();
+    expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+  });
+});
+```
+
+## Controlling All Overlays
+
+In Overlay-kit, you can close or unmount all overlays at once.
+<br />
+**You can also write tests for cases using closeAll or unmountAll, as shown below:**
+
+- **closeAll**: Closes all open overlays.
+- **unmountAll**: Completely removes all rendered overlays.
+
+```tsx
+it('should be able to close all overlays', async () => {
+  const contents = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+  };
+
+  function Component() {
+    const data = useOverlayData();
+    const overlays = Object.values(data);
+    const hasOpenOverlay = overlays.some((overlay) => overlay.isOpen);
+
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+    }, []);
+
+    return <div>{hasOpenOverlay && 'has Open overlay'}</div>;
+  }
+
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+  });
+
+  overlay.closeAll();
+  await waitFor(() => {
+    expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    expect(screen.queryByText('has Open overlay')).not.toBeInTheDocument();
+  });
+});
+
+it('should be able to unmount all overlays', async () => {
+  const contents = {
+    first: 'overlay-content-1',
+    second: 'overlay-content-2',
+  };
+
+  function Component() {
+    const data = useOverlayData();
+    const overlays = Object.values(data);
+    const hasOverlay = overlays.length !== 0;
+
+    useEffect(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+    }, []);
+
+    return <div>{hasOverlay && 'has overlay'}</div>;
+  }
+
+  render(<Component />, { wrapper });
+
+  await waitFor(() => {
+    expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+  });
+
+  overlay.unmountAll();
+  await waitFor(() => {
+    expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
+    expect(screen.queryByText('has overlay')).not.toBeInTheDocument();
+  });
+});
+``` 

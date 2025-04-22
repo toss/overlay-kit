@@ -6,7 +6,7 @@
 테스트 코드를 작성하기전, Test Runner를 세팅하세요. 세팅 방법은 아래 문서를 참고하세요.
 - Jest
     - [Jest: 시작하기](https://jestjs.io/docs/getting-started)
-    - [Jest: 설정] (https://jestjs.io/docs/configuration#testenvironment-string)
+    - [Jest: 설정](https://jestjs.io/docs/configuration#testenvironment-string)
 
 - Vitest
     - [Vitest: 시작하기](https://vitest.dev/guide/#getting-started)
@@ -50,7 +50,7 @@ it('should be able to close an open overlay using overlay.unmount', async () => 
 
 다중 오버레이의 경우 각각 다른 오버레이가 정상적으로 동작 하는지 검증할 수 있어요.
 <br />
-아래와 같이 다중으로 렌더링된 오버레이의 경우에도 모두 DOM에 존재하는지 확인할 있어요.
+아래와 같이 다중으로 렌더링된 오버레이의 경우에도 모두 DOM에 존재하는지 확인할 수 있어요.
 
 ```tsx
 it('should be able to open multiple overlays via overlay.open', async () => {
@@ -123,7 +123,7 @@ it('The value passed as an argument to close is passed to resolve. overlay.openA
 
 ## 오버레이 닫기/제거와 상태 검증
 
-현재 활성 오버레이 상태를 관리하는 `useCurrentOverlay`와 `useOverlayData` 훅을 사용한 코드에서, 오버레이 열기, 닫기, 순차 제거 등의 다양한 시나리오를 테스트할 수 있어요.
+현재 활성화 된 오버레이 상태를 관리하는 `useCurrentOverlay`와 `useOverlayData` 훅을 사용한 코드에서, 오버레이 열기, 닫기, 순차 제거 등의 다양한 시나리오를 테스트할 수 있어요.
 
 ```tsx
 it('should handle current overlay correctly when unmounting overlays in different orders', async () => {
@@ -242,7 +242,7 @@ it('should track current overlay state correctly', async () => {
 
 Overlay-kit에서는 모든 오버레이를 한 번에 닫거나 unmount할 수도 있어요.
 <br />
-**아래와 같이 closeAll 혹은, unmountAll 를 사용한 경우에도 테스트를 작성할 수 있어요.**
+아래와 같이 closeAll 혹은, unmountAll 를 사용한 경우에도 테스트를 작성할 수 있어요.
 
 - **closeAll**: 열려 있는 모든 오버레이를 닫아요.
 - **unmountAll**: 렌더링된 모든 오버레이를 완전히 제거해요.

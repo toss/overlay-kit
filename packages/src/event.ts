@@ -6,7 +6,7 @@ import { createUseExternalEvents } from './utils';
 import { randomId } from './utils/random-id';
 
 export type OverlayEvent = {
-  open: (args: { controller: OverlayControllerComponent; overlayId: string }) => void;
+  open: (args: { controller: OverlayControllerComponent; overlayId: string; componentKey: string }) => void;
   close: (overlayId: string) => void;
   unmount: (overlayId: string) => void;
   closeAll: () => void;
@@ -22,9 +22,10 @@ export function createOverlay() {
 
   const open = (controller: OverlayControllerComponent, options?: OpenOverlayOptions) => {
     const overlayId = options?.overlayId ?? randomId();
+    const componentKey = randomId();
     const dispatchOpenEvent = createEvent('open');
 
-    dispatchOpenEvent({ controller, overlayId });
+    dispatchOpenEvent({ controller, overlayId, componentKey });
     return overlayId;
   };
 

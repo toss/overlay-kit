@@ -2,7 +2,15 @@ import { type OverlayControllerComponent } from './provider/content-overlay-cont
 
 type OverlayId = string;
 type OverlayItem = {
+  /**
+   * @description The unique identifier for the overlay.
+   */
   id: OverlayId;
+  /**
+   * @description The key for the overlay component.
+   * This is used to identify the overlay component when it is unmounted.
+   */
+  componentKey: string;
   isOpen: boolean;
   controller: OverlayControllerComponent;
 };

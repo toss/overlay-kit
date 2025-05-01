@@ -1,6 +1,18 @@
-import { type OverlayData, type OverlayItem } from './store';
+import { type OverlayControllerComponent } from './provider/content-overlay-controller';
 
-export type OverlayReducerAction =
+type OverlayId = string;
+type OverlayItem = {
+  id: OverlayId;
+  isOpen: boolean;
+  controller: OverlayControllerComponent;
+};
+export type OverlayData = {
+  current: OverlayId | null;
+  overlayOrderList: OverlayId[];
+  overlayData: Record<OverlayId, OverlayItem>;
+};
+
+type OverlayReducerAction =
   | { type: 'ADD'; overlay: OverlayItem }
   | { type: 'OPEN'; overlayId: string }
   | { type: 'CLOSE'; overlayId: string }

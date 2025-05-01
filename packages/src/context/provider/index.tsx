@@ -15,11 +15,12 @@ export function createOverlayProvider() {
       overlayData: {},
     });
 
-    const open: OverlayEvent['open'] = useCallback(({ controller, overlayId }) => {
+    const open: OverlayEvent['open'] = useCallback(({ controller, overlayId, componentKey }) => {
       overlayDispatch({
         type: 'ADD',
         overlay: {
           id: overlayId,
+          componentKey,
           isOpen: false,
           controller: controller,
         },
@@ -50,11 +51,16 @@ export function createOverlayProvider() {
       <OverlayContextProvider value={overlayState}>
         {children}
         {overlayState.overlayOrderList.map((item) => {
-          const { id: currentOverlayId, isOpen, controller: currentController } = overlayState.overlayData[item];
+          const {
+            id: currentOverlayId,
+            componentKey,
+            isOpen,
+            controller: currentController,
+          } = overlayState.overlayData[item];
 
           return (
             <ContentOverlayController
-              key={currentOverlayId}
+              key={componentKey}
               isOpen={isOpen}
               current={overlayState.current}
               overlayId={currentOverlayId}

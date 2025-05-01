@@ -1,5 +1,20 @@
 # overlay-kit
 
+## 1.8.0
+
+### Minor Changes
+
+- [#149](https://github.com/toss/overlay-kit/pull/149) [`a98a312`](https://github.com/toss/overlay-kit/commit/a98a312249b5ad0006eec16025c4109714a47265) Thanks [@jungpaeng](https://github.com/jungpaeng)! - refactor: migrate event based store
+
+### Patch Changes
+
+- [#151](https://github.com/toss/overlay-kit/pull/151) [`07f42a5`](https://github.com/toss/overlay-kit/commit/07f42a585e8d2bd8ee6ee0841388e3dc39a287a4) Thanks [@jungpaeng](https://github.com/jungpaeng)! - feat: Add component key
+
+  Fixed an issue with overlay components not properly remounting when unmounted and immediately reopened with the same ID.
+  Added a new `componentKey` property that's separate from `overlayId` to ensure React properly handles component lifecycle. Each time `overlay.open()` is called, a new random `componentKey` is generated internally even when reusing the same `overlayId`.
+
+  This fix resolves scenarios where calling `unmount()` followed by `open()` with the same overlay ID in quick succession would result in the overlay not being visible to users.
+
 ## 1.7.0
 
 ### Minor Changes

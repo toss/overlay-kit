@@ -1,0 +1,307 @@
+import { Sandpack } from '@/components';
+
+# Hooks
+
+`overlay-kit`은 오버레이 상태를 전역에서 관리할 수 있도록
+`useCurrentOverlay`, `useOverlayData` 훅을 제공해요.
+
+
+`useCurrentOverlay`와 `useOverlayData`를 활용하면
+오버레이 외부에서도 상태 기반 UX 제어, 포커싱, 조건적 렌더링 등을 더욱 유연하게 구현할 수 있어요.
+
+---
+
+## useCurrentOverlay
+
+현재 가장 위에 떠 있는 오버레이의 ID를 반환해요.
+
+오버레이의 ID는 오버레이를 열 때 `overlay.open()` 또는 `overlay.openAsync()`의
+두 번째 인자로 다음처럼 `overlayId`를 넘겨 직접 지정할 수 있어요:
+
+```tsx
+overlay.open(
+  ({ isOpen, close }) => <ConfirmDialog isOpen={isOpen} close={close} />,
+  { overlayId: 'custom-overlayId' }
+);
+```
+만약 overlayId를 생략하면 내부에서 랜덤으로 `overlay-kit-[랜덤숫자]`로 Id가 생성돼요.
+
+
+이 ID를 기반으로 특정 오버레이가 열렸는지 조건을 분기하거나 포커스/단축키 제어 등에 활용할 수 있어요.
+
+<br />
+모달 A와 B, 그리고 모달 A에서 열 수 있는 모달 C를 설정하여 각 모달을 열었을 때 useCurrentOverlay의 값이 어떻게 변하는지 살펴볼게요.
+<br />
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay, useCurrentOverlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import { ConfirmDialog } from './confirm-dialog';
+
+function App() {
+  const current = useCurrentOverlay();
+
+  return (
+    <div>
+      <Button
+        variant="contained"
+        onClick={() => {
+          overlay.open(({ isOpen, close }) => {
+            return (
+              <ConfirmDialog
+                isOpen={isOpen}
+                close={close}
+                title="모달 A"
+                showOpenCButton
+              />
+            );
+          }, { overlayId: 'modal-a' });
+        }}
+      >
+        모달 A 열기
+      </Button>
+
+      <Button
+        variant="outlined"
+        style={{ marginLeft: '8px' }}
+        onClick={() => {
+          overlay.open(({ isOpen, close }) => {
+            return (
+              <ConfirmDialog
+                isOpen={isOpen}
+                close={close}
+                title="모달 B"
+              />
+            );
+          }, { overlayId: 'modal-b' });
+        }}
+      >
+        모달 B 열기
+      </Button>
+
+      <Typography variant="body1" style={{ marginTop: '5px' }}>
+        현재 current 값: {current}
+      </Typography>
+      <Typography variant="body2">
+        {current === 'modal-a'
+          ? '모달 A가 현재 열려 있습니다.'
+          : current === 'modal-b'
+            ? '모달 B가 현재 열려 있습니다.'
+            : current === 'modal-c'
+              ? '모달 C가 현재 열려 있습니다.'
+              : '현재 열린 모달이 없습니다.'}
+      </Typography>
+    </div>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+
+```
+
+```tsx confirm-dialog.tsx
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
+import { overlay } from 'overlay-kit';
+
+export function ConfirmDialog({ isOpen, close, title, showOpenCButton }) {
+  const handleOpenC = () => {
+    overlay.open(({ isOpen, close }) => {
+      return (
+        <ConfirmDialog
+          isOpen={isOpen}
+          close={close}
+          title="모달 C"
+        />
+      );
+    }, { overlayId: 'modal-c' });
+  };
+
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <Typography>{title} 내용입니다.</Typography>
+        {showOpenCButton && (
+          <Button
+            onClick={handleOpenC}
+            variant="outlined"
+            style={{ marginTop: '12px' }}
+          >
+            모달 C 열기
+          </Button>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={close}>닫기</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+```
+
+</Sandpack>
+
+---
+
+## useOverlayData
+
+현재 메모리에 존재하는 모든 오버레이 상태 정보를 반환해요.
+
+
+열린 오버레이뿐만 아니라 닫혔지만 메모리에 남아 있는 오버레이도 포함돼요.
+
+
+각 오버레이 항목은 다음과 같은 속성으로 구성되어 있어요:
+
+| 속성명          | 타입                      | 설명 |
+|------------------|----------------------------|------|
+| `id`             | `string`                   | 오버레이를 식별하는 고유 ID예요. `overlay.open()` 시 `overlayId`로 지정하거나, 생략 시 자동으로 생성돼요. |
+| `componentKey`   | `string`                   | 내부적으로 사용하는 고유 키로, 오버레이 UI를 React가 올바르게 렌더링하고 구분하는 데 사용돼요. 매번 열릴 때마다 새 값이 할당돼요. |
+| `isOpen`         | `boolean`                  | 현재 오버레이가 열려 있는지 여부를 나타내요. `close()`를 호출하면 `false`가 되고, `unmount()`되기 전까지는 메모리에 남아 있어요. |
+| `controller`     | `FC` | 오버레이를 실제로 렌더링하는 React 컴포넌트예요. `overlay.open()` 시 넘겨준 함수 형태의 UI가 이 필드에 저장돼요. |
+
+예를 들어, 다음처럼 확인할 수 있어요:
+
+```tsx
+const overlayData = useOverlayData();
+
+Object.entries(overlayData).forEach(([id, item]) => {
+  console.log(id);               // overlayId
+  console.log(item.isOpen);     // true / false
+  console.log(item.controller); // 컴포넌트 렌더링 함수
+});
+```
+
+<br />
+각각의 오버레이를 `close`와 `unmount` 방식으로 닫았을 때, `useOverlayData`에 남아 있는 오버레이 정보가 어떻게 달라지는지 살펴볼게요.
+<br />
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay, useOverlayData } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
+import { ConfirmDialog } from './confirm-dialog';
+
+function App() {
+  const overlayData = useOverlayData();
+
+  const allOverlayIds = Object.keys(overlayData);
+  const openOverlayIds = allOverlayIds.filter(
+  (id) => overlayData[id].isOpen
+  );
+
+  return (
+    <div>
+      <Button
+        variant="contained"
+        onClick={() => {
+          overlay.open(({ isOpen, close }) => {
+            return (
+              <ConfirmDialog
+              isOpen={isOpen}
+              close={close}
+              title="모달 A (close)"
+              />
+            );
+          }, { overlayId: 'modal-close' });
+        }}
+      >
+        모달 A 열기 (close)
+      </Button>
+
+      <Button
+        variant="outlined"
+        style={{ marginLeft: '8px' }}
+        onClick={() => {
+          overlay.open(({ isOpen, unmount }) => {
+            return (
+              <ConfirmDialog
+                isOpen={isOpen}
+                close={unmount}
+                title="모달 B (unmount)"
+              />
+            );
+          }, { overlayId: 'modal-unmount' });
+        }}
+      >
+      모달 B 열기 (unmount)
+      </Button>
+
+      <div style={{ marginTop: '24px' }}>
+      <Typography variant="subtitle1">열려 있는 오버레이</Typography>
+      <List dense>
+        {openOverlayIds.length > 0 ? (
+          openOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
+        ) : (
+          <ListItem>없음</ListItem>
+        )}
+      </List>
+
+      <Typography variant="subtitle1" style={{ marginTop: '16px' }}>
+        메모리에 남아 있는 오버레이
+      </Typography>
+      <List dense>
+        {allOverlayIds.length > 0 ? (
+          allOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
+        ) : (
+          <ListItem>없음</ListItem>
+        )}
+      </List>
+      </div>
+    </div>
+  );
+}
+
+export const Example = () => {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+};
+
+```
+
+```tsx confirm-dialog.tsx
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function ConfirmDialog({ isOpen, close }) {
+  return (
+    <Dialog open={isOpen} onClose={close}>
+      <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>아니요</Button>
+        <Button onClick={close}>네</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
+```
+
+</Sandpack>
+
+---
+
+
+

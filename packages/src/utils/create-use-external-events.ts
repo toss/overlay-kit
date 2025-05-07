@@ -3,9 +3,7 @@ import { createEmitter } from './emitter';
 
 const emitter = createEmitter();
 function useClientLayoutEffect(...args: Parameters<typeof useLayoutEffect>) {
-  if (typeof document === 'undefined') return;
-
-  useLayoutEffect(...args);
+  typeof document !== 'undefined' ? useLayoutEffect(...args) : () => {};
 }
 
 function dispatchEvent<Detail>(type: string, detail?: Detail) {

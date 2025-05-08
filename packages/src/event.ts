@@ -36,7 +36,7 @@ export function createOverlay(overlayId: string) {
          * @description close the overlay with resolve
          */
         const close = (param: T) => {
-          resolve(param as T);
+          resolve(param);
           overlayProps.close();
         };
         /**

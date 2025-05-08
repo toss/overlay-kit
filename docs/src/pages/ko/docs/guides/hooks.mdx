@@ -24,7 +24,7 @@ overlay.open(
   { overlayId: 'custom-overlayId' }
 );
 ```
-만약 overlayId를 생략하면 내부에서 랜덤으로 `overlay-kit-[랜덤숫자]`로 Id가 생성돼요.
+만약 overlayId를 생략하면 내부에서 랜덤으로 `overlay-kit-[랜덤숫자]`로 ID가 생성돼요.
 
 
 이 ID를 기반으로 특정 오버레이가 열렸는지 조건을 분기하거나 포커스/단축키 제어 등에 활용할 수 있어요.
@@ -83,15 +83,6 @@ function App() {
 
       <Typography variant="body1" style={{ marginTop: '5px' }}>
         현재 current 값: {current}
-      </Typography>
-      <Typography variant="body2">
-        {current === 'modal-a'
-          ? '모달 A가 현재 열려 있습니다.'
-          : current === 'modal-b'
-            ? '모달 B가 현재 열려 있습니다.'
-            : current === 'modal-c'
-              ? '모달 C가 현재 열려 있습니다.'
-              : '현재 열린 모달이 없습니다.'}
       </Typography>
     </div>
   );

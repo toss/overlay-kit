@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useReducer, type PropsWithChildren } from 'react';
 import { ContentOverlayController } from './content-overlay-controller';
 import { type OverlayEvent, createOverlay } from '../../event';
+import { randomId } from '../../utils/random-id';
 import { createOverlaySafeContext } from '../context';
 import { overlayReducer } from '../reducer';
 
 export function createOverlayProvider() {
-  const { useOverlayEvent, ...overlay } = createOverlay();
+  const overlayId = randomId();
+  const { useOverlayEvent, ...overlay } = createOverlay(overlayId);
   const { OverlayContextProvider, useCurrentOverlay, useOverlayData } = createOverlaySafeContext();
 
   function OverlayProvider({ children }: PropsWithChildren) {

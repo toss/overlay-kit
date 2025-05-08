@@ -30,7 +30,7 @@ overlay.open(
 이 ID를 기반으로 특정 오버레이가 열렸는지 조건을 분기하거나 포커스/단축키 제어 등에 활용할 수 있어요.
 
 <br />
-모달 A와 B, 그리고 모달 A에서 열 수 있는 모달 C를 설정하여 각 모달을 열었을 때 useCurrentOverlay의 값이 어떻게 변하는지 살펴볼게요.
+모달 A와 B를 설정하여 각 모달을 열었을 때 useCurrentOverlay의 값이 어떻게 변하는지 살펴볼게요.
 <br />
 <Sandpack>
 
@@ -54,7 +54,6 @@ function App() {
                 isOpen={isOpen}
                 close={close}
                 title="모달 A"
-                showOpenCButton
               />
             );
           }, { overlayId: 'modal-a' });
@@ -107,33 +106,13 @@ import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import { overlay } from 'overlay-kit';
 
-export function ConfirmDialog({ isOpen, close, title, showOpenCButton }) {
-  const handleOpenC = () => {
-    overlay.open(({ isOpen, close }) => {
-      return (
-        <ConfirmDialog
-          isOpen={isOpen}
-          close={close}
-          title="모달 C"
-        />
-      );
-    }, { overlayId: 'modal-c' });
-  };
+export function ConfirmDialog({ isOpen, close, title }) {
 
   return (
     <Dialog open={isOpen} onClose={close}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
         <Typography>{title} 내용입니다.</Typography>
-        {showOpenCButton && (
-          <Button
-            onClick={handleOpenC}
-            variant="outlined"
-            style={{ marginTop: '12px' }}
-          >
-            모달 C 열기
-          </Button>
-        )}
       </DialogContent>
       <DialogActions>
         <Button onClick={close}>닫기</Button>

@@ -8,7 +8,7 @@ type OverlayControllerProps = {
 };
 
 type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close'> & {
-  close: (param: T) => void;
+  close: (param?: T) => void;
 };
 
 export type OverlayControllerComponent = FC<OverlayControllerProps>;

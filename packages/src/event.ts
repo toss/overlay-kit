@@ -37,7 +37,7 @@ export function createOverlay() {
          */
         const close = (param: T) => {
           resolve(param as T);
-          overlayProps.close();
+          overlayProps?.close();
         };
         /**
          * @description Passing overridden methods

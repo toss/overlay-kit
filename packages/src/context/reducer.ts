@@ -1,3 +1,4 @@
+import { determineCurrentOverlayId } from './overlay-utils';
 import { type OverlayControllerComponent } from './provider/content-overlay-controller';
 
 type OverlayId = string;
@@ -78,25 +79,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
         return state;
       }
 
-      const openedOverlayOrderList = state.overlayOrderList.filter(
-        (orderedOverlayId) => state.overlayData[orderedOverlayId].isOpen === true
-      );
-      const targetIndexInOpenedList = openedOverlayOrderList.findIndex((item) => item === action.overlayId);
-
-      /**
-       * @description If closing the last overlay, specify the overlay before it.
-       * @description If closing intermediate overlays, specifies the last overlay.
-       *
-       * @example open - [1, 2, 3, 4]
-       * close 2 => current: 4
-       * close 4 => current: 3
-       * close 3 => current: 1
-       * close 1 => current: null
-       */
-      const currentOverlayId =
-        targetIndexInOpenedList === openedOverlayOrderList.length - 1
-          ? openedOverlayOrderList[targetIndexInOpenedList - 1] ?? null
-          : openedOverlayOrderList.at(-1) ?? null;
+      const currentOverlayId = determineCurrentOverlayId(state.overlayOrderList, state.overlayData, action.overlayId);
 
       return {
         ...state,
@@ -126,25 +109,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       const copiedOverlayData = { ...state.overlayData };
       delete copiedOverlayData[action.overlayId];
 
-      const openedOverlayOrderList = state.overlayOrderList.filter(
-        (orderedOverlayId) => state.overlayData[orderedOverlayId].isOpen === true
-      );
-      const targetIndexInOpenedList = openedOverlayOrderList.findIndex((item) => item === action.overlayId);
-
-      /**
-       * @description If unmounting the last overlay, specify the overlay before it.
-       * @description If unmounting intermediate overlays, specifies the last overlay.
-       *
-       * @example open - [1, 2, 3, 4]
-       * unmount 2 => current: 4
-       * unmount 4 => current: 3
-       * unmount 3 => current: 1
-       * unmount 1 => current: null
-       */
-      const currentOverlayId =
-        targetIndexInOpenedList === openedOverlayOrderList.length - 1
-          ? openedOverlayOrderList[targetIndexInOpenedList - 1] ?? null
-          : openedOverlayOrderList.at(-1) ?? null;
+      const currentOverlayId = determineCurrentOverlayId(state.overlayOrderList, state.overlayData, action.overlayId);
 
       return {
         current: currentOverlayId,

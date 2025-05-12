@@ -1,5 +1,16 @@
 # overlay-kit
 
+## 1.8.1
+
+### Patch Changes
+
+- [#161](https://github.com/toss/overlay-kit/pull/161) [`ec07614`](https://github.com/toss/overlay-kit/commit/ec0761404eabe27b07a8ad31cf82df34fb3169f7) Thanks [@jungpaeng](https://github.com/jungpaeng)! - feat: Change to allow each overlay provider to have a unique event ID
+
+  Each overlay provider now uses a unique event ID instead of relying on shared global identifiers.
+
+  This change improves event handling accuracy and avoids potential collisions when managing multiple overlays from different providers.
+  It is backward-compatible for existing overlays that do not explicitly set a provider-specific ID.
+
 ## 1.8.0
 
 ### Minor Changes

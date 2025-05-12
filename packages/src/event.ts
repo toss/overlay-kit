@@ -20,8 +20,8 @@ type OpenOverlayOptions = {
 type OverlayAction = 'open' | 'close' | 'unmount';
 type StateChangeCallback = (overlayId: string, action: OverlayAction) => void;
 
-export function createOverlay() {
-  const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>('overlay-kit');
+export function createOverlay(contextId: string = 'overlay-kit') {
+  const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>(`${contextId}`);
 
   const stateChangeCallbacks = new Set<StateChangeCallback>();
 
@@ -65,7 +65,7 @@ export function createOverlay() {
          * @description close the overlay with resolve
          */
         const close = (param: T) => {
-          resolve(param as T);
+          resolve(param);
           overlayProps.close();
 
           requestAnimationFrame(() => {

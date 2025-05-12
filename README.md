@@ -1,6 +1,6 @@
 ![](./docs/public/og.png)
 
-# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit)
+# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/toss/overlay-kit)
 
 English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
 

@@ -22,5 +22,5 @@ export function createSafeContext<T>(displayName?: string): CreateContextReturn<
     return context;
   }
 
-  return [Context.Provider as Provider<T>, useSafeContext];
+  return [Context.Provider, useSafeContext];
 }

@@ -17,8 +17,32 @@ type OpenOverlayOptions = {
   overlayId?: string;
 };
 
+type OverlayAction = 'open' | 'close' | 'unmount';
+type StateChangeCallback = (overlayId: string, action: OverlayAction) => void;
+
 export function createOverlay() {
   const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>('overlay-kit');
+
+  const stateChangeCallbacks = new Set<StateChangeCallback>();
+
+  function onStateChange(callback: StateChangeCallback): () => void {
+    stateChangeCallbacks.add(callback);
+    return () => {
+      stateChangeCallbacks.delete(callback);
+    };
+  }
+
+  function emitStateChange(overlayId: string, action: OverlayAction): void {
+    if (stateChangeCallbacks.size === 0) return;
+
+    for (const callback of stateChangeCallbacks) {
+      try {
+        callback(overlayId, action);
+      } catch (error) {
+        console.error('Error in overlay state change callback:', error);
+      }
+    }
+  }
 
   const open = (controller: OverlayControllerComponent, options?: OpenOverlayOptions) => {
     const overlayId = options?.overlayId ?? randomId();
@@ -26,6 +50,11 @@ export function createOverlay() {
     const dispatchOpenEvent = createEvent('open');
 
     dispatchOpenEvent({ controller, overlayId, componentKey });
+
+    requestAnimationFrame(() => {
+      emitStateChange(overlayId, 'open');
+    });
+
     return overlayId;
   };
 
@@ -38,7 +67,12 @@ export function createOverlay() {
         const close = (param: T) => {
           resolve(param as T);
           overlayProps.close();
+
+          requestAnimationFrame(() => {
+            emitStateChange(overlayProps.overlayId, 'close');
+          });
         };
+
         /**
          * @description Passing overridden methods
          */
@@ -53,5 +87,34 @@ export function createOverlay() {
   const closeAll = createEvent('closeAll');
   const unmountAll = createEvent('unmountAll');
 
-  return { open, openAsync, close, unmount, closeAll, unmountAll, useOverlayEvent };
+  const closeWithEvent = (overlayId: string) => {
+    close(overlayId);
+    requestAnimationFrame(() => {
+      emitStateChange(overlayId, 'close');
+    });
+  };
+
+  const unmountWithEvent = (overlayId: string) => {
+    emitStateChange(overlayId, 'unmount');
+    unmount(overlayId);
+  };
+
+  const closeAllWithEvent = () => {
+    closeAll();
+  };
+
+  const unmountAllWithEvent = () => {
+    unmountAll();
+  };
+
+  return {
+    open,
+    openAsync,
+    close: closeWithEvent,
+    unmount: unmountWithEvent,
+    closeAll: closeAllWithEvent,
+    unmountAll: unmountAllWithEvent,
+    useOverlayEvent,
+    onStateChange,
+  };
 }

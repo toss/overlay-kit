@@ -413,3 +413,162 @@ describe('overlay object', () => {
     });
   });
 });
+
+describe('overlay state change events', () => {
+  it('should call onStateChange callback when overlay opens', async () => {
+    const callback = vi.fn();
+    const cleanup = overlay.onStateChange(callback);
+
+    function TestComponent() {
+      useEffect(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="test-overlay">Test Overlay</div>);
+      }, []);
+
+      return <div>Test</div>;
+    }
+
+    render(<TestComponent />, { wrapper: OverlayProvider });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(callback).toHaveBeenCalledWith(expect.any(String), 'open');
+
+    cleanup();
+  });
+
+  it('should call onStateChange callback when overlay closes', async () => {
+    const callback = vi.fn();
+    let overlayId: string;
+
+    function TestComponent() {
+      useEffect(() => {
+        overlayId = overlay.open(({ isOpen }) => isOpen && <div data-testid="test-overlay">Test Overlay</div>);
+
+        return overlay.onStateChange(callback);
+      }, []);
+
+      return (
+        <button data-testid="close-button" onClick={() => overlay.close(overlayId)}>
+          Close Overlay
+        </button>
+      );
+    }
+
+    const { user } = { user: userEvent.setup() };
+    render(<TestComponent />, { wrapper: OverlayProvider });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(callback).toHaveBeenCalledWith(expect.any(String), 'open');
+
+    await user.click(screen.getByTestId('close-button'));
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(callback).toHaveBeenCalledWith(expect.any(String), 'close');
+  });
+
+  it('should call onStateChange callback when overlay unmounts', async () => {
+    const callback = vi.fn();
+    let overlayId: string;
+
+    function TestComponent() {
+      useEffect(() => {
+        overlayId = overlay.open(({ isOpen }) => isOpen && <div data-testid="test-overlay">Test Overlay</div>);
+
+        return overlay.onStateChange(callback);
+      }, []);
+
+      return (
+        <button data-testid="unmount-button" onClick={() => overlay.unmount(overlayId)}>
+          Unmount Overlay
+        </button>
+      );
+    }
+
+    const { user } = { user: userEvent.setup() };
+    render(<TestComponent />, { wrapper: OverlayProvider });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(callback).toHaveBeenCalledWith(expect.any(String), 'open');
+
+    await user.click(screen.getByTestId('unmount-button'));
+
+    expect(callback).toHaveBeenCalledWith(expect.any(String), 'unmount');
+  });
+
+  it('should remove callback when cleanup function is called', async () => {
+    const callback = vi.fn();
+    let overlayId: string;
+    let cleanupFn: () => void;
+
+    function TestComponent() {
+      useEffect(() => {
+        cleanupFn = overlay.onStateChange(callback);
+
+        overlayId = overlay.open(({ isOpen }) => isOpen && <div data-testid="test-overlay">Test Overlay</div>);
+      }, []);
+
+      return (
+        <>
+          <button data-testid="cleanup-button" onClick={() => cleanupFn()}>
+            Remove Callback
+          </button>
+          <button data-testid="close-button" onClick={() => overlay.close(overlayId)}>
+            Close Overlay
+          </button>
+        </>
+      );
+    }
+
+    const { user } = { user: userEvent.setup() };
+    render(<TestComponent />, { wrapper: OverlayProvider });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(callback).toHaveBeenCalledWith(expect.any(String), 'open');
+
+    callback.mockReset();
+    await user.click(screen.getByTestId('cleanup-button'));
+
+    await user.click(screen.getByTestId('close-button'));
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should handle errors in callbacks gracefully', async () => {
+    const originalConsoleError = console.error;
+    console.error = vi.fn();
+
+    const errorCallback = vi.fn().mockImplementation(() => {
+      throw new Error('Test error');
+    });
+
+    const normalCallback = vi.fn();
+
+    function TestComponent() {
+      useEffect(() => {
+        overlay.onStateChange(errorCallback);
+        overlay.onStateChange(normalCallback);
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="test-overlay">Test Overlay</div>);
+      }, []);
+
+      return <div>Test</div>;
+    }
+
+    render(<TestComponent />, { wrapper: OverlayProvider });
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    expect(errorCallback).toHaveBeenCalled();
+
+    expect(normalCallback).toHaveBeenCalled();
+
+    expect(console.error).toHaveBeenCalled();
+
+    console.error = originalConsoleError;
+  });
+});

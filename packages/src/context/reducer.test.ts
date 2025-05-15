@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { determineCurrentOverlayId } from './overlay-utils';
+import { determineCurrentOverlayId } from './reducer';
 
 describe('determineCurrentOverlayId', () => {
   it('should return the previous overlay when closing the last overlay', () => {

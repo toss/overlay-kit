@@ -3,7 +3,11 @@ import { createEmitter } from './emitter';
 
 const emitter = createEmitter();
 function useClientLayoutEffect(...args: Parameters<typeof useLayoutEffect>) {
-  if (typeof document === 'undefined') return;
+  
+  const isBrowser =  typeof document === 'undefined'
+  const isReactNative = typeof navigator !== 'undefined' && navigator.product === 'ReactNative';
+
+  if ( !isBrowser && !isReactNative) return;
 
   useLayoutEffect(...args);
 }

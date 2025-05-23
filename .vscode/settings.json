@@ -12,5 +12,4 @@
 	"typescript.tsdk": ".yarn/sdks/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"typescript.tsserver.experimental.useVsCodeWatcher": false,
-	"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 }

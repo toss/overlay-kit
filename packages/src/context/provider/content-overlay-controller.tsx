@@ -39,13 +39,15 @@ export function ContentOverlayController({
   /**
    * @description Executes when closing and reopening an overlay without unmounting.
    */
-  if (prevCurrent.current !== current) {
-    prevCurrent.current = current;
+  useEffect(() => {
+    if (prevCurrent.current !== current) {
+      prevCurrent.current = current;
 
-    if (current === overlayId) {
-      onMountedRef.current();
+      if (current === overlayId) {
+        onMountedRef.current();
+      }
     }
-  }
+  }, [current, overlayId]);
 
   useEffect(() => {
     onMountedRef.current();

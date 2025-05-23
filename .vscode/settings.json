@@ -11,5 +11,5 @@
 	"prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
 	"typescript.tsdk": ".yarn/sdks/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"typescript.tsserver.experimental.useVsCodeWatcher": false,
+	"typescript.tsserver.experimental.useVsCodeWatcher": false
 }

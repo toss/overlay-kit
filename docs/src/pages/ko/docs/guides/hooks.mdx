@@ -30,7 +30,7 @@ overlay.open(
 이 ID를 기반으로 특정 오버레이가 열렸는지 조건을 분기하거나 포커스/단축키 제어 등에 활용할 수 있어요.
 
 <br />
-모달 A와 B를 설정하여 각 모달을 열었을 때 useCurrentOverlay의 값이 어떻게 변하는지 살펴볼게요.
+오버레이 A와 B를 설정하여 각 오버레이를 열었을 때 useCurrentOverlay의 값이 어떻게 변하는지 살펴볼게요.
 <br />
 <Sandpack>
 
@@ -53,13 +53,13 @@ function App() {
               <ConfirmDialog
                 isOpen={isOpen}
                 close={close}
-                title="모달 A"
+                title="오버레이 A"
               />
             );
           }, { overlayId: 'modal-a' });
         }}
       >
-        모달 A 열기
+        오버레이 A 열기
       </Button>
 
       <Button
@@ -71,13 +71,13 @@ function App() {
               <ConfirmDialog
                 isOpen={isOpen}
                 close={close}
-                title="모달 B"
+                title="오버레이 B"
               />
             );
           }, { overlayId: 'modal-b' });
         }}
       >
-        모달 B 열기
+        오버레이 B 열기
       </Button>
 
       <Typography variant="body1" style={{ marginTop: '5px' }}>
@@ -187,13 +187,13 @@ function App() {
               <ConfirmDialog
               isOpen={isOpen}
               close={close}
-              title="모달 A (close)"
+              title="오버레이 A (close)"
               />
             );
           }, { overlayId: 'modal-close' });
         }}
       >
-        모달 A 열기 (close)
+        오버레이 A 열기 (close)
       </Button>
 
       <Button
@@ -205,13 +205,13 @@ function App() {
               <ConfirmDialog
                 isOpen={isOpen}
                 close={unmount}
-                title="모달 B (unmount)"
+                title="오버레이 B (unmount)"
               />
             );
           }, { overlayId: 'modal-unmount' });
         }}
       >
-      모달 B 열기 (unmount)
+      오버레이 B 열기 (unmount)
       </Button>
 
       <div style={{ marginTop: '24px' }}>

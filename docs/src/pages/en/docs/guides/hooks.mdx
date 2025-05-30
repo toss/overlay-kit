@@ -2,21 +2,17 @@ import { Sandpack } from '@/components';
 
 # Hooks
 
-`overlay-kit`은 오버레이 상태를 전역에서 관리할 수 있도록
-`useCurrentOverlay`, `useOverlayData` 훅을 제공해요.
+`overlay-kit` provides `useCurrentOverlay` and `useOverlayData` hooks to manage overlay state globally.
 
-
-`useCurrentOverlay`와 `useOverlayData`를 활용하면
-오버레이 외부에서도 상태 기반 UX 제어, 포커싱, 조건적 렌더링 등을 더욱 유연하게 구현할 수 있어요.
+Using `useCurrentOverlay` and `useOverlayData`, you can implement state-based UX control, focusing, and conditional rendering more flexibly even outside of overlays.
 
 ---
 
 ## useCurrentOverlay
 
-현재 가장 위에 떠 있는 오버레이의 ID를 반환해요.
+Returns the ID of the currently top-most overlay.
 
-오버레이의 ID는 오버레이를 열 때 `overlay.open()` 또는 `overlay.openAsync()`의
-두 번째 인자로 다음처럼 `overlayId`를 넘겨 직접 지정할 수 있어요:
+The overlay ID can be directly specified by passing `overlayId` as the second argument to `overlay.open()` or `overlay.openAsync()` when opening an overlay:
 
 ```tsx
 overlay.open(
@@ -24,13 +20,12 @@ overlay.open(
   { overlayId: 'custom-overlayId' }
 );
 ```
-만약 overlayId를 생략하면 내부에서 랜덤으로 `overlay-kit-[랜덤숫자]`로 ID가 생성돼요.
+If `overlayId` is omitted, it will be automatically generated internally as `overlay-kit-[random number]`.
 
-
-이 ID를 기반으로 특정 오버레이가 열렸는지 조건을 분기하거나 포커스/단축키 제어 등에 활용할 수 있어요.
+You can use this ID to conditionally branch based on whether a specific overlay is open, or for focus/shortcut control.
 
 <br />
-오버레이 A와 B를 설정하여 각 오버레이를 열었을 때 useCurrentOverlay의 값이 어떻게 변하는지 살펴볼게요.
+Let's see how the value of `useCurrentOverlay` changes when opening overlays A and B.
 <br />
 <Sandpack>
 
@@ -53,13 +48,13 @@ function App() {
               <ConfirmDialog
                 isOpen={isOpen}
                 close={close}
-                title="오버레이 A"
+                title="Overlay A"
               />
             );
           }, { overlayId: 'modal-a' });
         }}
       >
-        오버레이 A 열기
+        Open Overlay A
       </Button>
 
       <Button
@@ -71,17 +66,17 @@ function App() {
               <ConfirmDialog
                 isOpen={isOpen}
                 close={close}
-                title="오버레이 B"
+                title="Overlay B"
               />
             );
           }, { overlayId: 'modal-b' });
         }}
       >
-        오버레이 B 열기
+        Open Overlay B
       </Button>
 
       <Typography variant="body1" style={{ marginTop: '5px' }}>
-        현재 current 값: {current}
+        Current value: {current}
       </Typography>
     </div>
   );
@@ -104,16 +99,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
+import { overlay } from 'overlay-kit';
 
 export function ConfirmDialog({ isOpen, close, title }) {
   return (
     <Dialog open={isOpen} onClose={close}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <Typography>{title} 내용입니다.</Typography>
+        <Typography>This is the content of {title}.</Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={close}>닫기</Button>
+        <Button onClick={close}>Close</Button>
       </DialogActions>
     </Dialog>
   );
@@ -127,22 +123,20 @@ export function ConfirmDialog({ isOpen, close, title }) {
 
 ## useOverlayData
 
-현재 메모리에 존재하는 모든 오버레이 상태 정보를 반환해요.
+Returns information about all overlays currently in memory.
 
+This includes not only open overlays but also closed overlays that remain in memory.
 
-열린 오버레이뿐만 아니라 닫혔지만 메모리에 남아 있는 오버레이도 포함돼요.
+Each overlay item consists of the following properties:
 
+| Property        | Type                      | Description |
+|------------------|----------------------------|-------------|
+| `id`             | `string`                   | Unique ID that identifies the overlay. Specified as `overlayId` when calling `overlay.open()`, or automatically generated if omitted. |
+| `componentKey`   | `string`                   | Internal unique key used for React to correctly render and distinguish overlay UI. A new value is assigned each time it is opened. |
+| `isOpen`         | `boolean`                  | Indicates whether the overlay is currently open. Becomes `false` when `close()` is called, and remains in memory until `unmount()`. |
+| `controller`     | `FC` | React component that actually renders the overlay. The UI function passed to `overlay.open()` is stored in this field. |
 
-각 오버레이 항목은 다음과 같은 속성으로 구성되어 있어요:
-
-| 속성명          | 타입                      | 설명 |
-|------------------|----------------------------|------|
-| `id`             | `string`                   | 오버레이를 식별하는 고유 ID예요. `overlay.open()` 시 `overlayId`로 지정하거나, 생략 시 자동으로 생성돼요. |
-| `componentKey`   | `string`                   | 내부적으로 사용하는 고유 키로, 오버레이 UI를 React가 올바르게 렌더링하고 구분하는 데 사용돼요. 매번 열릴 때마다 새 값이 할당돼요. |
-| `isOpen`         | `boolean`                  | 현재 오버레이가 열려 있는지 여부를 나타내요. `close()`를 호출하면 `false`가 되고, `unmount()`되기 전까지는 메모리에 남아 있어요. |
-| `controller`     | `FC` | 오버레이를 실제로 렌더링하는 React 컴포넌트예요. `overlay.open()` 시 넘겨준 함수 형태의 UI가 이 필드에 저장돼요. |
-
-예를 들어, 다음처럼 확인할 수 있어요:
+For example, you can check it like this:
 
 ```tsx
 const overlayData = useOverlayData();
@@ -150,12 +144,12 @@ const overlayData = useOverlayData();
 Object.entries(overlayData).forEach(([id, item]) => {
   console.log(id);               // overlayId
   console.log(item.isOpen);     // true / false
-  console.log(item.controller); // 컴포넌트 렌더링 함수
+  console.log(item.controller); // component rendering function
 });
 ```
 
 <br />
-각각의 오버레이를 `close`와 `unmount` 방식으로 닫았을 때, `useOverlayData`에 남아 있는 오버레이 정보가 어떻게 달라지는지 살펴볼게요.
+Let's see how the overlay information remaining in `useOverlayData` changes when closing overlays using `close` and `unmount` methods.
 <br />
 <Sandpack>
 
@@ -187,13 +181,13 @@ function App() {
                 <ConfirmDialog
                 isOpen={isOpen}
                 close={close}
-                title="오버레이 A (close)"
+                title="Overlay A (close)"
                 />
               );
             }, { overlayId: 'modal-close' });
           }}
         >
-          오버레이 A 열기 (close)
+          Open Overlay A (close)
         </Button>
 
         <Button
@@ -205,33 +199,33 @@ function App() {
                 <ConfirmDialog
                   isOpen={isOpen}
                   close={unmount}
-                  title="오버레이 B (unmount)"
+                  title="Overlay B (unmount)"
                 />
               );
             }, { overlayId: 'modal-unmount' });
           }}
         >
-        오버레이 B 열기 (unmount)
+          Open Overlay B (unmount)
         </Button>
       </Stack>
       <div style={{ marginTop: '24px' }}>
-      <Typography variant="subtitle1">열려 있는 오버레이</Typography>
+      <Typography variant="subtitle1">Opened Overlays</Typography>
       <List dense>
         {openOverlayIds.length > 0 ? (
           openOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
         ) : (
-          <ListItem>없음</ListItem>
+          <ListItem>None</ListItem>
         )}
       </List>
 
       <Typography variant="subtitle1" style={{ marginTop: '16px' }}>
-        메모리에 남아 있는 오버레이
+        Overlays in Memory
       </Typography>
       <List dense>
         {allOverlayIds.length > 0 ? (
           allOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
         ) : (
-          <ListItem>없음</ListItem>
+          <ListItem>None</ListItem>
         )}
       </List>
       </div>
@@ -262,10 +256,10 @@ export function ConfirmDialog({ isOpen, close, title }) {
     <Dialog open={isOpen} onClose={close}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <Typography>{title} 내용입니다.</Typography>
+        <Typography>This is the content of {title}.</Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={close}>닫기</Button>
+        <Button onClick={close}>Close</Button>
       </DialogActions>
     </Dialog>
   );

@@ -17,8 +17,8 @@ type OpenOverlayOptions = {
   overlayId?: string;
 };
 
-export function createOverlay() {
-  const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>('overlay-kit');
+export function createOverlay(overlayId: string) {
+  const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>(`${overlayId}/overlay-kit`);
 
   const open = (controller: OverlayControllerComponent, options?: OpenOverlayOptions) => {
     const overlayId = options?.overlayId ?? randomId();
@@ -36,7 +36,7 @@ export function createOverlay() {
          * @description close the overlay with resolve
          */
         const close = (param: T) => {
-          resolve(param as T);
+          resolve(param);
           overlayProps.close();
         };
         /**

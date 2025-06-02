@@ -1,5 +1,11 @@
 # overlay-kit
 
+## 1.8.2
+
+### Patch Changes
+
+- [#145](https://github.com/toss/overlay-kit/pull/145) [`1a5d4bb`](https://github.com/toss/overlay-kit/commit/1a5d4bb631147771b265c873bc6447039fd86dbd) Thanks [@gwagjiug](https://github.com/gwagjiug)! - fix: remove unnecessary type assertion from Context.Provider
+
 ## 1.8.1
 
 ### Patch Changes

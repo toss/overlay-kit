@@ -1,5 +1,19 @@
 # overlay-kit
 
+## 1.8.2
+
+### Patch Changes
+
+- [#145](https://github.com/toss/overlay-kit/pull/145) [`1a5d4bb`](https://github.com/toss/overlay-kit/commit/1a5d4bb631147771b265c873bc6447039fd86dbd) Thanks [@gwagjiug](https://github.com/gwagjiug)! - fix: remove unnecessary type assertion from Context.Provider
+
+- [#167](https://github.com/toss/overlay-kit/pull/167) [`b19f2c6`](https://github.com/toss/overlay-kit/commit/b19f2c6b852a498c4f2c60b3f9f319af9fb2b863) Thanks [@jiji-hoon96](https://github.com/jiji-hoon96)! - refactor: Extract determine current overlay logic to a utility function
+
+- [#158](https://github.com/toss/overlay-kit/pull/158) [`a6e2f15`](https://github.com/toss/overlay-kit/commit/a6e2f1569e1205d885303f09533f1303676b1040) Thanks [@jiji-hoon96](https://github.com/jiji-hoon96)! - refactor: Replace map with forEach in event emitter
+
+- [#168](https://github.com/toss/overlay-kit/pull/168) [`4f70bdb`](https://github.com/toss/overlay-kit/commit/4f70bdb1ba81b7000c9a5f8b2115132777cc8fa7) Thanks [@DongGukMon](https://github.com/DongGukMon)! - feat: extend environment guard to recognise React Native
+
+- [#173](https://github.com/toss/overlay-kit/pull/173) [`617b0a0`](https://github.com/toss/overlay-kit/commit/617b0a0edab7f59d895f65d3888259ff2f5d83da) Thanks [@dayongkr](https://github.com/dayongkr)! - Enhance error message for duplicated id
+
 ## 1.8.1
 
 ### Patch Changes

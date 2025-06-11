@@ -53,14 +53,14 @@ export function createEmitter<Events extends Record<EventType, unknown>>(
     emit<Key extends keyof Events>(type: Key, evt?: Events[Key]) {
       let handlers = all!.get(type);
       if (handlers) {
-        (handlers as EventHandlerList<Events[keyof Events]>).slice().map((handler) => {
+        (handlers as EventHandlerList<Events[keyof Events]>).slice().forEach((handler) => {
           handler(evt!);
         });
       }
 
       handlers = all!.get('*');
       if (handlers) {
-        (handlers as WildCardEventHandlerList<Events>).slice().map((handler) => {
+        (handlers as WildCardEventHandlerList<Events>).slice().forEach((handler) => {
           handler(type, evt!);
         });
       }

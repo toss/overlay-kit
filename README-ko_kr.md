@@ -41,7 +41,7 @@ import { overlay } from 'overlay-kit';
 
 <Button
   onClick={async () => {
-    const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+    const result = await overlay.openAsync<boolean>(({ isOpen, close, unmount }) => (
       <Dialog
         open={isOpen}
         onConfirm={() => close(true)}

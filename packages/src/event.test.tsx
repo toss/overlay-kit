@@ -380,7 +380,9 @@ describe('overlay object', () => {
       act(() => {
         overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2" />, { overlayId: sameOverlayId });
       });
-    }).toThrowError("You can't open the multiple overlays with the same overlayId. Please set a different id.");
+    }).toThrowError(
+      "You can't open the multiple overlays with the same overlayId(same-overlay-id). Please set a different id."
+    );
   });
 
   it('unmount function requires the exact id to be provided', async () => {

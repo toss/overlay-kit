@@ -20,7 +20,7 @@ export type OverlayData = {
   overlayData: Record<OverlayId, OverlayItem>;
 };
 
-type OverlayReducerAction =
+export type OverlayReducerAction =
   | { type: 'ADD'; overlay: OverlayItem }
   | { type: 'OPEN'; overlayId: string }
   | { type: 'CLOSE'; overlayId: string }

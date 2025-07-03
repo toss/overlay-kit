@@ -64,15 +64,8 @@ export function createOverlayProvider() {
             <ContentOverlayController
               key={componentKey}
               isOpen={isOpen}
-              current={overlayState.current}
               overlayId={currentOverlayId}
-              onMounted={() => {
-                requestAnimationFrame(() => {
-                  overlayDispatch({ type: 'OPEN', overlayId: currentOverlayId });
-                });
-              }}
-              onCloseModal={() => overlay.close(currentOverlayId)}
-              onExitModal={() => overlay.unmount(currentOverlayId)}
+              overlayDispatch={overlayDispatch}
               controller={currentController}
             />
           );

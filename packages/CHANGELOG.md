@@ -1,5 +1,30 @@
 # overlay-kit
 
+## 1.8.3
+
+### Patch Changes
+
+- [#185](https://github.com/toss/overlay-kit/pull/185) [`f261784`](https://github.com/toss/overlay-kit/commit/f2617840af7a027c84b9e5d9048d7883b9617ac1) Thanks [@jungpaeng](https://github.com/jungpaeng)! - fix: prevent unnecessary re-renders of existing overlays with memo
+
+  Prevent unnecessary re-renders of existing overlays when new overlays are opened, improving performance.
+
+  ### Key Changes
+
+  - **Added React.memo**: Applied memo to overlay controller component to prevent re-renders when props haven't changed
+  - **Integrated state management**: Streamlined state management by integrating it directly into the component and removing redundant prop passing
+
+  ### Performance Improvements
+
+  - Eliminated unnecessary re-renders of existing overlays when adding new overlays in multi-overlay scenarios
+  - Provides more predictable and maintainable state management flow
+  - Maintained existing API compatibility while optimizing internal performance
+
+  This change maintains backward compatibility and provides performance improvements without requiring any code changes from users.
+
+- [#183](https://github.com/toss/overlay-kit/pull/183) [`579abaf`](https://github.com/toss/overlay-kit/commit/579abaf54ec3b84b7c2ca0b943387bfb33e893a1) Thanks [@jungpaeng](https://github.com/jungpaeng)! - test: fix duplicate overlayId error message expectation
+
+  Updated test case to match the actual implementation where duplicate overlayId error messages now include the specific overlayId value for better debugging experience.
+
 ## 1.8.2
 
 ### Patch Changes

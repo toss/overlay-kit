@@ -1,5 +1,5 @@
-import { type FC, useEffect, useRef, ActionDispatch, useCallback, memo } from 'react';
-import { OverlayReducerAction } from '../reducer';
+import { type FC, useEffect, type ActionDispatch, memo } from 'react';
+import { type OverlayReducerAction } from '../reducer';
 
 type OverlayControllerProps = {
   overlayId: string;

@@ -1,5 +1,70 @@
 # overlay-kit
 
+## 1.8.3
+
+### Patch Changes
+
+- [#185](https://github.com/toss/overlay-kit/pull/185) [`f261784`](https://github.com/toss/overlay-kit/commit/f2617840af7a027c84b9e5d9048d7883b9617ac1) Thanks [@jungpaeng](https://github.com/jungpaeng)! - fix: prevent unnecessary re-renders of existing overlays with memo
+
+  Prevent unnecessary re-renders of existing overlays when new overlays are opened, improving performance.
+
+  ### Key Changes
+
+  - **Added React.memo**: Applied memo to overlay controller component to prevent re-renders when props haven't changed
+  - **Integrated state management**: Streamlined state management by integrating it directly into the component and removing redundant prop passing
+
+  ### Performance Improvements
+
+  - Eliminated unnecessary re-renders of existing overlays when adding new overlays in multi-overlay scenarios
+  - Provides more predictable and maintainable state management flow
+  - Maintained existing API compatibility while optimizing internal performance
+
+  This change maintains backward compatibility and provides performance improvements without requiring any code changes from users.
+
+- [#183](https://github.com/toss/overlay-kit/pull/183) [`579abaf`](https://github.com/toss/overlay-kit/commit/579abaf54ec3b84b7c2ca0b943387bfb33e893a1) Thanks [@jungpaeng](https://github.com/jungpaeng)! - test: fix duplicate overlayId error message expectation
+
+  Updated test case to match the actual implementation where duplicate overlayId error messages now include the specific overlayId value for better debugging experience.
+
+## 1.8.2
+
+### Patch Changes
+
+- [#145](https://github.com/toss/overlay-kit/pull/145) [`1a5d4bb`](https://github.com/toss/overlay-kit/commit/1a5d4bb631147771b265c873bc6447039fd86dbd) Thanks [@gwagjiug](https://github.com/gwagjiug)! - fix: remove unnecessary type assertion from Context.Provider
+
+- [#167](https://github.com/toss/overlay-kit/pull/167) [`b19f2c6`](https://github.com/toss/overlay-kit/commit/b19f2c6b852a498c4f2c60b3f9f319af9fb2b863) Thanks [@jiji-hoon96](https://github.com/jiji-hoon96)! - refactor: Extract determine current overlay logic to a utility function
+
+- [#158](https://github.com/toss/overlay-kit/pull/158) [`a6e2f15`](https://github.com/toss/overlay-kit/commit/a6e2f1569e1205d885303f09533f1303676b1040) Thanks [@jiji-hoon96](https://github.com/jiji-hoon96)! - refactor: Replace map with forEach in event emitter
+
+- [#168](https://github.com/toss/overlay-kit/pull/168) [`4f70bdb`](https://github.com/toss/overlay-kit/commit/4f70bdb1ba81b7000c9a5f8b2115132777cc8fa7) Thanks [@DongGukMon](https://github.com/DongGukMon)! - feat: extend environment guard to recognise React Native
+
+- [#173](https://github.com/toss/overlay-kit/pull/173) [`617b0a0`](https://github.com/toss/overlay-kit/commit/617b0a0edab7f59d895f65d3888259ff2f5d83da) Thanks [@dayongkr](https://github.com/dayongkr)! - Enhance error message for duplicated id
+
+## 1.8.1
+
+### Patch Changes
+
+- [#161](https://github.com/toss/overlay-kit/pull/161) [`ec07614`](https://github.com/toss/overlay-kit/commit/ec0761404eabe27b07a8ad31cf82df34fb3169f7) Thanks [@jungpaeng](https://github.com/jungpaeng)! - feat: Change to allow each overlay provider to have a unique event ID
+
+  Each overlay provider now uses a unique event ID instead of relying on shared global identifiers.
+
+  This change improves event handling accuracy and avoids potential collisions when managing multiple overlays from different providers.
+  It is backward-compatible for existing overlays that do not explicitly set a provider-specific ID.
+
+## 1.8.0
+
+### Minor Changes
+
+- [#149](https://github.com/toss/overlay-kit/pull/149) [`a98a312`](https://github.com/toss/overlay-kit/commit/a98a312249b5ad0006eec16025c4109714a47265) Thanks [@jungpaeng](https://github.com/jungpaeng)! - refactor: migrate event based store
+
+### Patch Changes
+
+- [#151](https://github.com/toss/overlay-kit/pull/151) [`07f42a5`](https://github.com/toss/overlay-kit/commit/07f42a585e8d2bd8ee6ee0841388e3dc39a287a4) Thanks [@jungpaeng](https://github.com/jungpaeng)! - feat: Add component key
+
+  Fixed an issue with overlay components not properly remounting when unmounted and immediately reopened with the same ID.
+  Added a new `componentKey` property that's separate from `overlayId` to ensure React properly handles component lifecycle. Each time `overlay.open()` is called, a new random `componentKey` is generated internally even when reusing the same `overlayId`.
+
+  This fix resolves scenarios where calling `unmount()` followed by `open()` with the same overlay ID in quick succession would result in the overlay not being visible to users.
+
 ## 1.7.0
 
 ### Minor Changes

@@ -1,4 +1,4 @@
-import { type OverlayData } from './store';
+import { type OverlayData } from './reducer';
 import { createSafeContext } from '../utils/create-safe-context';
 
 export function createOverlaySafeContext() {

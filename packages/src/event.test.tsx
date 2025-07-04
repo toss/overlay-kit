@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import React, { useEffect, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
@@ -377,8 +377,12 @@ describe('overlay object', () => {
 
     // Using the same overlayId causes an error
     expect(() => {
-      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2" />, { overlayId: sameOverlayId });
-    }).toThrowError("You can't open the multiple overlays with the same overlayId. Please set a different id.");
+      act(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2" />, { overlayId: sameOverlayId });
+      });
+    }).toThrowError(
+      "You can't open the multiple overlays with the same overlayId(same-overlay-id). Please set a different id."
+    );
   });
 
   it('unmount function requires the exact id to be provided', async () => {

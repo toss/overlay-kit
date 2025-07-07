@@ -12,6 +12,7 @@ type OverlayItem = {
    */
   componentKey: string;
   isOpen: boolean;
+  isMounted: boolean;
   controller: OverlayControllerComponent;
 };
 export type OverlayData = {
@@ -63,6 +64,24 @@ export const determineCurrentOverlayId = (
 export function overlayReducer(state: OverlayData, action: OverlayReducerAction): OverlayData {
   switch (action.type) {
     case 'ADD': {
+      if (state.overlayData[action.overlay.id] != null && state.overlayData[action.overlay.id].isOpen === false) {
+        const overlay = state.overlayData[action.overlay.id];
+
+        // ignore if the overlay don't exist or already open
+        if (overlay == null || overlay.isOpen) {
+          return state;
+        }
+
+        return {
+          ...state,
+          current: action.overlay.id,
+          overlayData: {
+            ...state.overlayData,
+            [action.overlay.id]: { ...overlay, isOpen: true },
+          },
+        };
+      }
+
       const isExisted = state.overlayOrderList.includes(action.overlay.id);
 
       if (isExisted && state.overlayData[action.overlay.id].isOpen === true) {
@@ -97,10 +116,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
         ...state,
         overlayData: {
           ...state.overlayData,
-          [action.overlayId]: {
-            ...overlay,
-            isOpen: true,
-          },
+          [action.overlayId]: { ...overlay, isOpen: true, isMounted: true },
         },
       };
     }

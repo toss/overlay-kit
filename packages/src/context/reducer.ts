@@ -74,6 +74,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
 
         return {
           ...state,
+          current: action.overlay.id,
           overlayData: {
             ...state.overlayData,
             [action.overlay.id]: { ...overlay, isOpen: true },

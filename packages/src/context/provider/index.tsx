@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, type PropsWithChildren } from 'react';
+import { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
 import { ContentOverlayController } from './content-overlay-controller';
 import { type OverlayEvent, createOverlay } from '../../event';
 import { randomId } from '../../utils/random-id';
@@ -16,6 +16,7 @@ export function createOverlayProvider() {
       overlayOrderList: [],
       overlayData: {},
     });
+    const prevOverlayState = useRef(overlayState);
 
     const open: OverlayEvent['open'] = useCallback(({ controller, overlayId, componentKey }) => {
       overlayDispatch({
@@ -43,6 +44,14 @@ export function createOverlayProvider() {
 
     useOverlayEvent({ open, close, unmount, closeAll, unmountAll });
 
+    if (prevOverlayState.current !== overlayState) {
+      prevOverlayState.current = overlayState;
+
+      if (overlayState.current != null && overlayState.overlayData[overlayState.current].isOpen === false) {
+        overlayDispatch({ type: 'OPEN', overlayId: overlayState.current });
+      }
+    }
+
     useEffect(() => {
       return () => {
         overlayDispatch({ type: 'REMOVE_ALL' });
@@ -53,20 +62,15 @@ export function createOverlayProvider() {
       <OverlayContextProvider value={overlayState}>
         {children}
         {overlayState.overlayOrderList.map((item) => {
-          const {
-            id: currentOverlayId,
-            componentKey,
-            isOpen,
-            controller: currentController,
-          } = overlayState.overlayData[item];
+          const { id: currentOverlayId, componentKey, isOpen, controller: Controller } = overlayState.overlayData[item];
 
           return (
             <ContentOverlayController
               key={componentKey}
               isOpen={isOpen}
+              controller={Controller}
               overlayId={currentOverlayId}
               overlayDispatch={overlayDispatch}
-              controller={currentController}
             />
           );
         })}

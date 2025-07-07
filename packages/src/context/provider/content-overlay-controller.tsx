@@ -1,4 +1,4 @@
-import { type FC, useEffect, type ActionDispatch, memo } from 'react';
+import { type FC, type ActionDispatch, memo } from 'react';
 import { type OverlayReducerAction } from '../reducer';
 
 type OverlayControllerProps = {
@@ -24,16 +24,10 @@ type ContentOverlayControllerProps = {
 
 export const ContentOverlayController = memo(
   ({ isOpen, overlayId, overlayDispatch, controller: Controller }: ContentOverlayControllerProps) => {
-    useEffect(() => {
-      requestAnimationFrame(() => {
-        overlayDispatch({ type: 'OPEN', overlayId });
-      });
-    }, [overlayDispatch, overlayId]);
-
     return (
       <Controller
-        overlayId={overlayId}
         isOpen={isOpen}
+        overlayId={overlayId}
         close={() => overlayDispatch({ type: 'CLOSE', overlayId })}
         unmount={() => overlayDispatch({ type: 'REMOVE', overlayId })}
       />

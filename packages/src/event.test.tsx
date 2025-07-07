@@ -286,6 +286,13 @@ describe('overlay object', () => {
       expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
       expect(screen.queryByText('has Open overlay')).not.toBeInTheDocument();
     });
+
+    overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+    overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    });
   });
 
   it('should not be able to get current overlay when all overlays are closed', async () => {

@@ -29,7 +29,8 @@ overlay.openAsync(({ isOpen, close, unmount }) => {
 
 - `controller`: The overlay controller function. Returns JSX to render the overlay and receives parameters for overlay state and control functions.
   - `isOpen`: A value indicating whether the overlay is open.
-  - `close`: Function to close the overlay. When called, returns the passed value as a `Promise` and closes the overlay. <br/>The overlay information remains in memory for closing animations. Call `unmount` to completely remove it.
+  - `close`: A function to close the overlay. When you call this function, the value you pass as an argument will be delivered as the resolved value of the `Promise` returned by `overlay.openAsync`, and the overlay will close.
+To allow overlay closing animations to be displayed, 
   - `unmount`: Function to remove the overlay. <br/>If called immediately with a closing animation, the component may be removed before the animation completes.
 - **optional** `options`: Overlay options.
   - `overlayId`: Specify a unique ID when opening the overlay.

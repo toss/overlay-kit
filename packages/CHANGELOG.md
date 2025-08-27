@@ -1,5 +1,11 @@
 # overlay-kit
 
+## 1.8.5
+
+### Patch Changes
+
+- [#190](https://github.com/toss/overlay-kit/pull/190) [`de244a0`](https://github.com/toss/overlay-kit/commit/de244a00d7c0750541f2843a82431e132a523999) Thanks [@healtheloper](https://github.com/healtheloper)! - chore: add use client banner to build configuration
+
 ## 1.8.4
 
 ### Patch Changes

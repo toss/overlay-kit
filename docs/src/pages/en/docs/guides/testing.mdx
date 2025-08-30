@@ -1,25 +1,34 @@
 # Testing
+
 Let me introduce how to write test code.
 
 # Prerequisites
+
 ## Test Runner
+
 Before writing test code, set up a Test Runner. Refer to the following documents for setup instructions:
+
 - Jest
-    - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
-    - [Jest: Configuration](https://jestjs.io/docs/configuration#testenvironment-string)
+
+  - [Jest: Getting Started](https://jestjs.io/docs/getting-started)
+  - [Jest: Configuration](https://jestjs.io/docs/configuration#testenvironment-string)
 
 - Vitest
-    - [Vitest: Getting Started](https://vitest.dev/guide/#getting-started)
-    - [Vitest: Configuration](https://vitest.dev/config/)
+  - [Vitest: Getting Started](https://vitest.dev/guide/#getting-started)
+  - [Vitest: Configuration](https://vitest.dev/config/)
 
 ## UI Testing Tools
+
 Set up UI Testing Tools to help you test UI components easily. Refer to the following document for setup instructions:
+
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
 # Testing Methods by Scenario
+
 ## Closing Overlays
 
 You can verify if an overlay closes properly when using the `overlay.unmount` function.
+
 <br />
 You can check if the overlay is removed from the DOM using `waitFor` for asynchronous processing, as shown below:
 
@@ -49,6 +58,7 @@ it('should be able to close an open overlay using overlay.unmount', async () => 
 ## Opening Multiple Overlays
 
 For multiple overlays, you can verify if each overlay works correctly.
+
 <br />
 You can check if all overlays rendered in multiple layers exist in the DOM, as shown below:
 
@@ -84,6 +94,7 @@ it('should be able to open multiple overlays via overlay.open', async () => {
 ## Asynchronous Overlay Closing (overlay.openAsync)
 
 When an overlay opens and closes asynchronously, you can verify if the value passed when closing is returned correctly.
+
 <br />
 You can mock the function executed when the overlay opens and closes asynchronously and check its result, as shown below:
 
@@ -187,8 +198,10 @@ it('should handle current overlay correctly when unmounting overlays in differen
 ## Verifying Current Active Overlay State
 
 In code that uses the `useCurrentOverlay` hook, you can track the ID of the currently open overlay.
+
 <br />
-You can verify if the state value displayed on the screen changes as expected after opening, closing, and unmounting overlays, as shown below:
+You can verify if the state value displayed on the screen changes as expected after opening, closing, and unmounting overlays,
+as shown below:
 
 ```tsx
 it('should track current overlay state correctly', async () => {
@@ -238,6 +251,7 @@ it('should track current overlay state correctly', async () => {
 ## Controlling All Overlays
 
 In Overlay-kit, you can close or unmount all overlays at once.
+
 <br />
 **You can also write tests for cases using closeAll or unmountAll, as shown below:**
 
@@ -310,4 +324,4 @@ it('should be able to unmount all overlays', async () => {
     expect(screen.queryByText('has overlay')).not.toBeInTheDocument();
   });
 });
-``` 
+```

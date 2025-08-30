@@ -7,7 +7,7 @@ coverage:
         threshold: 30%
 
 comment:
-  layout: "header, reach, diff, flags, components"
+  layout: 'header, reach, diff, flags, components'
   behavior: default
   require_changes: false
   require_base: false
@@ -15,12 +15,12 @@ comment:
   hide_project_coverage: false
 
 ignore:
-  - "**/*.test-d.*"
-  - "**/test-utils/*"
+  - '**/*.test-d.*'
+  - '**/test-utils/*'
 
 component_management:
   individual_components:
     - component_id: overlay-kit
-      name: "overlay-kit"
+      name: 'overlay-kit'
       paths:
         - packages/**

@@ -1,4 +1,5 @@
-import { type FC, useEffect, useRef } from 'react';
+import { type FC, type ActionDispatch, memo, useEffect } from 'react';
+import { type OverlayReducerAction } from '../reducer';
 
 type OverlayControllerProps = {
   overlayId: string;
@@ -16,40 +17,26 @@ export type OverlayAsyncControllerComponent<T> = FC<OverlayAsyncControllerProps<
 
 type ContentOverlayControllerProps = {
   isOpen: boolean;
-  current: string | null;
   overlayId: string;
-  onMounted: () => void;
-  onCloseModal: () => void;
-  onExitModal: () => void;
+  overlayDispatch: ActionDispatch<[action: OverlayReducerAction]>;
   controller: OverlayControllerComponent;
 };
 
-export function ContentOverlayController({
-  isOpen,
-  current,
-  overlayId,
-  onMounted,
-  onCloseModal,
-  onExitModal,
-  controller: Controller,
-}: ContentOverlayControllerProps) {
-  const prevCurrent = useRef(current);
-  const onMountedRef = useRef(onMounted);
+export const ContentOverlayController = memo(
+  ({ isOpen, overlayId, overlayDispatch, controller: Controller }: ContentOverlayControllerProps) => {
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        overlayDispatch({ type: 'OPEN', overlayId });
+      });
+    }, [overlayDispatch, overlayId]);
 
-  /**
-   * @description Executes when closing and reopening an overlay without unmounting.
-   */
-  if (prevCurrent.current !== current) {
-    prevCurrent.current = current;
-
-    if (current === overlayId) {
-      onMountedRef.current();
-    }
+    return (
+      <Controller
+        isOpen={isOpen}
+        overlayId={overlayId}
+        close={() => overlayDispatch({ type: 'CLOSE', overlayId })}
+        unmount={() => overlayDispatch({ type: 'REMOVE', overlayId })}
+      />
+    );
   }
-
-  useEffect(() => {
-    onMountedRef.current();
-  }, []);
-
-  return <Controller overlayId={overlayId} isOpen={isOpen} close={onCloseModal} unmount={onExitModal} />;
-}
+);

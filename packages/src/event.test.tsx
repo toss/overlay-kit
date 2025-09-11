@@ -286,6 +286,13 @@ describe('overlay object', () => {
       expect(screen.queryByTestId(/^overlay-/)).not.toBeInTheDocument();
       expect(screen.queryByText('has Open overlay')).not.toBeInTheDocument();
     });
+
+    overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{contents.first}</div>);
+    overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2">{contents.second}</div>);
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+      expect(screen.getByTestId('overlay-2')).toBeInTheDocument();
+    });
   });
 
   it('should not be able to get current overlay when all overlays are closed', async () => {
@@ -380,7 +387,9 @@ describe('overlay object', () => {
       act(() => {
         overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-2" />, { overlayId: sameOverlayId });
       });
-    }).toThrowError("You can't open the multiple overlays with the same overlayId. Please set a different id.");
+    }).toThrowError(
+      "You can't open the multiple overlays with the same overlayId(same-overlay-id). Please set a different id."
+    );
   });
 
   it('unmount function requires the exact id to be provided', async () => {
@@ -410,6 +419,41 @@ describe('overlay object', () => {
     overlay.unmount(overlayIdMap.second);
     await waitFor(() => {
       expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    });
+  });
+
+  it('should be able to open an overlay after closing it', async () => {
+    const overlayId = 'overlay-content-1';
+
+    function Component() {
+      const current = useCurrentOverlay();
+
+      useEffect(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayId}</div>, {
+          overlayId: overlayId,
+        });
+      }, []);
+
+      return <div data-testid="current-overlay">{current}</div>;
+    }
+
+    render(<Component />, { wrapper });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayId);
+    });
+
+    overlay.close(overlayId);
+    await waitFor(() => {
+      expect(screen.queryByTestId('overlay-1')).not.toBeInTheDocument();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent('');
+    });
+
+    overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayId}</div>, { overlayId });
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeVisible();
+      expect(screen.getByTestId('current-overlay')).toHaveTextContent(overlayId);
     });
   });
 });

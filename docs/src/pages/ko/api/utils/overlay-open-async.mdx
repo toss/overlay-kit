@@ -1,0 +1,66 @@
+# overlay.openAsync
+
+`overlay.openAsync`는 사용자 입력(예: 확인 또는 취소)을 받아야 하는 오버레이를 열 때 사용해요.
+
+```ts
+const result = await overlay.openAsync(controller, options);
+```
+
+## 레퍼런스
+
+`overlay.openAsync(controller, options?)`
+
+값을 전달받는 오버레이를 열 때 `overlay.openAsync`을 호출하세요.
+
+```tsx
+overlay.openAsync(({ isOpen, close, unmount }) => {
+  function confirm() {
+    close(true);
+  }
+  function cancel() {
+    close(false);
+  }
+
+  return <ConfirmDialog isOpen={isOpen} confirm={confirm} close={cancel} onExit={unmount} />;
+});
+```
+
+### 매개변수
+
+- `controller`: 오버레이 컨트롤러 함수예요. 오버레이를 렌더링할 JSX를 반환하며, 오버레이의 상태와 제어 함수들을 매개변수로 받아요.
+  - `isOpen`: 오버레이가 열렸는지 여부를 나타내는 값이에요.
+  - `close`: 오버레이를 닫는 함수예요. 이 함수를 호출 할 때 인자로 전달한 값은 `overlay.openAsync`가 반환하는 `Promise`의 결과 값으로 전달되며 오버레이가 닫혀요. <br/>오버레이 닫기 애니메이션 등을 보여주기 위해서 오버레이 정보는 메모리에 계속 남아있어요. 이것을 완전히 제거하려면 `unmount` 함수를 호출하세요.
+  - `unmount`: 오버레이를 제거하는 함수예요. <br/>오버레이 닫기 애니메이션이 있을 때 `unmount`를 바로 호출하면 오버레이가 닫히기 전에 컴포넌트가 제거되어 애니메이션이 제대로 표시되지 않을 수 있어요.
+- **optional** `options`: 오버레이 옵션입니다.
+  - `overlayId`: 오버레이를 열 때 고유한 ID를 지정해요.
+
+### 반환값
+
+`close` 함수로 전달한 값을 반환해요.
+
+### 주의사항
+
+수동으로 ID를 지정할 때는 다른 오버레이와 중복되지 않도록 주의하세요. 중복된 ID로 여러 오버레이를 열면 의도치 않은 동작이 발생할 수 있어요.
+
+## 사용법
+
+아래는 확인 창(ConfirmDialog)을 열어 사용자의 입력에 따라 다르게 동작하는 예제예요.
+
+```tsx
+const result = await overlay.openAsync(({ isOpen, close, unmount }) => {
+  function confirm() {
+    close(true);
+  }
+  function cancel() {
+    close(false);
+  }
+
+  return <ConfirmDialog isOpen={isOpen} confirm={confirm} close={cancel} onExit={unmount} />;
+});
+
+if (result === true) {
+  console.log('사용자가 확인을 선택했어요.');
+} else {
+  console.log('사용자가 취소를 선택했어요.');
+}
+```

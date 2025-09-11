@@ -1,0 +1,91 @@
+import { Sandpack } from '@/components';
+
+# Opening Overlays Outside React
+
+With `overlay-kit`, you can open overlays from outside React components.
+
+For example, you can show an overlay to notify users when an error occurs during API calls.
+
+```tsx {7-11}
+import ky from 'ky';
+import { overlay } from 'overlay-kit';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        console.log('test:: response', response);
+        if (response.status >= 400) {
+          overlay.open(({ isOpen, close }) => <ErrorDialog open={isOpen} onClose={close} />);
+        }
+      },
+    ],
+  },
+});
+```
+
+The above code extends `ky` to check the status code after API calls and open an overlay if there's an error.
+
+## Complete Example: Opening Overlays After API Requests
+
+Here's a complete example of showing overlays after API requests. We use `overlay.open` to notify whether the API was successful.
+
+<br />
+
+<Sandpack dependencies={{ ky: 'latest' }}>
+
+```tsx Example.tsx active
+import ky from 'ky';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { Alert } from './alert';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        overlay.open(({ isOpen, close, unmount }) => {
+          return <Alert isOpen={isOpen} close={close} onExit={unmount} />;
+        });
+      },
+    ],
+  },
+});
+
+function App() {
+  return <Button onClick={() => api('/api')}>API Request</Button>;
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+```tsx alert.tsx
+import { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function Alert({ isOpen, close, onExit }) {
+  useEffect(() => {
+    return () => onExit();
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
+      <DialogTitle>API Response Received</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>Close</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+</Sandpack>

@@ -1,12 +1,16 @@
-import { type OverlayData } from './store';
+import { type OverlayData } from './reducer';
 import { createSafeContext } from '../utils/create-safe-context';
 
-export const [OverlayContextProvider, useOverlayContext] = createSafeContext<OverlayData>('overlay-kit/OverlayContext');
+export function createOverlaySafeContext() {
+  const [OverlayContextProvider, useOverlayContext] = createSafeContext<OverlayData>('overlay-kit/OverlayContext');
 
-export function useCurrentOverlay() {
-  return useOverlayContext().current;
-}
+  function useCurrentOverlay() {
+    return useOverlayContext().current;
+  }
 
-export function useOverlayData() {
-  return useOverlayContext().overlayData;
+  function useOverlayData() {
+    return useOverlayContext().overlayData;
+  }
+
+  return { OverlayContextProvider, useCurrentOverlay, useOverlayData };
 }

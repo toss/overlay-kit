@@ -1,0 +1,135 @@
+# FAQ (Frequently Asked Questions)
+
+`overlay-kit`을 사용하며 자주 나오는 질문과 답변을 모았습니다.
+
+## Q. overlay-kit은 어떤 상황에서 가장 유용한가요?
+
+**A:**
+`overlay-kit`은 다음과 같은 상황에서 특히 유용합니다:
+
+- **복잡한 오버레이 관리**: 체이닝된 다이얼로그, 중첩된 오버레이 등을 간단히 관리할 수 있어요.
+- **React 철학과의 일치**: 상태 관리 대신 선언적으로 UI를 정의할 수 있어요.
+- **성능 최적화**: 자주 열리고 닫히는 무거운 오버레이를 효율적으로 처리해요.
+- **대규모 애플리케이션**: 팀 전체에서 일관된 오버레이 관리 방식을 제공해요.
+
+## Q. `overlay.open`과 `overlay.openAsync`의 차이는 무엇인가요?
+
+**A:**
+두 메서드는 오버레이를 여는 방식에서 차이가 있습니다:
+
+- **`overlay.open`**: 단순히 오버레이를 열고 닫는 동작을 처리합니다.
+- **`overlay.openAsync`**: Promise를 반환해 비동기적으로 결과를 처리할 수 있습니다.
+
+**비교 예제**:
+
+```tsx
+// overlay.open
+overlay.open(({ isOpen, close }) => (
+  <Dialog open={isOpen} onClose={close}>
+    <p>단순 오버레이</p>
+  </Dialog>
+));
+
+// overlay.openAsync
+const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+  <Dialog open={isOpen} onClose={() => close(false)}>
+    <Button onClick={() => close(true)}>확인</Button>
+  </Dialog>
+));
+
+console.log(result ? 'Yes' : 'No');
+```
+
+## Q. `close`와 `unmount`의 차이점은 무엇인가요?
+
+**A:**
+둘 다 오버레이를 닫지만, 메모리 처리 방식에 차이가 있습니다:
+
+- **`close`**: 오버레이를 닫지만 상태는 메모리에 남아 있어요. 다시 열면 이전 상태가 복원됩니다.
+- **`unmount`**: 오버레이를 메모리에서 완전히 제거합니다. 이후 다시 열면 초기 상태로 시작합니다.
+
+**사용 사례**:
+
+- **`close`**: 자주 열리고 닫히는 오버레이에서 성능 최적화를 위해 사용해요.
+- **`unmount`**: 더 이상 필요 없는 오버레이를 메모리에서 제거해 메모리 릭을 방지할 때 사용해요.
+
+## Q. `overlay.closeAll`과 `overlay.unmountAll`의 차이는 무엇인가요?
+
+**A:**
+
+- **`overlay.closeAll`**: 모든 열려 있는 오버레이를 닫지만 상태는 메모리에 남아 있어요.
+- **`overlay.unmountAll`**: 모든 오버레이를 메모리에서 완전히 제거합니다.
+
+**비교 예제**:
+
+```tsx
+// 모든 오버레이 닫기
+overlay.closeAll();
+
+// 모든 오버레이 제거
+overlay.unmountAll();
+```
+
+## Q. 오버레이를 닫았는데 다시 열면 상태가 유지됩니다. 왜 그런가요?
+
+**A:**
+`close`는 상태를 메모리에 유지한 채 오버레이를 닫아요. 상태를 초기화하려면 `unmount`를 호출해 메모리에서 완전히 제거해야 해요.
+
+## Q. 언제 `unmount`를 사용해야 하나요?
+
+**A:**
+
+- 오버레이가 무거운 데이터를 유지하지 않는다면 일반적으로 `close`만 사용해도 충분해요.
+- 오버레이가 더 이상 필요 없거나 메모리를 확보해야 할 때는 `unmount` 또는 `unmountAll`을 사용하세요.
+
+## Q. overlay-kit은 어떤 UI 라이브러리와 함께 사용할 수 있나요?
+
+**A:**
+`overlay-kit`은 특정 UI 라이브러리에 종속적이지 않으며 React 기반의 모든 UI 라이브러리와 호환돼요.
+
+예를 들어:
+
+- **Material-UI**
+- **Chakra UI**
+- **Ant Design**
+
+## Q. overlay-kit은 TypeScript를 지원하나요?
+
+**A:**
+네, `overlay-kit`은 TypeScript를 완벽히 지원해요.
+
+**예제**:
+
+```tsx
+const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+  <Dialog open={isOpen} onClose={() => close(false)}>
+    <Button onClick={() => close(true)}>확인</Button>
+  </Dialog>
+));
+```
+
+## Q. 오버레이의 닫기 애니메이션이 보이지 않습니다. 이유가 뭔가요?
+
+**A:**
+`unmount`를 바로 호출하면 닫기 애니메이션이 실행되지 않아요.
+닫기 애니메이션을 유지하려면 `close`를 호출하고, 애니메이션이 끝난 뒤 `unmount`를 호출하세요.
+
+**예제**:
+
+```tsx
+overlay.open(({ isOpen, close, unmount }) => (
+  <Dialog
+    open={isOpen}
+    onClose={() => {
+      close(); // 닫기 애니메이션 실행
+      setTimeout(() => unmount(), 300); // 애니메이션 이후 메모리에서 제거
+    }}
+  >
+    <p>애니메이션 유지</p>
+  </Dialog>
+));
+```
+
+## 추가 질문
+
+추가로 궁금한 사항이 있거나 문서에서 다뤄야 할 내용을 발견하셨다면, [GitHub Issues](https://github.com/toss/overlay-kit/issues)에 의견을 남겨주세요.

@@ -1,7 +1,7 @@
 {
   "name": "@overlay-kit/framer-motion-react-16",
   "private": true,
-  "version": "0.0.7",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "predev": "yarn workspace overlay-kit build",
@@ -12,15 +12,15 @@
   },
   "dependencies": {
     "framer-motion": "^6",
-    "overlay-kit": "npm:overlay-kit@1.4.0-canary.2407260853",
+    "overlay-kit": "workspace:*",
     "react": "^16.8",
     "react-dom": "^16.8"
   },
   "devDependencies": {
     "@types/react": "^16.8",
     "@types/react-dom": "^16.8",
-    "@vitejs/plugin-react": "^4.3.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.4.5",
-    "vite": "^5.2.13"
+    "vite": "^6.0.3"
   }
 }

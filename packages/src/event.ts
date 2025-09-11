@@ -1,56 +1,57 @@
-import { type OverlayAsyncControllerComponent, type OverlayControllerComponent } from './context/provider';
-import { dispatchOverlay } from './context/store';
-import { randomId } from './utils';
+import {
+  type OverlayAsyncControllerComponent,
+  type OverlayControllerComponent,
+} from './context/provider/content-overlay-controller';
+import { createUseExternalEvents } from './utils';
+import { randomId } from './utils/random-id';
+
+export type OverlayEvent = {
+  open: (args: { controller: OverlayControllerComponent; overlayId: string; componentKey: string }) => void;
+  close: (overlayId: string) => void;
+  unmount: (overlayId: string) => void;
+  closeAll: () => void;
+  unmountAll: () => void;
+};
 
 type OpenOverlayOptions = {
   overlayId?: string;
 };
 
-function open(controller: OverlayControllerComponent, options?: OpenOverlayOptions) {
-  const overlayId = options?.overlayId ?? randomId();
+export function createOverlay(overlayId: string) {
+  const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>(`${overlayId}/overlay-kit`);
 
-  dispatchOverlay({
-    type: 'ADD',
-    overlay: {
-      id: overlayId,
-      isOpen: false,
-      controller: controller,
-    },
-  });
+  const open = (controller: OverlayControllerComponent, options?: OpenOverlayOptions) => {
+    const overlayId = options?.overlayId ?? randomId();
+    const componentKey = randomId();
+    const dispatchOpenEvent = createEvent('open');
 
-  return overlayId;
-}
+    dispatchOpenEvent({ controller, overlayId, componentKey });
+    return overlayId;
+  };
 
-async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) {
-  return new Promise<T>((resolve) => {
-    open((overlayProps, ...deprecatedLegacyContext) => {
-      /**
-       * @description close the overlay with resolve
-       */
-      const close = (param: T) => {
-        resolve(param as T);
-        overlayProps.close();
-      };
-      /**
-       * @description Passing overridden methods
-       */
-      const props = { ...overlayProps, close };
-      return controller(props, ...deprecatedLegacyContext);
-    }, options);
-  });
-}
+  const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) => {
+    return new Promise<T>((resolve) => {
+      open((overlayProps, ...deprecatedLegacyContext) => {
+        /**
+         * @description close the overlay with resolve
+         */
+        const close = (param: T) => {
+          resolve(param);
+          overlayProps.close();
+        };
+        /**
+         * @description Passing overridden methods
+         */
+        const props = { ...overlayProps, close };
+        return controller(props, ...deprecatedLegacyContext);
+      }, options);
+    });
+  };
 
-function close(overlayId: string) {
-  dispatchOverlay({ type: 'CLOSE', overlayId });
-}
-function unmount(overlayId: string) {
-  dispatchOverlay({ type: 'REMOVE', overlayId });
-}
-function closeAll() {
-  dispatchOverlay({ type: 'CLOSE_ALL' });
-}
-function unmountAll() {
-  dispatchOverlay({ type: 'REMOVE_ALL' });
-}
+  const close = createEvent('close');
+  const unmount = createEvent('unmount');
+  const closeAll = createEvent('closeAll');
+  const unmountAll = createEvent('unmountAll');
 
-export const overlay = { open, close, unmount, closeAll, unmountAll, openAsync };
+  return { open, openAsync, close, unmount, closeAll, unmountAll, useOverlayEvent };
+}

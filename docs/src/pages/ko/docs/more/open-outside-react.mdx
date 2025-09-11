@@ -1,0 +1,91 @@
+import { Sandpack } from '@/components';
+
+# React 외부에서 오버레이 열기
+
+`overlay-kit`을 사용하면 React 컴포넌트 바깥에서도 오버레이를 열 수 있어요.
+
+예를 들어, API 호출 중 오류가 발생했을 때 오버레이를 띄워 사용자에게 알릴 수 있어요.
+
+```tsx {7-11}
+import ky from 'ky';
+import { overlay } from 'overlay-kit';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        console.log('test:: response', response);
+        if (response.status >= 400) {
+          overlay.open(({ isOpen, close }) => <ErrorDialog open={isOpen} onClose={close} />);
+        }
+      },
+    ],
+  },
+});
+```
+
+위 코드는 `ky`를 확장해서 API 호출 이후 상태 코드를 확인한 뒤, 오류가 있을 경우 오버레이를 여는 방식이에요.
+
+## 전체 예제: API 요청 후 오버레이 열기
+
+다음은 API 요청 이후 오버레이를 띄우는 전체 예제에요. `overlay.open`을 사용해 API를 성공적으로 받았는지 알려줘요.
+
+<br />
+
+<Sandpack dependencies={{ ky: 'latest' }}>
+
+```tsx Example.tsx active
+import ky from 'ky';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import { Alert } from './alert';
+
+const api = ky.extend({
+  hooks: {
+    afterResponse: [
+      (_, __, response) => {
+        overlay.open(({ isOpen, close, unmount }) => {
+          return <Alert isOpen={isOpen} close={close} onExit={unmount} />;
+        });
+      },
+    ],
+  },
+});
+
+function App() {
+  return <Button onClick={() => api('/api')}>API 요청</Button>;
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+```tsx alert.tsx
+import { useEffect } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+export function Alert({ isOpen, close, onExit }) {
+  useEffect(() => {
+    return () => onExit();
+  }, []);
+
+  return (
+    <Dialog open={isOpen} onClose={close} transitionDuration={1000}>
+      <DialogTitle>API 응답을 받았어요</DialogTitle>
+      <DialogActions>
+        <Button onClick={close}>닫기</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+```
+
+</Sandpack>

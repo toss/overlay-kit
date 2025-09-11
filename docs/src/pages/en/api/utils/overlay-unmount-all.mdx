@@ -1,0 +1,65 @@
+# overlay.unmountAll
+
+`overlay.unmountAll` is a function that completely removes all open overlays from both the React element tree and memory.
+
+```ts
+overlay.unmountAll();
+```
+
+## Reference
+
+`overlay.unmountAll()`
+
+Call `overlay.unmountAll` when you need to free up memory for all overlays.
+
+```tsx
+overlay.unmountAll();
+```
+
+### Important Notes
+
+- When this function is called, overlays are immediately removed from memory, which may cause closing animations to not be displayed.
+- For overlays with animations, you should call `overlay.closeAll` first and then call `overlay.unmountAll` after the closing animations complete to provide a smooth user experience.
+
+## Interface
+
+```tsx
+function unmountAll(): void;
+```
+
+## Usage
+
+### Using Auto-generated IDs
+
+Here's a simple example of opening multiple overlays and removing them all using `overlay.unmountAll`.
+
+```tsx {12}
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+// Removes all three overlays above
+overlay.unmountAll();
+```
+
+### With Animations
+
+For overlays with animations, you should call `overlay.unmountAll` after the closing animations complete to provide a natural user experience.
+
+```tsx {7-9}
+const overlayId = overlay.open(({ isOpen, close, unmount }) => {
+  return <ConfirmDialog isOpen={isOpen} close={close} onExit={unmount} />;
+});
+
+overlay.closeAll();
+
+setTimeout(() => {
+  overlay.unmountAll();
+}, 1000);
+```

@@ -1,0 +1,126 @@
+# overlay-kit으로 생각하기
+
+React 철학을 기반으로 탄생한 `overlay-kit`과 이를 구체화한 <b>선언적 오버레이 패턴(Declarative Overlay Pattern)</b>에 대해 알아볼게요.
+
+## overlay-kit을 사용하는 이유
+
+### 기존 오버레이 관리의 문제점
+
+1. **상태 관리의 복잡성**
+
+   - `useState`나 전역 상태를 사용해 직접 오버레이 상태를 관리해야 했어요.
+   - 상태 관리와 UI 로직이 섞여 코드가 복잡해지고 가독성이 떨어졌어요.
+
+2. **이벤트 핸들링의 반복**
+
+   - 열기, 닫기, 결과 반환 같은 이벤트 핸들링 코드를 반복해서 작성해야 했어요.
+   - 이는 중복 코드를 유발하고 개발 경험을 저하시키는 주요 원인이 되었어요.
+
+3. **재사용성 부족**
+
+   - 오버레이에서 값을 반환하려면 callback 함수 등으로 UI와 로직이 강하게 결합되었어요.
+   - 이로 인해 컴포넌트를 재사용하기 어려웠어요.
+
+### overlay-kit의 목표
+
+1. **React 철학을 따르는 설계**
+
+   - React는 선언적인 코드를 지향해요.
+   - `overlay-kit`은 오버레이를 선언적으로 관리할 수 있게 도와줘요.
+
+2. **개발 생산성 향상**
+
+   - 상태 관리와 이벤트 핸들링을 캡슐화해, 개발자는 UI와 비즈니스 로직에만 집중할 수 있어요.
+
+3. **확장성과 재사용성 강화**
+
+   - UI와 동작을 분리하고, Promise를 반환하는 방식으로 오버레이의 재사용성을 높였어요.
+
+## Declarative Overlay Pattern
+
+기존의 오버레이 관리 방식은 **명령형(Imperative)** 접근을 사용했어요.
+`useState`를 사용한 상태 관리와 이벤트 핸들링 코드가 섞여 있어 코드가 복잡하고 유지보수하기 어려웠죠.
+
+**Declarative Overlay Pattern**은 오버레이를 **상태가 아닌 동작(Behavior)** 중심으로 관리해 더 직관적이고 선언적인 코드를 작성할 수 있도록 해요.
+
+#### 명령형 접근 방식
+
+상태 관리와 이벤트 핸들링이 결합되어 중복 코드가 많고, 가독성이 떨어져요.
+
+```tsx
+import { useState } from 'react';
+
+function Overlay() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  function handleOpen() {
+    setIsOpen(true);
+  }
+
+  function handleClose() {
+    setIsOpen(false);
+  }
+
+  return (
+    <>
+      <Button onClick={handleOpen}>열기</Button>
+      <Dialog open={isOpen} onClose={handleClose}>
+        <DialogTitle>명령형 오버레이</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>확인</Button>
+          <Button onClick={handleClose}>취소</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+```
+
+#### 선언적 접근 방식
+
+상태 관리 코드를 제거하고, UI와 동작을 분리해 가독성과 유지보수성이 향상돼요.
+
+```tsx
+import { overlay } from 'overlay-kit';
+
+function Overlay() {
+  return (
+    <Button
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => (
+          <Dialog open={isOpen} onClose={close}>
+            <DialogTitle>선언적 오버레이</DialogTitle>
+            <DialogActions>
+              <Button onClick={close}>확인</Button>
+              <Button onClick={close}>취소</Button>
+            </DialogActions>
+          </Dialog>
+        ));
+      }}
+    >
+      열기
+    </Button>
+  );
+}
+```
+
+## 핵심 원칙
+
+overlay-kit의 설계를 이해하려면 다음 원칙을 알아야 해요.
+
+### 코로케이션(Co-location)
+
+연관된 코드를 가까이 배치해 코드를 쉽게 이해할 수 있도록 해요.
+
+오버레이 호출, 상태 관리, 컴포넌트 정의를 한곳에서 처리할 수 있어 가독성이 좋아져요.
+
+### 최소한의 API
+
+overlay-kit은 배우기 쉽고 간결한 API를 제공합니다. 핵심 API는 단 두 가지예요.
+
+1. `overlay.open`: 오버레이를 열고 닫는 기능을 제공해요.
+2. `overlay.openAsync`: 값을 반환해 비동기 로직을 처리할 수 있어요.
+
+이 두 API는 범용적인 JavaScript 패턴을 활용해 다양한 오버레이를 구현할 수 있도록 설계됐어요.
+
+예를 들어, overlay.openAsync는 Promise 값을 반환하므로 체이닝 같은 패턴을 쉽게 적용할 수 있어요.

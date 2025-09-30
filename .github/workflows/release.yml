@@ -19,6 +19,9 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
+      - name: Update npm
+        run: npm install -g npm@11.5.1
+
       - name: Build Package
         run: yarn workspace overlay-kit run build
 

@@ -1,4 +1,5 @@
 import {
+  type OverlayAsyncControllerProps,
   type OverlayAsyncControllerComponent,
   type OverlayControllerComponent,
 } from './context/provider/content-overlay-controller';
@@ -30,19 +31,28 @@ export function createOverlay(overlayId: string) {
   };
 
   const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) => {
-    return new Promise<T>((resolve) => {
+    return new Promise<T>((_resolve, _reject) => {
       open((overlayProps, ...deprecatedLegacyContext) => {
         /**
          * @description close the overlay with resolve
          */
         const close = (param: T) => {
-          resolve(param);
+          _resolve(param);
           overlayProps.close();
         };
+
+        /**
+         * @description close the overlay with reject
+         */
+        const reject = (reason?: unknown) => {
+          _reject(reason);
+          overlayProps.close();
+        };
+
         /**
          * @description Passing overridden methods
          */
-        const props = { ...overlayProps, close };
+        const props: OverlayAsyncControllerProps<T> = { ...overlayProps, close, reject };
         return controller(props, ...deprecatedLegacyContext);
       }, options);
     });

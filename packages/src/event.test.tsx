@@ -134,6 +134,71 @@ describe('overlay object', () => {
     });
   });
 
+  it('The reason passed as an argument to reject is passed to reject. overlay.openAsync', async () => {
+    const overlayDialogContent = 'context-modal-dialog-content';
+    const overlayTriggerContent = 'context-modal-overlay-trigger-content';
+    const rejectedReason = 'rejected';
+    const mockFn = vi.fn();
+
+    function Component() {
+      return (
+        <button
+          onClick={async () => {
+            try {
+              await overlay.openAsync<boolean>(
+                ({ isOpen, reject }) =>
+                  isOpen && <button onClick={() => reject(rejectedReason)}>{overlayDialogContent}</button>
+              );
+            } catch (error) {
+              mockFn(error);
+            }
+          }}
+        >
+          {overlayTriggerContent}
+        </button>
+      );
+    }
+
+    const { user } = renderWithUser(<Component />);
+    await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+    await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+    await waitFor(() => {
+      expect(mockFn).toHaveBeenCalledWith(rejectedReason);
+    });
+  });
+
+  it('should be able to turn off overlay through reject overlay.openAsync', async () => {
+    const overlayTriggerContent = 'context-modal-test-content';
+    const overlayDialogContent = 'context-modal-dialog-content';
+
+    function Component() {
+      return (
+        <button
+          onClick={async () => {
+            try {
+              await overlay.openAsync<boolean>(
+                ({ isOpen, reject }) =>
+                  isOpen && <button onClick={() => reject('rejected')}>{overlayDialogContent}</button>
+              );
+            } catch (error) {
+              //
+            }
+          }}
+        >
+          {overlayTriggerContent}
+        </button>
+      );
+    }
+
+    const { user } = renderWithUser(<Component />, { wrapper });
+    await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+    await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+    await waitFor(() => {
+      expect(screen.queryByRole('button', { name: overlayDialogContent })).not.toBeInTheDocument();
+    });
+  });
   it('should handle current overlay correctly when unmounting overlays in different orders', async () => {
     const contents = {
       first: 'overlay-content-1',

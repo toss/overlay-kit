@@ -58,7 +58,7 @@ export const determineCurrentOverlayId = (
 
   return targetIndexInOpenedList === openedOverlayOrderList.length - 1
     ? openedOverlayOrderList[targetIndexInOpenedList - 1] ?? null
-    : openedOverlayOrderList.at(-1) ?? null;
+    : openedOverlayOrderList[openedOverlayOrderList.length - 1];
 };
 
 export function overlayReducer(state: OverlayData, action: OverlayReducerAction): OverlayData {

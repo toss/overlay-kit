@@ -19,26 +19,29 @@ function dispatchEvent<Detail>(type: string, detail?: Detail) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createUseExternalEvents<EventHandlers extends Record<string, (params: any) => void>>(prefix: string) {
   function useExternalEvents(events: EventHandlers) {
-    const handlers = Object.keys(events).reduce<Record<string, () => void>>((prev, eventKey) => {
-      const currentEventKeys = `${prefix}:${eventKey}`;
+    const handlers = Object.entries(events).reduce<Record<string, (event: unknown) => void>>(
+      (prev, [eventKey, eventFn]) => {
+        const currentEventKeys = `${prefix}:${eventKey}`;
 
-      return {
-        ...prev,
-        [currentEventKeys]: function (event: unknown) {
-          events[eventKey](event);
-        } as () => void,
-      };
-    }, {});
+        return {
+          ...prev,
+          [currentEventKeys]: function (event: unknown) {
+            eventFn(event);
+          },
+        };
+      },
+      {}
+    );
 
     useClientLayoutEffect(() => {
-      Object.keys(handlers).forEach((eventKey) => {
-        emitter.off(eventKey, handlers[eventKey]);
-        emitter.on(eventKey, handlers[eventKey]);
+      Object.entries(handlers).forEach(([eventKey, eventFn]) => {
+        emitter.off(eventKey, eventFn);
+        emitter.on(eventKey, eventFn);
       });
 
       return () =>
-        Object.keys(handlers).forEach((eventKey) => {
-          emitter.off(eventKey, handlers[eventKey]);
+        Object.entries(handlers).forEach(([eventKey, eventFn]) => {
+          emitter.off(eventKey, eventFn);
         });
     }, [handlers]);
   }

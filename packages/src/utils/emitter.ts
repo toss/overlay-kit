@@ -28,37 +28,37 @@ export function createEmitter<Events extends Record<EventType, unknown>>(
   all?: EventHandlerMap<Events>
 ): Emitter<Events> {
   type GenericEventHandler = Handler<Events[keyof Events]> | WildcardHandler<Events>;
-  all = all || new Map();
+  all = all ?? new Map();
 
   return {
     all,
     on<Key extends keyof Events>(type: Key, handler: GenericEventHandler) {
-      const handlers: Array<GenericEventHandler> | undefined = all!.get(type);
+      const handlers: Array<GenericEventHandler> | undefined = all.get(type);
       if (handlers) {
         handlers.push(handler);
       } else {
-        all!.set(type, [handler] as EventHandlerList<Events[keyof Events]>);
+        all.set(type, [handler] as EventHandlerList<Events[keyof Events]>);
       }
     },
     off<Key extends keyof Events>(type: Key, handler?: GenericEventHandler) {
-      const handlers: Array<GenericEventHandler> | undefined = all!.get(type);
+      const handlers: Array<GenericEventHandler> | undefined = all.get(type);
       if (handlers) {
         if (handler) {
           handlers.splice(handlers.indexOf(handler) >>> 0, 1);
         } else {
-          all!.set(type, []);
+          all.set(type, []);
         }
       }
     },
     emit<Key extends keyof Events>(type: Key, evt?: Events[Key]) {
-      let handlers = all!.get(type);
+      let handlers = all.get(type);
       if (handlers) {
         (handlers as EventHandlerList<Events[keyof Events]>).slice().forEach((handler) => {
           handler(evt!);
         });
       }
 
-      handlers = all!.get('*');
+      handlers = all.get('*');
       if (handlers) {
         (handlers as WildCardEventHandlerList<Events>).slice().forEach((handler) => {
           handler(type, evt!);

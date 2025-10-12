@@ -1,12 +1,11 @@
 import { type Provider, createContext, useContext } from 'react';
 
-type NullSymbolType = typeof NullSymbol;
-const NullSymbol = Symbol('Null');
-
 export type CreateContextReturn<T> = [Provider<T>, () => T];
 
 export function createSafeContext<T>(displayName?: string): CreateContextReturn<T> {
-  const Context = createContext<T | NullSymbolType>(NullSymbol);
+  const NullSymbol = Symbol('Null');
+
+  const Context = createContext<T | typeof NullSymbol>(NullSymbol);
   Context.displayName = displayName ?? 'SafeContext';
 
   function useSafeContext() {

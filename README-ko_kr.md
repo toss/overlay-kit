@@ -14,6 +14,19 @@ npm install overlay-kit
 
 ## 예제
 
+먼저, `OverlayProvider`를 추가해주세요:
+
+```
+import { OverlayProvider } from 'overlay-kit';
+
+const app = createRoot(document.getElementById('root')!);
+app.render(
+  <OverlayProvider>
+    <App />
+  </OverlayProvider>
+);
+```
+
 ### 간단한 오버레이 열기
 
 `overlay.open`을 사용하면 오버레이를 간단하게 열고 닫을 수 있어요.

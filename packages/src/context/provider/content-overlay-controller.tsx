@@ -1,15 +1,16 @@
 import { type FC, type ActionDispatch, memo, useEffect } from 'react';
 import { type OverlayReducerAction } from '../reducer';
 
-type OverlayControllerProps = {
+export type OverlayControllerProps = {
   overlayId: string;
   isOpen: boolean;
   close: () => void;
   unmount: () => void;
 };
 
-type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close'> & {
+export type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close'> & {
   close: (param: T) => void;
+  reject: (reason?: unknown) => void;
 };
 
 export type OverlayControllerComponent = FC<OverlayControllerProps>;

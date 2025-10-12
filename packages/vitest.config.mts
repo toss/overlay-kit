@@ -10,6 +10,7 @@ export default defineConfig({
     dir: './src',
     coverage: {
       provider: 'v8',
+      exclude: ['**/index.ts', '**/index.tsx', 'dist/**/*', '**/*.config.ts', '**/*.config.mts', '**/*.d.ts'],
     },
   },
 });

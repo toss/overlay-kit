@@ -1,5 +1,11 @@
 # overlay-kit
 
+## 1.8.6
+
+### Patch Changes
+
+- [#198](https://github.com/toss/overlay-kit/pull/198) [`a525306`](https://github.com/toss/overlay-kit/commit/a52530694368435ad93b77c9b4d050996f6891cd) Thanks [@manudeli](https://github.com/manudeli)! - ci: oidc
+
 ## 1.8.5
 
 ### Patch Changes

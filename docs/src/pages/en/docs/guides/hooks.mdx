@@ -15,11 +15,9 @@ Returns the ID of the currently top-most overlay.
 The overlay ID can be directly specified by passing `overlayId` as the second argument to `overlay.open()` or `overlay.openAsync()` when opening an overlay:
 
 ```tsx
-overlay.open(
-  ({ isOpen, close }) => <ConfirmDialog isOpen={isOpen} close={close} />,
-  { overlayId: 'custom-overlayId' }
-);
+overlay.open(({ isOpen, close }) => <ConfirmDialog isOpen={isOpen} close={close} />, { overlayId: 'custom-overlayId' });
 ```
+
 If `overlayId` is omitted, it will be automatically generated internally as `overlay-kit-[random number]`.
 
 You can use this ID to conditionally branch based on whether a specific overlay is open, or for focus/shortcut control.
@@ -43,15 +41,12 @@ function App() {
       <Button
         variant="contained"
         onClick={() => {
-          overlay.open(({ isOpen, close }) => {
-            return (
-              <ConfirmDialog
-                isOpen={isOpen}
-                close={close}
-                title="Overlay A"
-              />
-            );
-          }, { overlayId: 'modal-a' });
+          overlay.open(
+            ({ isOpen, close }) => {
+              return <ConfirmDialog isOpen={isOpen} close={close} title="Overlay A" />;
+            },
+            { overlayId: 'modal-a' }
+          );
         }}
       >
         Open Overlay A
@@ -61,15 +56,12 @@ function App() {
         variant="outlined"
         style={{ marginLeft: '8px' }}
         onClick={() => {
-          overlay.open(({ isOpen, close }) => {
-            return (
-              <ConfirmDialog
-                isOpen={isOpen}
-                close={close}
-                title="Overlay B"
-              />
-            );
-          }, { overlayId: 'modal-b' });
+          overlay.open(
+            ({ isOpen, close }) => {
+              return <ConfirmDialog isOpen={isOpen} close={close} title="Overlay B" />;
+            },
+            { overlayId: 'modal-b' }
+          );
         }}
       >
         Open Overlay B
@@ -89,7 +81,6 @@ export const Example = () => {
     </OverlayProvider>
   );
 };
-
 ```
 
 ```tsx confirm-dialog.tsx
@@ -114,7 +105,6 @@ export function ConfirmDialog({ isOpen, close, title }) {
     </Dialog>
   );
 }
-
 ```
 
 </Sandpack>
@@ -129,12 +119,12 @@ This includes not only open overlays but also closed overlays that remain in mem
 
 Each overlay item consists of the following properties:
 
-| Property        | Type                      | Description |
-|------------------|----------------------------|-------------|
-| `id`             | `string`                   | Unique ID that identifies the overlay. Specified as `overlayId` when calling `overlay.open()`, or automatically generated if omitted. |
-| `componentKey`   | `string`                   | Internal unique key used for React to correctly render and distinguish overlay UI. A new value is assigned each time it is opened. |
-| `isOpen`         | `boolean`                  | Indicates whether the overlay is currently open. Becomes `false` when `close()` is called, and remains in memory until `unmount()`. |
-| `controller`     | `FC` | React component that actually renders the overlay. The UI function passed to `overlay.open()` is stored in this field. |
+| Property       | Type      | Description                                                                                                                           |
+| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `id`           | `string`  | Unique ID that identifies the overlay. Specified as `overlayId` when calling `overlay.open()`, or automatically generated if omitted. |
+| `componentKey` | `string`  | Internal unique key used for React to correctly render and distinguish overlay UI. A new value is assigned each time it is opened.    |
+| `isOpen`       | `boolean` | Indicates whether the overlay is currently open. Becomes `false` when `close()` is called, and remains in memory until `unmount()`.   |
+| `controller`   | `FC`      | React component that actually renders the overlay. The UI function passed to `overlay.open()` is stored in this field.                |
 
 For example, you can check it like this:
 
@@ -142,8 +132,8 @@ For example, you can check it like this:
 const overlayData = useOverlayData();
 
 Object.entries(overlayData).forEach(([id, item]) => {
-  console.log(id);               // overlayId
-  console.log(item.isOpen);     // true / false
+  console.log(id); // overlayId
+  console.log(item.isOpen); // true / false
   console.log(item.controller); // component rendering function
 });
 ```
@@ -166,9 +156,7 @@ function App() {
   const overlayData = useOverlayData();
 
   const allOverlayIds = Object.keys(overlayData);
-  const openOverlayIds = allOverlayIds.filter(
-  (id) => overlayData[id].isOpen
-  );
+  const openOverlayIds = allOverlayIds.filter((id) => overlayData[id].isOpen);
 
   return (
     <div>
@@ -176,15 +164,12 @@ function App() {
         <Button
           variant="contained"
           onClick={() => {
-            overlay.open(({ isOpen, close }) => {
-              return (
-                <ConfirmDialog
-                isOpen={isOpen}
-                close={close}
-                title="Overlay A (close)"
-                />
-              );
-            }, { overlayId: 'modal-close' });
+            overlay.open(
+              ({ isOpen, close }) => {
+                return <ConfirmDialog isOpen={isOpen} close={close} title="Overlay A (close)" />;
+              },
+              { overlayId: 'modal-close' }
+            );
           }}
         >
           Open Overlay A (close)
@@ -194,40 +179,37 @@ function App() {
           variant="outlined"
           style={{ marginLeft: '8px' }}
           onClick={() => {
-            overlay.open(({ isOpen, unmount }) => {
-              return (
-                <ConfirmDialog
-                  isOpen={isOpen}
-                  close={unmount}
-                  title="Overlay B (unmount)"
-                />
-              );
-            }, { overlayId: 'modal-unmount' });
+            overlay.open(
+              ({ isOpen, unmount }) => {
+                return <ConfirmDialog isOpen={isOpen} close={unmount} title="Overlay B (unmount)" />;
+              },
+              { overlayId: 'modal-unmount' }
+            );
           }}
         >
           Open Overlay B (unmount)
         </Button>
       </Stack>
       <div style={{ marginTop: '24px' }}>
-      <Typography variant="subtitle1">Opened Overlays</Typography>
-      <List dense>
-        {openOverlayIds.length > 0 ? (
-          openOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
-        ) : (
-          <ListItem>None</ListItem>
-        )}
-      </List>
+        <Typography variant="subtitle1">Opened Overlays</Typography>
+        <List dense>
+          {openOverlayIds.length > 0 ? (
+            openOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
+          ) : (
+            <ListItem>None</ListItem>
+          )}
+        </List>
 
-      <Typography variant="subtitle1" style={{ marginTop: '16px' }}>
-        Overlays in Memory
-      </Typography>
-      <List dense>
-        {allOverlayIds.length > 0 ? (
-          allOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
-        ) : (
-          <ListItem>None</ListItem>
-        )}
-      </List>
+        <Typography variant="subtitle1" style={{ marginTop: '16px' }}>
+          Overlays in Memory
+        </Typography>
+        <List dense>
+          {allOverlayIds.length > 0 ? (
+            allOverlayIds.map((id) => <ListItem key={id}>{id}</ListItem>)
+          ) : (
+            <ListItem>None</ListItem>
+          )}
+        </List>
       </div>
     </div>
   );
@@ -240,7 +222,6 @@ export const Example = () => {
     </OverlayProvider>
   );
 };
-
 ```
 
 ```tsx confirm-dialog.tsx
@@ -264,12 +245,8 @@ export function ConfirmDialog({ isOpen, close, title }) {
     </Dialog>
   );
 }
-
 ```
 
 </Sandpack>
 
 ---
-
-
-

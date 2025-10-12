@@ -74,7 +74,7 @@ export function Example() {
       <App />
     </OverlayProvider>
   );
-};
+}
 
 const root = createRoot(document.getElementById('root'));
 root.render(<Example />);
@@ -113,7 +113,7 @@ export function Example() {
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -177,7 +177,7 @@ function App() {
 
   return (
     <>
-      <p>{result === null ? "Not selected" : result ? "Y" : "N"}</p>
+      <p>{result === null ? 'Not selected' : result ? 'Y' : 'N'}</p>
       <Button
         onClick={async () => {
           const result = await overlay.openAsync(({ isOpen, close }) => {
@@ -199,7 +199,7 @@ export function Example() {
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -279,7 +279,7 @@ export function Example() {
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -389,7 +389,7 @@ export function Example() {
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx

@@ -1,5 +1,63 @@
 # overlay-kit
 
+## 1.8.6
+
+### Patch Changes
+
+- [#198](https://github.com/toss/overlay-kit/pull/198) [`a525306`](https://github.com/toss/overlay-kit/commit/a52530694368435ad93b77c9b4d050996f6891cd) Thanks [@manudeli](https://github.com/manudeli)! - ci: oidc
+
+## 1.8.5
+
+### Patch Changes
+
+- [#190](https://github.com/toss/overlay-kit/pull/190) [`de244a0`](https://github.com/toss/overlay-kit/commit/de244a00d7c0750541f2843a82431e132a523999) Thanks [@healtheloper](https://github.com/healtheloper)! - chore: add use client banner to build configuration
+
+## 1.8.4
+
+### Patch Changes
+
+- [#187](https://github.com/toss/overlay-kit/pull/187) [`c3dfcf1`](https://github.com/toss/overlay-kit/commit/c3dfcf169663069955f871bfe4f61923af3a1fd3) Thanks [@jungpaeng](https://github.com/jungpaeng)! - Fixed a bug where overlays could not be reopened after closing with the same ID.
+
+  ### Fixed Issues
+
+  - Resolved issue where overlays would not display when reopened with the same `overlayId` after being closed
+  - Improved mounting state tracking with added `isMounted` property in overlay state management
+  - Added state change detection logic to ensure proper reopen handling
+
+  ### Changes
+
+  - Added `isMounted` property to `OverlayItem` type for better mounting state tracking
+  - Enhanced `ADD` action in reducer to handle reopening of existing closed overlays
+  - Implemented automatic reopen mechanism through state comparison in `OverlayProvider`
+  - Added test cases for overlay reopen scenarios
+
+  This fix ensures overlays work as expected when closing and reopening them.
+
+## 1.8.3
+
+### Patch Changes
+
+- [#185](https://github.com/toss/overlay-kit/pull/185) [`f261784`](https://github.com/toss/overlay-kit/commit/f2617840af7a027c84b9e5d9048d7883b9617ac1) Thanks [@jungpaeng](https://github.com/jungpaeng)! - fix: prevent unnecessary re-renders of existing overlays with memo
+
+  Prevent unnecessary re-renders of existing overlays when new overlays are opened, improving performance.
+
+  ### Key Changes
+
+  - **Added React.memo**: Applied memo to overlay controller component to prevent re-renders when props haven't changed
+  - **Integrated state management**: Streamlined state management by integrating it directly into the component and removing redundant prop passing
+
+  ### Performance Improvements
+
+  - Eliminated unnecessary re-renders of existing overlays when adding new overlays in multi-overlay scenarios
+  - Provides more predictable and maintainable state management flow
+  - Maintained existing API compatibility while optimizing internal performance
+
+  This change maintains backward compatibility and provides performance improvements without requiring any code changes from users.
+
+- [#183](https://github.com/toss/overlay-kit/pull/183) [`579abaf`](https://github.com/toss/overlay-kit/commit/579abaf54ec3b84b7c2ca0b943387bfb33e893a1) Thanks [@jungpaeng](https://github.com/jungpaeng)! - test: fix duplicate overlayId error message expectation
+
+  Updated test case to match the actual implementation where duplicate overlayId error messages now include the specific overlayId value for better debugging experience.
+
 ## 1.8.2
 
 ### Patch Changes

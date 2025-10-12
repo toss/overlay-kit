@@ -14,6 +14,19 @@ npm install overlay-kit
 
 ## Example
 
+First, add provider:
+
+```tsx
+import { OverlayProvider } from 'overlay-kit';
+
+const app = createRoot(document.getElementById('root')!);
+app.render(
+  <OverlayProvider>
+    <App />
+  </OverlayProvider>
+);
+```
+
 ### Opening Simple Overlays
 
 You can easily open and close overlays using `overlay.open`.

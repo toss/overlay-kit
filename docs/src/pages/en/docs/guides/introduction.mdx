@@ -68,13 +68,13 @@ You can specify the rendering position using `OverlayProvider`.
 import { OverlayProvider } from 'overlay-kit';
 import { createRoot } from 'react-dom/client';
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 
 const root = createRoot(document.getElementById('root'));
 root.render(<Example />);
@@ -107,13 +107,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -193,13 +193,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -273,13 +273,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -381,13 +381,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx

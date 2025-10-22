@@ -1,6 +1,6 @@
 ![](./docs/public/og.png)
 
-# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit)
+# overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/toss/overlay-kit)
 
 English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
 
@@ -13,6 +13,19 @@ npm install overlay-kit
 ```
 
 ## Example
+
+First, add provider:
+
+```tsx
+import { OverlayProvider } from 'overlay-kit';
+
+const app = createRoot(document.getElementById('root')!);
+app.render(
+  <OverlayProvider>
+    <App />
+  </OverlayProvider>
+);
+```
 
 ### Opening Simple Overlays
 
@@ -41,7 +54,7 @@ import { overlay } from 'overlay-kit';
 
 <Button
   onClick={async () => {
-    const result = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+    const result = await overlay.openAsync<boolean>(({ isOpen, close, unmount }) => (
       <Dialog
         open={isOpen}
         onConfirm={() => close(true)}

@@ -1,68 +1,67 @@
 import {
+  type OverlayAsyncControllerProps,
   type OverlayAsyncControllerComponent,
   type OverlayControllerComponent,
 } from './context/provider/content-overlay-controller';
-import { type OverlayStore } from './context/store';
+import { createUseExternalEvents } from './utils';
 import { randomId } from './utils/random-id';
+
+export type OverlayEvent = {
+  open: (args: { controller: OverlayControllerComponent; overlayId: string; componentKey: string }) => void;
+  close: (overlayId: string) => void;
+  unmount: (overlayId: string) => void;
+  closeAll: () => void;
+  unmountAll: () => void;
+};
 
 type OpenOverlayOptions = {
   overlayId?: string;
 };
 
-export function createOverlay(overlayStore: OverlayStore) {
-  function open(controller: OverlayControllerComponent, options?: OpenOverlayOptions) {
+export function createOverlay(overlayId: string) {
+  const [useOverlayEvent, createEvent] = createUseExternalEvents<OverlayEvent>(`${overlayId}/overlay-kit`);
+
+  const open = (controller: OverlayControllerComponent, options?: OpenOverlayOptions) => {
     const overlayId = options?.overlayId ?? randomId();
+    const componentKey = randomId();
+    const dispatchOpenEvent = createEvent('open');
 
-    overlayStore.dispatchOverlay({
-      type: 'ADD',
-      overlay: {
-        id: overlayId,
-        isOpen: false,
-        controller: controller,
-      },
-    });
-
+    dispatchOpenEvent({ controller, overlayId, componentKey });
     return overlayId;
-  }
+  };
 
-  async function openAsync<T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) {
-    return new Promise<T>((resolve) => {
+  const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) => {
+    return new Promise<T>((_resolve, _reject) => {
       open((overlayProps, ...deprecatedLegacyContext) => {
         /**
          * @description close the overlay with resolve
          */
         const close = (param: T) => {
-          resolve(param as T);
+          _resolve(param);
           overlayProps.close();
         };
+
+        /**
+         * @description close the overlay with reject
+         */
+        const reject = (reason?: unknown) => {
+          _reject(reason);
+          overlayProps.close();
+        };
+
         /**
          * @description Passing overridden methods
          */
-        const props = { ...overlayProps, close };
+        const props: OverlayAsyncControllerProps<T> = { ...overlayProps, close, reject };
         return controller(props, ...deprecatedLegacyContext);
       }, options);
     });
-  }
-
-  function close(overlayId: string) {
-    overlayStore.dispatchOverlay({ type: 'CLOSE', overlayId });
-  }
-  function unmount(overlayId: string) {
-    overlayStore.dispatchOverlay({ type: 'REMOVE', overlayId });
-  }
-  function closeAll() {
-    overlayStore.dispatchOverlay({ type: 'CLOSE_ALL' });
-  }
-  function unmountAll() {
-    overlayStore.dispatchOverlay({ type: 'REMOVE_ALL' });
-  }
-
-  return {
-    open,
-    close,
-    unmount,
-    closeAll,
-    unmountAll,
-    openAsync,
   };
+
+  const close = createEvent('close');
+  const unmount = createEvent('unmount');
+  const closeAll = createEvent('closeAll');
+  const unmountAll = createEvent('unmountAll');
+
+  return { open, openAsync, close, unmount, closeAll, unmountAll, useOverlayEvent };
 }

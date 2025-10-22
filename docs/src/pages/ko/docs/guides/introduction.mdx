@@ -68,13 +68,13 @@ export function ConfirmDialog({ isOpen, close }) {
 import { OverlayProvider } from 'overlay-kit';
 import { createRoot } from 'react-dom/client';
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 
 const root = createRoot(document.getElementById('root'));
 root.render(<Example />);
@@ -107,13 +107,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -177,7 +177,7 @@ function App() {
 
   return (
     <>
-      <p>{result === null ? "Not selected" : result ? "Y" : "N"}</p>
+      <p>{result === null ? 'Not selected' : result ? 'Y' : 'N'}</p>
       <Button
         onClick={async () => {
           const result = await overlay.openAsync(({ isOpen, close }) => {
@@ -193,13 +193,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -273,13 +273,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx
@@ -383,13 +383,13 @@ function App() {
   );
 }
 
-export const Example = () => {
+export function Example() {
   return (
     <OverlayProvider>
       <App />
     </OverlayProvider>
   );
-};
+}
 ```
 
 ```tsx confirm-dialog.tsx

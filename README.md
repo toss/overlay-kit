@@ -70,7 +70,7 @@ import { overlay } from 'overlay-kit';
 
 ## Why use overlay-kit?
 
-### Problems with Traditional Overlay Management**
+### Problems with Traditional Overlay Management
 
 1. Complexity of State Management
    - Had to manage overlay state directly using useState or global state.

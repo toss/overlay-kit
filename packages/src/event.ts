@@ -39,28 +39,51 @@ export function createOverlay(overlayId: string) {
   const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenAsyncOverlayOptions<T>) => {
     return new Promise<T>((_resolve, _reject) => {
       let resolved = false;
+      const hasOnDismiss = options !== undefined && 'onDismiss' in options;
+
+      const cleanup = () => {
+        unsubscribeClose();
+        unsubscribeCloseAll();
+        unsubscribeUnmount();
+        unsubscribeUnmountAll();
+      };
 
       const resolve = (value: T) => {
         if (resolved) return;
         resolved = true;
-        unsubscribeClose();
-        unsubscribeCloseAll();
+        cleanup();
         _resolve(value);
       };
 
       const currentOverlayId = options?.overlayId ?? randomId();
 
-      const unsubscribeClose = subscribeEvent('close', (closedOverlayId: string) => {
-        if (closedOverlayId === currentOverlayId && 'onDismiss' in (options ?? {})) {
-          resolve(options!.onDismiss as T);
-        }
-      });
+      const unsubscribeClose = hasOnDismiss
+        ? subscribeEvent('close', (closedOverlayId: string) => {
+            if (closedOverlayId === currentOverlayId) {
+              resolve(options!.onDismiss as T);
+            }
+          })
+        : () => {};
 
-      const unsubscribeCloseAll = subscribeEvent('closeAll', () => {
-        if ('onDismiss' in (options ?? {})) {
-          resolve(options!.onDismiss as T);
-        }
-      });
+      const unsubscribeCloseAll = hasOnDismiss
+        ? subscribeEvent('closeAll', () => {
+            resolve(options!.onDismiss as T);
+          })
+        : () => {};
+
+      const unsubscribeUnmount = hasOnDismiss
+        ? subscribeEvent('unmount', (unmountedOverlayId: string) => {
+            if (unmountedOverlayId === currentOverlayId) {
+              resolve(options!.onDismiss as T);
+            }
+          })
+        : () => {};
+
+      const unsubscribeUnmountAll = hasOnDismiss
+        ? subscribeEvent('unmountAll', () => {
+            resolve(options!.onDismiss as T);
+          })
+        : () => {};
 
       open(
         (overlayProps, ...deprecatedLegacyContext) => {
@@ -72,8 +95,7 @@ export function createOverlay(overlayId: string) {
           const reject = (reason?: unknown) => {
             if (resolved) return;
             resolved = true;
-            unsubscribeClose();
-            unsubscribeCloseAll();
+            cleanup();
             _reject(reason);
             overlayProps.close();
           };

@@ -655,6 +655,108 @@ describe('overlay object', () => {
       // mockFn should still only be called once
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
+
+    it('resolves with onDismiss value when unmounted externally via overlay.unmount()', async () => {
+      const overlayTriggerContent = 'openasync-unmount-trigger';
+      const testOverlayId = 'test-unmount-overlay';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean | undefined>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-unmount">Dialog</div>,
+                { overlayId: testOverlayId, onDismiss: undefined }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-unmount')).toBeInTheDocument();
+      });
+
+      act(() => {
+        overlay.unmount(testOverlayId);
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(undefined);
+      });
+    });
+
+    it('resolves with onDismiss value when unmounted via overlay.unmountAll()', async () => {
+      const overlayTriggerContent = 'openasync-unmountall-trigger';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<string | null>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-unmountall">Dialog</div>,
+                { onDismiss: null }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-unmountall')).toBeInTheDocument();
+      });
+
+      act(() => {
+        overlay.unmountAll();
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(null);
+      });
+    });
+
+    it('does not subscribe to events when onDismiss is not provided (no memory leak)', async () => {
+      const overlayTriggerContent = 'openasync-no-leak-trigger';
+      const overlayDialogContent = 'openasync-no-leak-dialog';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean>(
+                ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+      await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(true);
+      });
+    });
   });
 
   it('unmount function requires the exact id to be provided', async () => {

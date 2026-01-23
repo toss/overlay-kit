@@ -467,9 +467,9 @@ describe('overlay object', () => {
         return (
           <button
             onClick={async () => {
-              const result = await overlay.openAsync<boolean | undefined>(
+              const result = await overlay.openAsync<boolean>(
                 ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>,
-                { defaultValue: undefined }
+                { defaultValue: false }
               );
               mockFn(result);
             }}
@@ -488,7 +488,7 @@ describe('overlay object', () => {
       });
     });
 
-    it('resolves with defaultValue value when closed externally via overlay.close()', async () => {
+    it('resolves with defaultValue when closed externally via overlay.close()', async () => {
       const overlayDialogContent = 'openasync-external-close-dialog';
       const overlayTriggerContent = 'openasync-external-close-trigger';
       const testOverlayId = 'test-external-close-overlay';
@@ -498,9 +498,9 @@ describe('overlay object', () => {
         return (
           <button
             onClick={async () => {
-              const result = await overlay.openAsync<boolean | undefined>(
+              const result = await overlay.openAsync<boolean>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-content">{overlayDialogContent}</div>,
-                { overlayId: testOverlayId, defaultValue: undefined }
+                { overlayId: testOverlayId, defaultValue: false }
               );
               mockFn(result);
             }}
@@ -524,11 +524,11 @@ describe('overlay object', () => {
       });
 
       await waitFor(() => {
-        expect(mockFn).toHaveBeenCalledWith(undefined);
+        expect(mockFn).toHaveBeenCalledWith(false);
       });
     });
 
-    it('resolves with defaultValue value when closed via overlay.closeAll()', async () => {
+    it('resolves with defaultValue when closed via overlay.closeAll()', async () => {
       const overlayTriggerContent = 'openasync-closeall-trigger';
       const mockFn = vi.fn();
 
@@ -536,9 +536,9 @@ describe('overlay object', () => {
         return (
           <button
             onClick={async () => {
-              const result = await overlay.openAsync<string | null>(
+              const result = await overlay.openAsync<string>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-closeall">Dialog</div>,
-                { defaultValue: null }
+                { defaultValue: 'cancelled' }
               );
               mockFn(result);
             }}
@@ -562,7 +562,7 @@ describe('overlay object', () => {
       });
 
       await waitFor(() => {
-        expect(mockFn).toHaveBeenCalledWith(null);
+        expect(mockFn).toHaveBeenCalledWith('cancelled');
       });
     });
 
@@ -656,7 +656,7 @@ describe('overlay object', () => {
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
 
-    it('resolves with defaultValue value when unmounted externally via overlay.unmount()', async () => {
+    it('resolves with defaultValue when unmounted externally via overlay.unmount()', async () => {
       const overlayTriggerContent = 'openasync-unmount-trigger';
       const testOverlayId = 'test-unmount-overlay';
       const mockFn = vi.fn();
@@ -665,9 +665,9 @@ describe('overlay object', () => {
         return (
           <button
             onClick={async () => {
-              const result = await overlay.openAsync<boolean | undefined>(
+              const result = await overlay.openAsync<boolean>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-unmount">Dialog</div>,
-                { overlayId: testOverlayId, defaultValue: undefined }
+                { overlayId: testOverlayId, defaultValue: false }
               );
               mockFn(result);
             }}
@@ -689,11 +689,11 @@ describe('overlay object', () => {
       });
 
       await waitFor(() => {
-        expect(mockFn).toHaveBeenCalledWith(undefined);
+        expect(mockFn).toHaveBeenCalledWith(false);
       });
     });
 
-    it('resolves with defaultValue value when unmounted via overlay.unmountAll()', async () => {
+    it('resolves with defaultValue when unmounted via overlay.unmountAll()', async () => {
       const overlayTriggerContent = 'openasync-unmountall-trigger';
       const mockFn = vi.fn();
 
@@ -701,9 +701,9 @@ describe('overlay object', () => {
         return (
           <button
             onClick={async () => {
-              const result = await overlay.openAsync<string | null>(
+              const result = await overlay.openAsync<string>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-unmountall">Dialog</div>,
-                { defaultValue: null }
+                { defaultValue: 'unmounted' }
               );
               mockFn(result);
             }}
@@ -725,7 +725,7 @@ describe('overlay object', () => {
       });
 
       await waitFor(() => {
-        expect(mockFn).toHaveBeenCalledWith(null);
+        expect(mockFn).toHaveBeenCalledWith('unmounted');
       });
     });
 

@@ -13,7 +13,7 @@ export function Demo() {
       <hr style={{ margin: '20px 0' }} />
       <DemoOpenAsyncBasic />
       <hr style={{ margin: '20px 0' }} />
-      <DemoOpenAsyncWithOnDismiss />
+      <DemoOpenAsyncWithDefaultValue />
       <hr style={{ margin: '20px 0' }} />
       <DemoExternalClose />
     </div>
@@ -105,15 +105,17 @@ function DemoOpenAsyncBasic() {
   );
 }
 
-function DemoOpenAsyncWithOnDismiss() {
+function DemoOpenAsyncWithDefaultValue() {
   const [result, setResult] = useState<string>('(no result yet)');
-  const [overlayId] = useState('ondismiss-demo-overlay');
+  const [overlayId] = useState('defaultvalue-demo-overlay');
 
   return (
     <div>
       <h2>4. Demo with overlay.openAsync + defaultValue option</h2>
       <p style={{ fontSize: 14, color: '#666', marginBottom: 10 }}>
         With <code>defaultValue</code>, the Promise resolves even when closed externally.
+        <br />
+        <code>defaultValue: false</code> → external close resolves with <code>false</code>
       </p>
       <p>
         Result: <strong>{result}</strong>
@@ -122,7 +124,7 @@ function DemoOpenAsyncWithOnDismiss() {
         <button
           onClick={async () => {
             setResult('(waiting...)');
-            const value = await overlay.openAsync<boolean | 'dismissed'>(
+            const value = await overlay.openAsync<boolean>(
               ({ isOpen, close, unmount }) => {
                 return (
                   <Modal isOpen={isOpen} onExit={unmount}>
@@ -145,7 +147,7 @@ function DemoOpenAsyncWithOnDismiss() {
                   </Modal>
                 );
               },
-              { overlayId, defaultValue: 'dismissed' }
+              { overlayId, defaultValue: false }
             );
             setResult(String(value));
           }}
@@ -156,13 +158,13 @@ function DemoOpenAsyncWithOnDismiss() {
           onClick={() => overlay.close(overlayId)}
           style={{ backgroundColor: '#ff6b6b', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 4 }}
         >
-          Close Externally
+          Close Externally (→ false)
         </button>
         <button
           onClick={() => overlay.closeAll()}
           style={{ backgroundColor: '#ffa94d', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 4 }}
         >
-          Close All
+          Close All (→ false)
         </button>
       </div>
     </div>

@@ -54,5 +54,19 @@ export function createUseExternalEvents<EventHandlers extends Record<string, (pa
     return (...payload: Parameters<EventHandlers[EventKey]>) => dispatchEvent(`${prefix}:${String(event)}`, payload[0]);
   }
 
-  return [useExternalEvents, createEvent] as const;
+  function subscribeEvent<EventKey extends keyof EventHandlers>(
+    event: EventKey,
+    handler: EventHandlers[EventKey]
+  ): () => void {
+    const eventKey = `${prefix}:${String(event)}`;
+    const wrappedHandler = (payload: Parameters<EventHandlers[EventKey]>[0]) => {
+      handler(payload);
+    };
+    emitter.on(eventKey, wrappedHandler);
+    return () => {
+      emitter.off(eventKey, wrappedHandler);
+    };
+  }
+
+  return [useExternalEvents, createEvent, subscribeEvent] as const;
 }

@@ -107,7 +107,7 @@ function DemoOpenAsyncBasic() {
 
 function DemoOpenAsyncWithDefaultValue() {
   const [result, setResult] = useState<string>('(no result yet)');
-  const [overlayId] = useState('defaultvalue-demo-overlay');
+  const overlayId = 'defaultvalue-demo-overlay';
 
   return (
     <div>
@@ -120,53 +120,66 @@ function DemoOpenAsyncWithDefaultValue() {
       <p>
         Result: <strong>{result}</strong>
       </p>
-      <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-        <button
-          onClick={async () => {
-            setResult('(waiting...)');
-            const value = await overlay.openAsync<boolean>(
-              ({ isOpen, close, unmount }) => {
-                return (
-                  <Modal isOpen={isOpen} onExit={unmount}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 10,
-                      }}
-                    >
-                      <p>Do you confirm?</p>
-                      <p style={{ fontSize: 12, color: '#666' }}>(Try clicking "Close Externally" button below)</p>
-                      <div style={{ display: 'flex', gap: 10 }}>
-                        <button onClick={() => close(true)}>Confirm (true)</button>
-                        <button onClick={() => close(false)}>Cancel (false)</button>
-                      </div>
+      <button
+        onClick={async () => {
+          setResult('(waiting...)');
+          const value = await overlay.openAsync<boolean>(
+            ({ isOpen, close, unmount }) => {
+              return (
+                <Modal isOpen={isOpen} onExit={unmount}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 10,
+                    }}
+                  >
+                    <p>Do you confirm?</p>
+                    <div style={{ display: 'flex', gap: 10 }}>
+                      <button onClick={() => close(true)}>Confirm (true)</button>
+                      <button onClick={() => close(false)}>Cancel (false)</button>
                     </div>
-                  </Modal>
-                );
-              },
-              { overlayId, defaultValue: false }
-            );
-            setResult(String(value));
-          }}
-        >
-          open dialog
-        </button>
-        <button
-          onClick={() => overlay.close(overlayId)}
-          style={{ backgroundColor: '#ff6b6b', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 4 }}
-        >
-          Close Externally (→ false)
-        </button>
-        <button
-          onClick={() => overlay.closeAll()}
-          style={{ backgroundColor: '#ffa94d', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 4 }}
-        >
-          Close All (→ false)
-        </button>
-      </div>
+                    <hr style={{ width: '100%', margin: '10px 0' }} />
+                    <p style={{ fontSize: 12, color: '#666' }}>External close (uses overlay.close):</p>
+                    <div style={{ display: 'flex', gap: 10 }}>
+                      <button
+                        onClick={() => overlay.close(overlayId)}
+                        style={{
+                          backgroundColor: '#ff6b6b',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 4,
+                        }}
+                      >
+                        overlay.close() → false
+                      </button>
+                      <button
+                        onClick={() => overlay.closeAll()}
+                        style={{
+                          backgroundColor: '#ffa94d',
+                          color: 'white',
+                          border: 'none',
+                          padding: '8px 16px',
+                          borderRadius: 4,
+                        }}
+                      >
+                        overlay.closeAll() → false
+                      </button>
+                    </div>
+                  </div>
+                </Modal>
+              );
+            },
+            { overlayId, defaultValue: false }
+          );
+          setResult(String(value));
+        }}
+      >
+        open dialog
+      </button>
     </div>
   );
 }
@@ -174,7 +187,7 @@ function DemoOpenAsyncWithDefaultValue() {
 function DemoExternalClose() {
   const [result, setResult] = useState<string>('(no result yet)');
   const [status, setStatus] = useState<'idle' | 'waiting'>('idle');
-  const [overlayId] = useState('external-close-demo-overlay');
+  const overlayId = 'external-close-demo-overlay';
 
   return (
     <div>
@@ -188,45 +201,51 @@ function DemoExternalClose() {
       <p>
         Status: <strong style={{ color: status === 'waiting' ? 'orange' : 'green' }}>{status}</strong>
       </p>
-      <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-        <button
-          onClick={async () => {
-            setResult('(no result yet)');
-            setStatus('waiting');
-            const value = await overlay.openAsync<boolean>(
-              ({ isOpen, close, unmount }) => {
-                return (
-                  <Modal isOpen={isOpen} onExit={unmount}>
-                    <div
+      <button
+        onClick={async () => {
+          setResult('(no result yet)');
+          setStatus('waiting');
+          const value = await overlay.openAsync<boolean>(
+            ({ isOpen, close, unmount }) => {
+              return (
+                <Modal isOpen={isOpen} onExit={unmount}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 10,
+                    }}
+                  >
+                    <p>Without defaultValue, external close keeps Promise pending</p>
+                    <button onClick={() => close(true)}>close(true) - resolves</button>
+                    <hr style={{ width: '100%', margin: '10px 0' }} />
+                    <p style={{ fontSize: 12, color: '#666' }}>External close (Promise stays pending!):</p>
+                    <button
+                      onClick={() => overlay.close(overlayId)}
                       style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 10,
+                        backgroundColor: '#ff6b6b',
+                        color: 'white',
+                        border: 'none',
+                        padding: '8px 16px',
+                        borderRadius: 4,
                       }}
                     >
-                      <p>Click "Close Externally" - Promise will stay pending!</p>
-                      <button onClick={() => close(true)}>Close Internally (resolves)</button>
-                    </div>
-                  </Modal>
-                );
-              },
-              { overlayId }
-            );
-            setResult(String(value));
-            setStatus('idle');
-          }}
-        >
-          open dialog
-        </button>
-        <button
-          onClick={() => overlay.close(overlayId)}
-          style={{ backgroundColor: '#ff6b6b', color: 'white', border: 'none', padding: '8px 16px', borderRadius: 4 }}
-        >
-          Close Externally (Promise stays pending)
-        </button>
-      </div>
+                      overlay.close() - NO resolve
+                    </button>
+                  </div>
+                </Modal>
+              );
+            },
+            { overlayId }
+          );
+          setResult(String(value));
+          setStatus('idle');
+        }}
+      >
+        open dialog
+      </button>
     </div>
   );
 }

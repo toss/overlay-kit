@@ -457,7 +457,7 @@ describe('overlay object', () => {
     );
   });
 
-  describe('openAsync with onDismiss option', () => {
+  describe('openAsync with defaultValue option', () => {
     it('resolves with close(value) when called internally (backward compatible)', async () => {
       const overlayDialogContent = 'openasync-dialog-content';
       const overlayTriggerContent = 'openasync-trigger-content';
@@ -469,7 +469,7 @@ describe('overlay object', () => {
             onClick={async () => {
               const result = await overlay.openAsync<boolean | undefined>(
                 ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>,
-                { onDismiss: undefined }
+                { defaultValue: undefined }
               );
               mockFn(result);
             }}
@@ -488,7 +488,7 @@ describe('overlay object', () => {
       });
     });
 
-    it('resolves with onDismiss value when closed externally via overlay.close()', async () => {
+    it('resolves with defaultValue value when closed externally via overlay.close()', async () => {
       const overlayDialogContent = 'openasync-external-close-dialog';
       const overlayTriggerContent = 'openasync-external-close-trigger';
       const testOverlayId = 'test-external-close-overlay';
@@ -500,7 +500,7 @@ describe('overlay object', () => {
             onClick={async () => {
               const result = await overlay.openAsync<boolean | undefined>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-content">{overlayDialogContent}</div>,
-                { overlayId: testOverlayId, onDismiss: undefined }
+                { overlayId: testOverlayId, defaultValue: undefined }
               );
               mockFn(result);
             }}
@@ -528,7 +528,7 @@ describe('overlay object', () => {
       });
     });
 
-    it('resolves with onDismiss value when closed via overlay.closeAll()', async () => {
+    it('resolves with defaultValue value when closed via overlay.closeAll()', async () => {
       const overlayTriggerContent = 'openasync-closeall-trigger';
       const mockFn = vi.fn();
 
@@ -538,7 +538,7 @@ describe('overlay object', () => {
             onClick={async () => {
               const result = await overlay.openAsync<string | null>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-closeall">Dialog</div>,
-                { onDismiss: null }
+                { defaultValue: null }
               );
               mockFn(result);
             }}
@@ -566,7 +566,7 @@ describe('overlay object', () => {
       });
     });
 
-    it('stays pending without onDismiss option when closed externally (backward compatible)', async () => {
+    it('stays pending without defaultValue option when closed externally (backward compatible)', async () => {
       const overlayTriggerContent = 'openasync-no-ondismiss-trigger';
       const testOverlayId = 'test-no-ondismiss-overlay';
       const mockFn = vi.fn();
@@ -620,7 +620,7 @@ describe('overlay object', () => {
                   closeRef = close;
                   return isOpen && <div data-testid="overlay-double-resolve">Dialog</div>;
                 },
-                { overlayId: testOverlayId, onDismiss: 'dismissed' }
+                { overlayId: testOverlayId, defaultValue: 'dismissed' }
               );
               mockFn(result);
             }}
@@ -656,7 +656,7 @@ describe('overlay object', () => {
       expect(mockFn).toHaveBeenCalledTimes(1);
     });
 
-    it('resolves with onDismiss value when unmounted externally via overlay.unmount()', async () => {
+    it('resolves with defaultValue value when unmounted externally via overlay.unmount()', async () => {
       const overlayTriggerContent = 'openasync-unmount-trigger';
       const testOverlayId = 'test-unmount-overlay';
       const mockFn = vi.fn();
@@ -667,7 +667,7 @@ describe('overlay object', () => {
             onClick={async () => {
               const result = await overlay.openAsync<boolean | undefined>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-unmount">Dialog</div>,
-                { overlayId: testOverlayId, onDismiss: undefined }
+                { overlayId: testOverlayId, defaultValue: undefined }
               );
               mockFn(result);
             }}
@@ -693,7 +693,7 @@ describe('overlay object', () => {
       });
     });
 
-    it('resolves with onDismiss value when unmounted via overlay.unmountAll()', async () => {
+    it('resolves with defaultValue value when unmounted via overlay.unmountAll()', async () => {
       const overlayTriggerContent = 'openasync-unmountall-trigger';
       const mockFn = vi.fn();
 
@@ -703,7 +703,7 @@ describe('overlay object', () => {
             onClick={async () => {
               const result = await overlay.openAsync<string | null>(
                 ({ isOpen }) => isOpen && <div data-testid="overlay-unmountall">Dialog</div>,
-                { onDismiss: null }
+                { defaultValue: null }
               );
               mockFn(result);
             }}
@@ -729,7 +729,7 @@ describe('overlay object', () => {
       });
     });
 
-    it('does not subscribe to events when onDismiss is not provided (no memory leak)', async () => {
+    it('does not subscribe to events when defaultValue is not provided (no memory leak)', async () => {
       const overlayTriggerContent = 'openasync-no-leak-trigger';
       const overlayDialogContent = 'openasync-no-leak-dialog';
       const mockFn = vi.fn();

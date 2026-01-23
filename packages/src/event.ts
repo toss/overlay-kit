@@ -19,7 +19,7 @@ type OpenOverlayOptions = {
 };
 
 type OpenAsyncOverlayOptions<T> = OpenOverlayOptions & {
-  onDismiss?: T;
+  defaultValue?: T;
 };
 
 export function createOverlay(overlayId: string) {
@@ -39,7 +39,7 @@ export function createOverlay(overlayId: string) {
   const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenAsyncOverlayOptions<T>) => {
     return new Promise<T>((_resolve, _reject) => {
       let resolved = false;
-      const hasOnDismiss = options !== undefined && 'onDismiss' in options;
+      const hasDefaultValue = options !== undefined && 'defaultValue' in options;
 
       const cleanup = () => {
         unsubscribeClose();
@@ -57,31 +57,31 @@ export function createOverlay(overlayId: string) {
 
       const currentOverlayId = options?.overlayId ?? randomId();
 
-      const unsubscribeClose = hasOnDismiss
+      const unsubscribeClose = hasDefaultValue
         ? subscribeEvent('close', (closedOverlayId: string) => {
             if (closedOverlayId === currentOverlayId) {
-              resolve(options!.onDismiss as T);
+              resolve(options!.defaultValue as T);
             }
           })
         : () => {};
 
-      const unsubscribeCloseAll = hasOnDismiss
+      const unsubscribeCloseAll = hasDefaultValue
         ? subscribeEvent('closeAll', () => {
-            resolve(options!.onDismiss as T);
+            resolve(options!.defaultValue as T);
           })
         : () => {};
 
-      const unsubscribeUnmount = hasOnDismiss
+      const unsubscribeUnmount = hasDefaultValue
         ? subscribeEvent('unmount', (unmountedOverlayId: string) => {
             if (unmountedOverlayId === currentOverlayId) {
-              resolve(options!.onDismiss as T);
+              resolve(options!.defaultValue as T);
             }
           })
         : () => {};
 
-      const unsubscribeUnmountAll = hasOnDismiss
+      const unsubscribeUnmountAll = hasDefaultValue
         ? subscribeEvent('unmountAll', () => {
-            resolve(options!.onDismiss as T);
+            resolve(options!.defaultValue as T);
           })
         : () => {};
 

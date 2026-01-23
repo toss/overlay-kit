@@ -36,11 +36,43 @@ export function createOverlay(overlayId: string) {
     return overlayId;
   };
 
+  /**
+   * Opens an overlay and returns a Promise that resolves when the overlay is closed.
+   *
+   * ## External Event Subscription Pattern
+   *
+   * When `defaultValue` is provided, this function subscribes to external close/unmount events
+   * using `subscribeEvent` (outside React's lifecycle). This enables the Promise to resolve
+   * even when closed externally via `overlay.close(id)` or `overlay.closeAll()`.
+   *
+   * ### Why subscribe outside React hooks?
+   * - Promise executor runs outside React component lifecycle
+   * - Cannot use `useEffect` for cleanup - must manage manually
+   * - `subscribeEvent` returns unsubscribe function for manual cleanup
+   *
+   * ### Memory safety guarantees:
+   * 1. `resolved` flag prevents double-resolution
+   * 2. `cleanup()` unsubscribes ALL event listeners on resolution
+   * 3. Conditional subscription - no listeners if `defaultValue` not provided
+   *
+   * @param controller - Render function receiving overlay props (isOpen, close, reject)
+   * @param options - Optional config: `overlayId` and `defaultValue`
+   * @param options.defaultValue - Value to resolve with when closed externally.
+   *                               If not provided, Promise stays pending on external close (backward compatible)
+   */
   const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenAsyncOverlayOptions<T>) => {
     return new Promise<T>((_resolve, _reject) => {
+      /**
+       * Prevents double-resolution of the Promise.
+       * Once resolved/rejected, subsequent calls to resolve() are no-ops.
+       */
       let resolved = false;
       const hasDefaultValue = options !== undefined && 'defaultValue' in options;
 
+      /**
+       * Unsubscribes all external event listeners.
+       * MUST be called when Promise settles to prevent memory leaks.
+       */
       const cleanup = () => {
         unsubscribeClose();
         unsubscribeCloseAll();
@@ -48,6 +80,10 @@ export function createOverlay(overlayId: string) {
         unsubscribeUnmountAll();
       };
 
+      /**
+       * Resolves the Promise with given value.
+       * Idempotent - only the first call takes effect.
+       */
       const resolve = (value: T) => {
         if (resolved) return;
         resolved = true;
@@ -57,6 +93,14 @@ export function createOverlay(overlayId: string) {
 
       const currentOverlayId = options?.overlayId ?? randomId();
 
+      /*
+       * External Event Subscriptions (only when defaultValue is provided)
+       *
+       * These subscriptions allow the Promise to resolve when the overlay is closed
+       * from outside (e.g., overlay.close(id), overlay.closeAll()).
+       *
+       * Without defaultValue: subscriptions are no-op functions (backward compatible)
+       */
       const unsubscribeClose = hasDefaultValue
         ? subscribeEvent('close', (closedOverlayId: string) => {
             if (closedOverlayId === currentOverlayId) {

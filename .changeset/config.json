@@ -7,10 +7,5 @@
   "access": "restricted",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": [
-    "@overlay-kit/framer-motion-react-16",
-    "@overlay-kit/framer-motion-react-17",
-    "@overlay-kit/framer-motion-react-18",
-    "@overlay-kit/framer-motion-react-19"
-  ]
+  "ignore": ["@overlay-kit/framer-motion-react-18", "@overlay-kit/framer-motion-react-19"]
 }

@@ -4,15 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predev": "yarn workspace overlay-kit build",
-    "dev": "yarn predev && vite",
+    "predev": "pnpm --filter @banksalad/overlay-kit build",
+    "dev": "pnpm predev && vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
   "dependencies": {
     "framer-motion": "^11.14.1",
-    "overlay-kit": "workspace:^",
+    "@banksalad/overlay-kit": "workspace:^",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

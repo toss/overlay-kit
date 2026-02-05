@@ -1,5 +1,5 @@
 {
-  "name": "overlay-kit",
+  "name": "@banksalad/overlay-kit",
   "version": "1.8.6",
   "description": "Next-generation tools for managing overlays",
   "keywords": [
@@ -7,10 +7,10 @@
     "react"
   ],
   "homepage": "https://overlay-kit.slash.page",
-  "bugs": "https://github.com/toss/overlay-kit/issues",
+  "bugs": "https://github.com/banksalad/overlay-kit/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/toss/overlay-kit.git",
+    "url": "git+https://github.com/banksalad/overlay-kit.git",
     "directory": "packages"
   },
   "license": "MIT",
@@ -40,7 +40,7 @@
     "./package.json": "./package.json"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   },
   "scripts": {
     "build": "tsup",

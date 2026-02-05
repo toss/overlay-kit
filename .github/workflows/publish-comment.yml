@@ -1,0 +1,82 @@
+name: Publish by PR Comment
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  publish:
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/publish')
+    runs-on:
+      group: internet
+      labels: [dedicated, Linux, X64]
+
+    steps:
+      - name: Get PR branch
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+            core.setOutput('ref', pr.data.head.ref);
+            core.setOutput('sha', pr.data.head.sha);
+
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.pr.outputs.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_ACCESS_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Add GitHub Package Token
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_WEB_PACKAGES_TOKEN }}" > ~/.npmrc
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_WEB_PACKAGES_TOKEN }}
+
+      - name: Build Package
+        run: pnpm --filter @banksalad/overlay-kit run build
+
+      - name: Set Variables
+        id: vars
+        run: echo "github_short_sha=$(echo ${{ steps.pr.outputs.sha }} | cut -c1-10)" >> $GITHUB_OUTPUT
+
+      - name: Publish to GitHub Packages
+        id: publish
+        run: |
+          VERSION=$(TZ=Asia/Seoul date +'%Y.%m.%d-%H%M%S')-pr${{ github.event.issue.number }}-${{ steps.vars.outputs.github_short_sha }}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          cd packages
+          npm version $VERSION --no-git-tag-version
+          npm publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_WEB_PACKAGES_TOKEN }}
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ steps.publish.outputs.version }}';
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `📦 Published \`@banksalad/overlay-kit@${version}\` to GitHub Packages!\n\nInstall with:\n\`\`\`bash\npnpm add @banksalad/overlay-kit@${version}\n\`\`\``
+            });

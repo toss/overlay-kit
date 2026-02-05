@@ -55,12 +55,13 @@ jobs:
 
       - name: Set Variables
         id: vars
-        run: echo "github_short_sha=$(echo ${{ steps.pr.outputs.sha }} | cut -c1-10)" >> $GITHUB_OUTPUT
+        run: |
+          echo "base_version=$(node -p "require('./packages/package.json').version")" >> $GITHUB_OUTPUT
 
       - name: Publish to GitHub Packages
         id: publish
         run: |
-          VERSION=$(TZ=Asia/Seoul date +'%Y.%m.%d-%H%M%S')-pr${{ github.event.issue.number }}-${{ steps.vars.outputs.github_short_sha }}
+          VERSION=${{ steps.vars.outputs.base_version }}-pr${{ github.event.issue.number }}
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           cd packages
           npm version $VERSION --no-git-tag-version

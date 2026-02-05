@@ -44,15 +44,9 @@ jobs:
       - name: Build Package
         run: pnpm --filter @banksalad/overlay-kit run build
 
-      - name: Set Variables
-        id: vars
-        run: echo "github_short_sha=$(git rev-parse --short=10 HEAD)" >> $GITHUB_OUTPUT
-
       - name: Publish to GitHub Packages
         run: |
-          VERSION=$(TZ=Asia/Seoul date +'%Y.%m.%d-%H%M%S')-${{ steps.vars.outputs.github_short_sha }}
           cd packages
-          npm version $VERSION --no-git-tag-version
           npm publish
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ACCESS_TOKEN }}

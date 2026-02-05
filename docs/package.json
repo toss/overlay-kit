@@ -8,28 +8,28 @@
   },
   "type": "commonjs",
   "dependencies": {
-    "@codesandbox/sandpack-react": "^2.19.10",
-    "@react-three/drei": "^9.120.4",
-    "@react-three/fiber": "^8.17.10",
-    "@stylexjs/stylex": "^0.9.3",
-    "@stylexswc/nextjs-plugin": "^0.5.0",
-    "@suspensive/react": "^2.18.10",
-    "codehike": "^1.0.4",
-    "motion": "^11.15.0",
-    "next": "^15.1.2",
-    "nextra": "^3.2.5",
-    "nextra-theme-docs": "^3.2.5",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "@codesandbox/sandpack-react": "^2.20.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@stylexjs/stylex": "^0.17.5",
+    "@stylexswc/nextjs-plugin": "^0.14.2",
+    "@suspensive/react": "^3.19.0",
+    "codehike": "^1.0.7",
+    "motion": "^12.31.1",
+    "next": "^16.1.6",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "remark-sandpack": "^0.0.5",
-    "three": "^0.171.0",
-    "zod": "^3.24.1"
+    "three": "^0.182.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@types/node": "22.10.2",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "@types/three": "^0",
-    "typescript": "^5"
+    "@types/node": "25.2.0",
+    "@types/react": "^19.2.13",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.182.0",
+    "typescript": "^5.9.3"
   }
 }

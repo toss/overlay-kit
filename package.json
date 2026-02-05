@@ -1,18 +1,10 @@
 {
   "name": "root",
   "private": true,
-  "packageManager": "yarn@4.5.1",
-  "workspaces": [
-    ".",
-    "packages",
-    "docs",
-    "docs-old",
-    "examples/**/**"
-  ],
   "scripts": {
     "lint": "eslint .",
-    "changeset:version": "yarn changeset version",
-    "changeset:publish": "yarn changeset publish"
+    "changeset:version": "pnpm changeset version",
+    "changeset:publish": "pnpm changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",

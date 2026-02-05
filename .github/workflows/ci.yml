@@ -16,14 +16,12 @@ jobs:
       matrix:
         command:
           [
-            'yarn workspace overlay-kit run test',
-            'yarn workspace overlay-kit run test:attw',
-            'yarn workspace overlay-kit run test:publint',
-            'yarn lint',
-            'yarn workspace @overlay-kit/framer-motion-react-16 run build',
-            'yarn workspace @overlay-kit/framer-motion-react-17 run build',
-            'yarn workspace @overlay-kit/framer-motion-react-18 run build',
-            'yarn workspace @overlay-kit/framer-motion-react-19 run build',
+            'pnpm --filter @banksalad/overlay-kit run test',
+            'pnpm --filter @banksalad/overlay-kit run test:attw',
+            'pnpm --filter @banksalad/overlay-kit run test:publint',
+            'pnpm lint',
+            'pnpm --filter @overlay-kit/framer-motion-react-18 run build',
+            'pnpm --filter @overlay-kit/framer-motion-react-19 run build',
           ]
     steps:
       - uses: actions/checkout@v4
@@ -32,17 +30,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Install Dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: Build Package
-        run: yarn workspace overlay-kit run build
+        run: pnpm --filter @banksalad/overlay-kit run build
 
       - name: Run command
         run: ${{ matrix.command }}
-      - if: matrix.command == 'yarn workspace overlay-kit run test'
+      - if: matrix.command == 'pnpm --filter @banksalad/overlay-kit run test'
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -26,9 +26,11 @@ type ContentOverlayControllerProps = {
 export const ContentOverlayController = memo(
   ({ isOpen, overlayId, overlayDispatch, controller: Controller }: ContentOverlayControllerProps) => {
     useEffect(() => {
-      requestAnimationFrame(() => {
+      const frameId = requestAnimationFrame(() => {
         overlayDispatch({ type: 'OPEN', overlayId });
       });
+
+      return () => cancelAnimationFrame(frameId);
     }, [overlayDispatch, overlayId]);
 
     return (

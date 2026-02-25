@@ -1,5 +1,25 @@
 # overlay-kit
 
+## 1.9.0
+
+### Minor Changes
+
+- [#199](https://github.com/toss/overlay-kit/pull/199) [`62e2304`](https://github.com/toss/overlay-kit/commit/62e2304bf3e29c1aea860711f3288bc7dd03aaeb) Thanks [@ojj1123](https://github.com/ojj1123)! - feat: enhance overlay async controller with reject handler
+
+### Patch Changes
+
+- [#203](https://github.com/toss/overlay-kit/pull/203) [`be20412`](https://github.com/toss/overlay-kit/commit/be20412fa271f7aea7ee913a9327b7d1d35ad7ae) Thanks [@wo-o29](https://github.com/wo-o29)! - refactor: Improve type safety in useExternalEvents by removing type assertions
+
+- [#219](https://github.com/toss/overlay-kit/pull/219) [`c6e3594`](https://github.com/toss/overlay-kit/commit/c6e3594e7a03b00d7ccbbd97a3124f3056a13fca) Thanks [@minuukang](https://github.com/minuukang)! - remove peer dependencie `react-dom`
+
+- [#171](https://github.com/toss/overlay-kit/pull/171) [`6d35a52`](https://github.com/toss/overlay-kit/commit/6d35a52703405f8686c9521a4a60f63d01c2b70c) Thanks [@jiji-hoon96](https://github.com/jiji-hoon96)! - test : coverage improvement
+
+- [#179](https://github.com/toss/overlay-kit/pull/179) [`6a96688`](https://github.com/toss/overlay-kit/commit/6a966880282a16ed113a05673fc547b3bcc4c8e6) Thanks [@Lee-WonJun](https://github.com/Lee-WonJun)! - Export `isClientEnvironment` function for mocking
+
+- [#201](https://github.com/toss/overlay-kit/pull/201) [`697f389`](https://github.com/toss/overlay-kit/commit/697f3898ddd9329fe8d63f1c4afc19ac80efd654) Thanks [@wo-o29](https://github.com/wo-o29)! - refactor: Improve test coverage by removing unreachable defensive code in determineCurrentOverlayId
+
+- [#202](https://github.com/toss/overlay-kit/pull/202) [`cdc6c51`](https://github.com/toss/overlay-kit/commit/cdc6c51a2f84e239f088e3af59afad31e1470711) Thanks [@wo-o29](https://github.com/wo-o29)! - refactor: Improve type safety in createEmitter by removing non-null assertions
+
 ## 1.8.6
 
 ### Patch Changes

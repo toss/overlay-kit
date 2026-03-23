@@ -71,7 +71,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 function App() {
-  const [result, setResult] = useState<boolean>();
+  const [result, setResult] = useState<boolean | null>(null);
 
   return (
     <div>
@@ -94,7 +94,7 @@ function App() {
       >
         Open Confirm Dialog
       </Button>
-      <p>result: {result ? 'Y' : 'N'}</p>
+      <p>{result === null ? 'Not selected' : result ? 'result: Y' : 'result: N'}</p>
     </div>
   );
 }

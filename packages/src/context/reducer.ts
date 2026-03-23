@@ -67,11 +67,6 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
       if (state.overlayData[action.overlay.id] != null && state.overlayData[action.overlay.id].isOpen === false) {
         const overlay = state.overlayData[action.overlay.id];
 
-        // ignore if the overlay don't exist or already open
-        if (overlay == null || overlay.isOpen) {
-          return state;
-        }
-
         return {
           ...state,
           current: action.overlay.id,
@@ -96,12 +91,10 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
          * @description Brings the overlay to the front when reopened after closing without unmounting.
          */
         overlayOrderList: [...state.overlayOrderList.filter((item) => item !== action.overlay.id), action.overlay.id],
-        overlayData: isExisted
-          ? state.overlayData
-          : {
-              ...state.overlayData,
-              [action.overlay.id]: action.overlay,
-            },
+        overlayData: {
+          ...state.overlayData,
+          [action.overlay.id]: action.overlay,
+        },
       };
     }
     case 'OPEN': {

@@ -1,6 +1,6 @@
 {
   "name": "overlay-kit",
-  "version": "1.8.6",
+  "version": "1.9.0",
   "description": "Next-generation tools for managing overlays",
   "keywords": [
     "overlay",
@@ -68,7 +68,6 @@
     "vitest": "^2.1.8"
   },
   "peerDependencies": {
-    "react": "^16.8 || ^17 || ^18 || ^19",
-    "react-dom": "^16.8 || ^17 || ^18 || ^19"
+    "react": "^16.8 || ^17 || ^18 || ^19"
   }
 }

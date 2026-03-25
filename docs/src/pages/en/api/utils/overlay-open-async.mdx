@@ -32,6 +32,7 @@ overlay.openAsync(({ isOpen, close, unmount }) => {
   - `close`: A function to close the overlay. When you call this function, the value you pass as an argument will be delivered as the resolved value of the `Promise` returned by `overlay.openAsync`, and the overlay will close.
     To allow overlay closing animations to be displayed,
   - `unmount`: Function to remove the overlay. <br/>If called immediately with a closing animation, the component may be removed before the animation completes.
+  - `reject`: When you call this function, the value you pass as an argument will be delivered as the rejected value of the `Promise` returned by `overlay.openAsync`, and the overlay will close.
 - **optional** `options`: Overlay options.
   - `overlayId`: Specify a unique ID when opening the overlay.
 

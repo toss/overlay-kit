@@ -134,11 +134,7 @@ function App() {
       variant="contained"
       onClick={() => {
         overlay.open(({ isOpen, close, unmount }) => (
-          <Dialog
-            open={isOpen}
-            onClose={close}
-            TransitionProps={{ onExited: unmount }}
-          >
+          <Dialog open={isOpen} onClose={close} TransitionProps={{ onExited: unmount }}>
             <DialogTitle>정말로 계속하시겠어요?</DialogTitle>
             <DialogActions>
               <Button onClick={close}>아니요</Button>

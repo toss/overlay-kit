@@ -1,0 +1,156 @@
+import { Sandpack } from '@/components';
+
+# With Ant Design
+
+Learn how to use Ant Design's `Modal` component together with `overlay-kit`.
+
+## Installation
+
+Install the `antd` package.
+
+```sh npm2yarn filename="shell" copy
+npm install overlay-kit antd
+```
+
+## Basic Usage
+
+Ant Design `Modal` uses an `open` prop for visibility plus `onCancel` / `onOk` handlers. Passing `close` to both handlers lets `overlay-kit` manage the state.
+
+<br />
+
+<Sandpack dependencies={{ antd: '^5.22.0' }}>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, Modal } from 'antd';
+
+function App() {
+  return (
+    <Button
+      type="primary"
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => (
+          <Modal
+            title="Are you sure you want to continue?"
+            open={isOpen}
+            onCancel={close}
+            onOk={close}
+            cancelText="No"
+            okText="Yes"
+          />
+        ));
+      }}
+    >
+      Open Confirm Dialog
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## Receiving Async Results
+
+With `overlay.openAsync`, you can tell whether the user pressed "OK" or "Cancel" through the resolved `Promise`.
+
+<br />
+
+<Sandpack dependencies={{ antd: '^5.22.0' }}>
+
+```tsx Example.tsx active
+import { useState } from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, Modal } from 'antd';
+
+function App() {
+  const [result, setResult] = useState<boolean | null>(null);
+
+  return (
+    <div>
+      <p>Result: {result === null ? 'Not selected' : result ? 'Yes' : 'No'}</p>
+      <Button
+        type="primary"
+        onClick={async () => {
+          const confirmed = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+            <Modal
+              title="Are you sure you want to continue?"
+              open={isOpen}
+              onCancel={() => close(false)}
+              onOk={() => close(true)}
+              cancelText="No"
+              okText="Yes"
+            />
+          ));
+          setResult(confirmed);
+        }}
+      >
+        Open Confirm Dialog
+      </Button>
+    </div>
+  );
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## Releasing Memory After Animation
+
+Ant Design `Modal` fires an `afterClose` callback once the close animation completes. Passing `unmount` there keeps the animation visible while safely releasing overlay memory.
+
+<br />
+
+<Sandpack dependencies={{ antd: '^5.22.0' }}>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, Modal } from 'antd';
+
+function App() {
+  return (
+    <Button
+      type="primary"
+      onClick={() => {
+        overlay.open(({ isOpen, close, unmount }) => (
+          <Modal
+            title="Are you sure you want to continue?"
+            open={isOpen}
+            onCancel={close}
+            onOk={close}
+            afterClose={unmount}
+            cancelText="No"
+            okText="Yes"
+          />
+        ));
+      }}
+    >
+      Open Confirm Dialog
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+</Sandpack>

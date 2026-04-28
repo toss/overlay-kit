@@ -1,0 +1,161 @@
+import { Sandpack } from '@/components';
+
+# With Material UI
+
+Learn how to use Material UI(MUI)'s `Dialog` component together with `overlay-kit`.
+
+## Installation
+
+Install MUI along with its emotion peer dependencies.
+
+```sh npm2yarn filename="shell" copy
+npm install overlay-kit @mui/material @emotion/react @emotion/styled
+```
+
+## Basic Usage
+
+MUI `Dialog` takes an `open` prop for visibility and `onClose` for dismissal. You can pass `isOpen` and `close` from `overlay-kit` directly.
+
+<br />
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+function App() {
+  return (
+    <Button
+      variant="contained"
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => (
+          <Dialog open={isOpen} onClose={close}>
+            <DialogTitle>Are you sure you want to continue?</DialogTitle>
+            <DialogActions>
+              <Button onClick={close}>No</Button>
+              <Button onClick={close}>Yes</Button>
+            </DialogActions>
+          </Dialog>
+        ));
+      }}
+    >
+      Open Confirm Dialog
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## Receiving Async Results
+
+Use `overlay.openAsync` to receive the user's choice as a `Promise`. Pass the result through `close(value)` so "Yes" resolves to `true` and "No" to `false`.
+
+<br />
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { useState } from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+function App() {
+  const [result, setResult] = useState<boolean | null>(null);
+
+  return (
+    <div>
+      <p>Result: {result === null ? 'Not selected' : result ? 'Yes' : 'No'}</p>
+      <Button
+        variant="contained"
+        onClick={async () => {
+          const confirmed = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+            <Dialog open={isOpen} onClose={() => close(false)}>
+              <DialogTitle>Are you sure you want to continue?</DialogTitle>
+              <DialogActions>
+                <Button onClick={() => close(false)}>No</Button>
+                <Button onClick={() => close(true)}>Yes</Button>
+              </DialogActions>
+            </Dialog>
+          ));
+          setResult(confirmed);
+        }}
+      >
+        Open Confirm Dialog
+      </Button>
+    </div>
+  );
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## Releasing Memory After Animation
+
+MUI `Dialog` exposes `TransitionProps.onExited`, which fires after the close animation completes. Pass `unmount` there to safely release overlay memory while preserving the exit animation.
+
+<br />
+
+<Sandpack>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+
+function App() {
+  return (
+    <Button
+      variant="contained"
+      onClick={() => {
+        overlay.open(({ isOpen, close, unmount }) => (
+          <Dialog open={isOpen} onClose={close} TransitionProps={{ onExited: unmount }}>
+            <DialogTitle>Are you sure you want to continue?</DialogTitle>
+            <DialogActions>
+              <Button onClick={close}>No</Button>
+              <Button onClick={close}>Yes</Button>
+            </DialogActions>
+          </Dialog>
+        ));
+      }}
+    >
+      Open Confirm Dialog
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <OverlayProvider>
+      <App />
+    </OverlayProvider>
+  );
+}
+```
+
+</Sandpack>

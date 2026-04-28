@@ -1,0 +1,206 @@
+import { Sandpack } from '@/components';
+
+# With Chakra UI
+
+Learn how to use Chakra UI v3's `Dialog` component together with `overlay-kit`.
+
+## Installation
+
+Chakra UI v3 only needs `@emotion/react` (unlike v2, you no longer need `@emotion/styled` or `framer-motion`).
+
+```sh npm2yarn filename="shell" copy
+npm install overlay-kit @chakra-ui/react @emotion/react
+```
+
+## Basic Usage
+
+Chakra v3's `Dialog.Root` uses `open` and `onOpenChange`. Since `onOpenChange` receives a `{ open: boolean }` object, calling `close()` whenever `!e.open` handles backdrop clicks and ESC dismissal automatically. Wrap the app root in `ChakraProvider value={defaultSystem}`.
+
+<br />
+
+<Sandpack dependencies={{ '@chakra-ui/react': '^3.2.0' }}>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, ChakraProvider, Dialog, Portal, defaultSystem } from '@chakra-ui/react';
+
+function App() {
+  return (
+    <Button
+      colorPalette="blue"
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => (
+          <Dialog.Root open={isOpen} onOpenChange={(e) => !e.open && close()}>
+            <Portal>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content>
+                  <Dialog.Header>
+                    <Dialog.Title>Are you sure you want to continue?</Dialog.Title>
+                  </Dialog.Header>
+                  <Dialog.Footer gap={2}>
+                    <Button variant="outline" onClick={close}>
+                      No
+                    </Button>
+                    <Button colorPalette="blue" onClick={close}>
+                      Yes
+                    </Button>
+                  </Dialog.Footer>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Portal>
+          </Dialog.Root>
+        ));
+      }}
+    >
+      Open Confirm Dialog
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <OverlayProvider>
+        <App />
+      </OverlayProvider>
+    </ChakraProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## Receiving Async Results
+
+Use `overlay.openAsync` to capture the user's choice as a `Promise`. Each button passes its own value through `close(value)`.
+
+<br />
+
+<Sandpack dependencies={{ '@chakra-ui/react': '^3.2.0' }}>
+
+```tsx Example.tsx active
+import { useState } from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, ChakraProvider, Dialog, Portal, defaultSystem } from '@chakra-ui/react';
+
+function App() {
+  const [result, setResult] = useState<boolean | null>(null);
+
+  return (
+    <div>
+      <p>Result: {result === null ? 'Not selected' : result ? 'Yes' : 'No'}</p>
+      <Button
+        colorPalette="blue"
+        onClick={async () => {
+          const confirmed = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+            <Dialog.Root open={isOpen} onOpenChange={(e) => !e.open && close(false)}>
+              <Portal>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                  <Dialog.Content>
+                    <Dialog.Header>
+                      <Dialog.Title>Are you sure you want to continue?</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Footer gap={2}>
+                      <Button variant="outline" onClick={() => close(false)}>
+                        No
+                      </Button>
+                      <Button colorPalette="blue" onClick={() => close(true)}>
+                        Yes
+                      </Button>
+                    </Dialog.Footer>
+                  </Dialog.Content>
+                </Dialog.Positioner>
+              </Portal>
+            </Dialog.Root>
+          ));
+          setResult(confirmed);
+        }}
+      >
+        Open Confirm Dialog
+      </Button>
+    </div>
+  );
+}
+
+export function Example() {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <OverlayProvider>
+        <App />
+      </OverlayProvider>
+    </ChakraProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## Releasing Memory After Animation
+
+Unlike MUI's `onExited` or Ant Design's `afterClose`, Chakra v3 `Dialog` doesn't expose a dedicated animation-complete callback. The simplest approach is to call `close()` inside `onOpenChange` and schedule `unmount` with `setTimeout` matching the animation duration. This covers button clicks, backdrop clicks, and ESC dismissal uniformly.
+
+<br />
+
+<Sandpack dependencies={{ '@chakra-ui/react': '^3.2.0' }}>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, ChakraProvider, Dialog, Portal, defaultSystem } from '@chakra-ui/react';
+
+function App() {
+  return (
+    <Button
+      colorPalette="blue"
+      onClick={() => {
+        overlay.open(({ isOpen, close, unmount }) => (
+          <Dialog.Root
+            open={isOpen}
+            onOpenChange={(e) => {
+              if (!e.open) {
+                close();
+                // Chakra v3's scale animation takes ~200ms.
+                setTimeout(unmount, 200);
+              }
+            }}
+          >
+            <Portal>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content>
+                  <Dialog.Header>
+                    <Dialog.Title>Are you sure you want to continue?</Dialog.Title>
+                  </Dialog.Header>
+                  <Dialog.Footer gap={2}>
+                    <Button variant="outline" onClick={close}>
+                      No
+                    </Button>
+                    <Button colorPalette="blue" onClick={close}>
+                      Yes
+                    </Button>
+                  </Dialog.Footer>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Portal>
+          </Dialog.Root>
+        ));
+      }}
+    >
+      Open Confirm Dialog
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <OverlayProvider>
+        <App />
+      </OverlayProvider>
+    </ChakraProvider>
+  );
+}
+```
+
+</Sandpack>

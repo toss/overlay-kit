@@ -1,0 +1,206 @@
+import { Sandpack } from '@/components';
+
+# Chakra UI와 함께 쓰기
+
+Chakra UI v3의 `Dialog` 컴포넌트를 `overlay-kit`과 함께 사용하는 방법을 알아볼게요.
+
+## 설치
+
+Chakra UI v3는 `@emotion/react`만 있으면 돼요. (v2와 달리 `@emotion/styled`, `framer-motion`은 필요 없어요)
+
+```sh npm2yarn filename="shell" copy
+npm install overlay-kit @chakra-ui/react @emotion/react
+```
+
+## 기본 사용법
+
+Chakra v3의 `Dialog.Root`는 `open`과 `onOpenChange`를 사용해요. `onOpenChange`는 `{ open: boolean }` 형태의 객체를 넘겨주기 때문에 `!e.open`일 때 `close`를 호출해주면 backdrop 클릭·ESC 키로 닫히는 경우까지 자연스럽게 처리돼요. 앱 루트는 `ChakraProvider value={defaultSystem}`으로 감싸야 해요.
+
+<br />
+
+<Sandpack dependencies={{ '@chakra-ui/react': '^3.2.0' }}>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, ChakraProvider, Dialog, Portal, defaultSystem } from '@chakra-ui/react';
+
+function App() {
+  return (
+    <Button
+      colorPalette="blue"
+      onClick={() => {
+        overlay.open(({ isOpen, close }) => (
+          <Dialog.Root open={isOpen} onOpenChange={(e) => !e.open && close()}>
+            <Portal>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content>
+                  <Dialog.Header>
+                    <Dialog.Title>정말로 계속하시겠어요?</Dialog.Title>
+                  </Dialog.Header>
+                  <Dialog.Footer gap={2}>
+                    <Button variant="outline" onClick={close}>
+                      아니요
+                    </Button>
+                    <Button colorPalette="blue" onClick={close}>
+                      네
+                    </Button>
+                  </Dialog.Footer>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Portal>
+          </Dialog.Root>
+        ));
+      }}
+    >
+      Confirm Dialog 열기
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <OverlayProvider>
+        <App />
+      </OverlayProvider>
+    </ChakraProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## 비동기 결과 받기
+
+`overlay.openAsync`로 사용자의 선택을 `Promise`로 받을 수 있어요. 각 버튼에서 `close(value)`로 결과를 넘기면 돼요.
+
+<br />
+
+<Sandpack dependencies={{ '@chakra-ui/react': '^3.2.0' }}>
+
+```tsx Example.tsx active
+import { useState } from 'react';
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, ChakraProvider, Dialog, Portal, defaultSystem } from '@chakra-ui/react';
+
+function App() {
+  const [result, setResult] = useState<boolean | null>(null);
+
+  return (
+    <div>
+      <p>결과: {result === null ? '선택 없음' : result ? '네' : '아니요'}</p>
+      <Button
+        colorPalette="blue"
+        onClick={async () => {
+          const confirmed = await overlay.openAsync<boolean>(({ isOpen, close }) => (
+            <Dialog.Root open={isOpen} onOpenChange={(e) => !e.open && close(false)}>
+              <Portal>
+                <Dialog.Backdrop />
+                <Dialog.Positioner>
+                  <Dialog.Content>
+                    <Dialog.Header>
+                      <Dialog.Title>정말로 계속하시겠어요?</Dialog.Title>
+                    </Dialog.Header>
+                    <Dialog.Footer gap={2}>
+                      <Button variant="outline" onClick={() => close(false)}>
+                        아니요
+                      </Button>
+                      <Button colorPalette="blue" onClick={() => close(true)}>
+                        네
+                      </Button>
+                    </Dialog.Footer>
+                  </Dialog.Content>
+                </Dialog.Positioner>
+              </Portal>
+            </Dialog.Root>
+          ));
+          setResult(confirmed);
+        }}
+      >
+        Confirm Dialog 열기
+      </Button>
+    </div>
+  );
+}
+
+export function Example() {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <OverlayProvider>
+        <App />
+      </OverlayProvider>
+    </ChakraProvider>
+  );
+}
+```
+
+</Sandpack>
+
+## 애니메이션 후 메모리 해제
+
+Chakra v3 `Dialog`는 MUI의 `onExited`나 Ant Design의 `afterClose` 같은 애니메이션 완료 콜백을 직접 제공하지 않아요. 대신 `onOpenChange`에서 `close`를 호출한 뒤 애니메이션 지속 시간만큼 `setTimeout`으로 `unmount`를 예약하는 방식이 가장 간단해요. 버튼 클릭뿐만 아니라 backdrop 클릭·ESC 키로 닫히는 경우도 모두 처리돼요.
+
+<br />
+
+<Sandpack dependencies={{ '@chakra-ui/react': '^3.2.0' }}>
+
+```tsx Example.tsx active
+import { OverlayProvider, overlay } from 'overlay-kit';
+import { Button, ChakraProvider, Dialog, Portal, defaultSystem } from '@chakra-ui/react';
+
+function App() {
+  return (
+    <Button
+      colorPalette="blue"
+      onClick={() => {
+        overlay.open(({ isOpen, close, unmount }) => (
+          <Dialog.Root
+            open={isOpen}
+            onOpenChange={(e) => {
+              if (!e.open) {
+                close();
+                // Chakra v3 scale 애니메이션이 약 200ms 걸려요.
+                setTimeout(unmount, 200);
+              }
+            }}
+          >
+            <Portal>
+              <Dialog.Backdrop />
+              <Dialog.Positioner>
+                <Dialog.Content>
+                  <Dialog.Header>
+                    <Dialog.Title>정말로 계속하시겠어요?</Dialog.Title>
+                  </Dialog.Header>
+                  <Dialog.Footer gap={2}>
+                    <Button variant="outline" onClick={close}>
+                      아니요
+                    </Button>
+                    <Button colorPalette="blue" onClick={close}>
+                      네
+                    </Button>
+                  </Dialog.Footer>
+                </Dialog.Content>
+              </Dialog.Positioner>
+            </Portal>
+          </Dialog.Root>
+        ));
+      }}
+    >
+      Confirm Dialog 열기
+    </Button>
+  );
+}
+
+export function Example() {
+  return (
+    <ChakraProvider value={defaultSystem}>
+      <OverlayProvider>
+        <App />
+      </OverlayProvider>
+    </ChakraProvider>
+  );
+}
+```
+
+</Sandpack>

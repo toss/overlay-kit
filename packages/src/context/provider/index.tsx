@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useReducer, useRef, type PropsWithChildren } from 'react';
 import { ContentOverlayController } from './content-overlay-controller';
 import { type OverlayEvent, createOverlay } from '../../event';
 import { randomId } from '../../utils/random-id';
@@ -10,7 +10,24 @@ export function createOverlayProvider() {
   const { useOverlayEvent, ...overlay } = createOverlay(overlayId);
   const { OverlayContextProvider, useCurrentOverlay, useOverlayData } = createOverlaySafeContext();
 
+  let instanceCounter = 0;
+  const mountedInstances: number[] = [];
+
   function OverlayProvider({ children }: PropsWithChildren) {
+    const instanceIdRef = useRef<number>(0);
+
+    // Must run before useOverlayEvent so instanceIdRef is set when first event fires
+    useLayoutEffect(() => {
+      const id = ++instanceCounter;
+      instanceIdRef.current = id;
+      mountedInstances.push(id);
+
+      return () => {
+        const idx = mountedInstances.indexOf(id);
+        if (idx !== -1) mountedInstances.splice(idx, 1);
+      };
+    }, []);
+
     const [overlayState, overlayDispatch] = useReducer(overlayReducer, {
       current: null,
       overlayOrderList: [],
@@ -18,7 +35,12 @@ export function createOverlayProvider() {
     });
     const prevOverlayState = useRef(overlayState);
 
+    const isLatestInstance = useCallback(() => {
+      return mountedInstances[mountedInstances.length - 1] === instanceIdRef.current;
+    }, []);
+
     const open: OverlayEvent['open'] = useCallback(({ controller, overlayId, componentKey }) => {
+      if (!isLatestInstance()) return;
       overlayDispatch({
         type: 'ADD',
         overlay: {
@@ -29,7 +51,7 @@ export function createOverlayProvider() {
           controller: controller,
         },
       });
-    }, []);
+    }, [isLatestInstance]);
     const close: OverlayEvent['close'] = useCallback((overlayId: string) => {
       overlayDispatch({ type: 'CLOSE', overlayId });
     }, []);

@@ -2,7 +2,7 @@
 
 # overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit)
 
-[English](https://github.com/toss/overlay-kit/blob/main/README.md) | 한국어
+[English](https://github.com/toss/overlay-kit/blob/main/README.md) | 한국어 | [日本語](https://github.com/toss/overlay-kit/blob/main/README-ja_JP.md)
 
 overlay-kit은 React에서 모달, 팝업, 다이얼로그 같은 오버레이를 선언적으로 관리하기 위한 라이브러리예요.
 

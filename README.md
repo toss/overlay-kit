@@ -2,7 +2,7 @@
 
 # overlay-kit &middot; [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/toss/overlay-kit/blob/main/LICENSE) [![codecov](https://codecov.io/gh/toss/overlay-kit/graph/badge.svg?token=JBEAQTL7XK)](https://codecov.io/gh/toss/overlay-kit) [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/toss/overlay-kit)
 
-English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md)
+English | [한국어](https://github.com/toss/overlay-kit/blob/main/README-ko_kr.md) | [日本語](https://github.com/toss/overlay-kit/blob/main/README-ja_JP.md)
 
 overlay-kit is a library for declaratively managing overlays like modals, popups, and dialogs in React.
 

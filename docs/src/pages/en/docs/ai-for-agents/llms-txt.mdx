@@ -1,0 +1,44 @@
+# AI Integration
+
+overlay-kit provides resources that help AI agents — ChatGPT, Claude, Cursor, and similar tools — read its documentation and answer questions grounded in the real API surface.
+
+## llms.txt
+
+overlay-kit provides [llms.txt](https://llmstxt.org/) files — a standard that helps AI assistants and large language models (LLMs) understand project documentation more effectively.
+
+### `/llms.txt`
+
+A structured table of contents for overlay-kit's documentation, including links to individual pages. This is useful when an AI tool needs to look up specific guides or API references.
+
+- **URL**: [https://overlay-kit.slash.page/llms.txt](https://overlay-kit.slash.page/llms.txt)
+
+### `/llms-full.txt`
+
+The complete English documentation combined into a single file. This is useful when you want to give an AI tool comprehensive context about overlay-kit.
+
+- **URL**: [https://overlay-kit.slash.page/llms-full.txt](https://overlay-kit.slash.page/llms-full.txt)
+
+### `/ai.txt`
+
+A short list of high-confidence facts about overlay-kit's public API. Useful for keeping assistants from inventing methods that do not exist.
+
+- **URL**: [https://overlay-kit.slash.page/ai.txt](https://overlay-kit.slash.page/ai.txt)
+
+### Using these endpoints
+
+Many AI tools and LLM-powered applications support the llms.txt standard. You can use these endpoints to give AI assistants full context about overlay-kit's API and features.
+
+For example, you can hand the URL to a coding assistant so it consults the docs while writing code:
+
+    Use overlay-kit for managing modals and dialogs. Docs: https://overlay-kit.slash.page/llms-full.txt
+
+## Copy Markdown
+
+If you want to share just a single page rather than the whole documentation, every page under `/docs` and `/api` has a **Copy Markdown** chip in the top-right.
+
+- Click the label to copy the page's raw MDX to your clipboard.
+- Click the caret to open the current page pre-filled in **ChatGPT** or **Claude**. The prompt is:
+
+```
+Read <page-url>, I want to ask questions about it.
+```

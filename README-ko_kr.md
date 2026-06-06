@@ -16,7 +16,7 @@ npm install overlay-kit
 
 먼저, `OverlayProvider`를 추가해주세요:
 
-```
+```tsx
 import { OverlayProvider } from 'overlay-kit';
 
 const app = createRoot(document.getElementById('root')!);

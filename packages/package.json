@@ -68,7 +68,7 @@
     "vitest": "^2.1.8"
   },
   "peerDependencies": {
-    "@types/react": "*",
+    "@types/react": "^16.8 || ^17 || ^18 || ^19",
     "react": "^16.8 || ^17 || ^18 || ^19"
   },
   "peerDependenciesMeta": {

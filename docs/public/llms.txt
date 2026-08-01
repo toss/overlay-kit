@@ -36,6 +36,10 @@ The library is UI-library agnostic. There is no built-in dialog UI — you suppl
 - [Material UI](https://overlay-kit.slash.page/en/docs/more/with-design-systems/mui): MUI `Dialog` with `open`/`onClose`; pass `unmount` through `TransitionProps.onExited` to release memory after the exit animation.
 - [Chakra UI](https://overlay-kit.slash.page/en/docs/more/with-design-systems/chakra-ui): Chakra v3 `Dialog.Root` with `open`/`onOpenChange`; call `close()` on `!e.open` and schedule `setTimeout(unmount, 200)` to release memory after the ~200ms scale animation.
 - [Ant Design](https://overlay-kit.slash.page/en/docs/more/with-design-systems/ant-design): antd `Modal` with `open`/`onCancel`/`onOk`; pass `unmount` to `afterClose` to release memory after the close animation.
+- [shadcn/ui](https://overlay-kit.slash.page/en/docs/more/with-design-systems/shadcn): shadcn/ui `Dialog` with `open`/`onOpenChange`; call `close()` on dismissal and schedule `setTimeout(unmount, 200)` to release memory after the close animation.
+- [Radix UI](https://overlay-kit.slash.page/en/docs/more/with-design-systems/radix-ui): Radix `Dialog.Root` with `open`/`onOpenChange`; call `close()` on dismissal and schedule `setTimeout(unmount, 200)` to release memory after the close animation.
+- [Mantine](https://overlay-kit.slash.page/en/docs/more/with-design-systems/mantine): Mantine `Modal` with `opened`/`onClose`; pass `unmount` to `transitionProps.onExited` to release memory after the close animation.
+- [Headless UI](https://overlay-kit.slash.page/en/docs/more/with-design-systems/headless-ui): Headless UI `Dialog` with `open`/`onClose`; wrap it with `Transition` and pass `unmount` to `afterLeave` to release memory after the close animation.
 
 ## Project
 

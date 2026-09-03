@@ -311,7 +311,13 @@ URL: https://overlay-kit.slash.page/en/docs/guides/hooks
 
 ### useCurrentOverlay
 
-Returns the ID of the currently top-most overlay.
+When an overlay is opened, it returns that overlay's ID.
+
+When a closed overlay is reopened with the same ID, it becomes the current overlay without changing its original registration order.
+
+When an overlay is closed or unmounted, it returns the last open overlay's ID in registration order, excluding the closed or unmounted overlay.
+
+If no overlays remain open, it returns `null`.
 
 The overlay ID can be specified by passing `overlayId` as the second argument to `overlay.open()` or `overlay.openAsync()`:
 
@@ -393,8 +399,8 @@ The published guide demonstrates the following recipes with Jest/Vitest + React 
 - **Closing overlays via `overlay.unmount`** — render a component that opens an overlay imperatively, click a button calling `overlay.unmount(overlayId)`, and assert the overlay leaves the DOM with `waitFor`.
 - **Opening multiple overlays via `overlay.open`** — open N overlays in a single `useEffect` and assert all of their contents are in the DOM.
 - **Async result via `overlay.openAsync`** — assert that the value passed to `close(value)` resolves as the awaited result; mock with `vi.fn()` and verify with `toHaveBeenCalledWith`.
-- **Sequential unmount across overlays** — open multiple overlays, unmount them in a non-LIFO order, and assert `useCurrentOverlay` / DOM state stays consistent.
-- **Active overlay tracking via `useCurrentOverlay`** — assert that the hook returns the id of the top overlay across `open` / `close` / `unmount` transitions.
+- **Sequential unmount across overlays** — open multiple overlays, unmount them in a non-LIFO order, and assert removed overlays leave the DOM while the remaining overlays stay visible.
+- **Active overlay tracking via `useCurrentOverlay`** — assert that the hook returns the current overlay id across `open` / `close` / `unmount` transitions.
 - **Closing/removing all overlays** — `overlay.closeAll()` removes them from the screen while `useOverlayData()` still reports them; `overlay.unmountAll()` removes them from memory and the DOM entirely.
 
 Rule of thumb: assert via `waitFor` (overlays mount/unmount asynchronously) and use `userEvent` for clicks so portaled overlays receive events correctly.

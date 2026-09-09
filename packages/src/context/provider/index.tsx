@@ -18,7 +18,7 @@ export function createOverlayProvider() {
     });
     const prevOverlayState = useRef(overlayState);
 
-    const open: OverlayEvent['open'] = useCallback(({ controller, overlayId, componentKey }) => {
+    const open: OverlayEvent['open'] = useCallback(({ controller, overlayId, componentKey, asyncResult }) => {
       overlayDispatch({
         type: 'ADD',
         overlay: {
@@ -27,6 +27,8 @@ export function createOverlayProvider() {
           isOpen: false,
           isMounted: false,
           controller: controller,
+          isAsyncController: asyncResult != null,
+          asyncResult,
         },
       });
     }, []);
@@ -75,7 +77,14 @@ export function createOverlayProvider() {
       <OverlayContextProvider value={overlayState}>
         {children}
         {overlayState.overlayOrderList.map((item) => {
-          const { id: currentOverlayId, componentKey, isOpen, controller: Controller } = overlayState.overlayData[item];
+          const {
+            id: currentOverlayId,
+            componentKey,
+            isOpen,
+            controller: Controller,
+            isAsyncController,
+            asyncResult,
+          } = overlayState.overlayData[item];
 
           return (
             <ContentOverlayController
@@ -84,6 +93,8 @@ export function createOverlayProvider() {
               controller={Controller}
               overlayId={currentOverlayId}
               overlayDispatch={overlayDispatch}
+              isAsyncController={isAsyncController}
+              asyncResult={asyncResult}
             />
           );
         })}

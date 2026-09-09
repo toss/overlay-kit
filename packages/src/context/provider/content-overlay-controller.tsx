@@ -16,28 +16,53 @@ export type OverlayAsyncControllerProps<T> = Omit<OverlayControllerProps, 'close
 export type OverlayControllerComponent = FC<OverlayControllerProps>;
 export type OverlayAsyncControllerComponent<T> = FC<OverlayAsyncControllerProps<T>>;
 
+export type OverlayAsyncResult = {
+  resolve: (value: unknown) => void;
+  reject: (reason?: unknown) => void;
+};
+
 type ContentOverlayControllerProps = {
   isOpen: boolean;
   overlayId: string;
   overlayDispatch: ActionDispatch<[action: OverlayReducerAction]>;
   controller: OverlayControllerComponent;
+  isAsyncController?: boolean;
+  asyncResult?: OverlayAsyncResult;
 };
 
 export const ContentOverlayController = memo(
-  ({ isOpen, overlayId, overlayDispatch, controller: Controller }: ContentOverlayControllerProps) => {
+  ({
+    isOpen,
+    overlayId,
+    overlayDispatch,
+    controller: Controller,
+    isAsyncController,
+    asyncResult,
+  }: ContentOverlayControllerProps) => {
     useEffect(() => {
       requestAnimationFrame(() => {
         overlayDispatch({ type: 'OPEN', overlayId });
       });
     }, [overlayDispatch, overlayId]);
 
-    return (
-      <Controller
-        isOpen={isOpen}
-        overlayId={overlayId}
-        close={() => overlayDispatch({ type: 'CLOSE', overlayId })}
-        unmount={() => overlayDispatch({ type: 'REMOVE', overlayId })}
-      />
-    );
+    const props = {
+      isOpen,
+      overlayId,
+      close: (value?: unknown) => {
+        asyncResult?.resolve(value);
+        overlayDispatch({ type: 'CLOSE', overlayId, asyncResult });
+      },
+      unmount: () => overlayDispatch({ type: 'REMOVE', overlayId }),
+      ...(isAsyncController
+        ? {
+            reject: (reason?: unknown) => {
+              asyncResult?.reject(reason);
+              overlayDispatch({ type: 'CLOSE', overlayId, asyncResult });
+            },
+          }
+        : {}),
+    };
+
+    return <Controller {...props} />;
   }
 );

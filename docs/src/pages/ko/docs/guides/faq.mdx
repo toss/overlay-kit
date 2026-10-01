@@ -130,6 +130,37 @@ overlay.open(({ isOpen, close, unmount }) => (
 ));
 ```
 
+## Q. 페이지를 이동했는데 오버레이가 그대로 남아 있어요. 왜 그런가요?
+
+**A:**
+오버레이는 오버레이를 연 컴포넌트가 아니라 `OverlayProvider` 아래에 렌더돼요.
+`OverlayProvider`는 보통 앱 최상위에 있으므로 페이지가 바뀌어도 오버레이는 남아 있어요.
+`overlay-kit`은 라우터에 의존하지 않기 때문에, 페이지 이동과 연결하는 코드는 앱에서 작성해야 해요.
+
+라우터의 이동이 끝나는 시점에 `overlay.unmountAll()`을 호출하세요.
+
+**예제 (TanStack Router)**: `RouterProvider` 안쪽(예: 루트 라우트 컴포넌트)에 렌더하세요.
+
+```tsx
+import { useEffect } from 'react';
+import { useRouter } from '@tanstack/react-router';
+import { overlay } from 'overlay-kit';
+
+function UnmountOverlaysOnNavigate() {
+  const router = useRouter();
+
+  useEffect(() => {
+    return router.subscribe('onResolved', (event) => {
+      if (event.hrefChanged) {
+        overlay.unmountAll();
+      }
+    });
+  }, [router]);
+
+  return null;
+}
+```
+
 ## 추가 질문
 
 추가로 궁금한 사항이 있거나 문서에서 다뤄야 할 내용을 발견하셨다면, [GitHub Issues](https://github.com/toss/overlay-kit/issues)에 의견을 남겨주세요.

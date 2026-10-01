@@ -130,6 +130,37 @@ overlay.open(({ isOpen, close, unmount }) => (
 ));
 ```
 
+## Q. Why does my overlay remain open after navigating to another page?
+
+**A:**
+Overlays are rendered under `OverlayProvider`, rather than the component that opened them.
+Since `OverlayProvider` is usually placed at the top of the app, overlays remain open even when the page changes.
+`overlay-kit` does not depend on a router, so your app needs to connect overlay cleanup to navigation.
+
+Call `overlay.unmountAll()` when navigation completes.
+
+**Example (TanStack Router)**: Render this component inside `RouterProvider`, such as in the root route component.
+
+```tsx
+import { useEffect } from 'react';
+import { useRouter } from '@tanstack/react-router';
+import { overlay } from 'overlay-kit';
+
+function UnmountOverlaysOnNavigate() {
+  const router = useRouter();
+
+  useEffect(() => {
+    return router.subscribe('onResolved', (event) => {
+      if (event.hrefChanged) {
+        overlay.unmountAll();
+      }
+    });
+  }, [router]);
+
+  return null;
+}
+```
+
 ## Additional Questions
 
 If you have additional questions or find topics that should be covered in the documentation, please leave your feedback in [GitHub Issues](https://github.com/toss/overlay-kit/issues).

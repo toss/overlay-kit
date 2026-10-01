@@ -10,7 +10,13 @@ Using `useCurrentOverlay` and `useOverlayData`, you can implement state-based UX
 
 ## useCurrentOverlay
 
-Returns the ID of the currently top-most overlay.
+When an overlay is opened, it returns that overlay's ID.
+
+When a closed overlay is reopened with the same ID, it becomes the current overlay without changing its original registration order.
+
+When an overlay is closed or unmounted, it returns the last open overlay's ID in registration order, excluding the closed or unmounted overlay.
+
+If no overlays remain open, it returns `null`.
 
 The overlay ID can be directly specified by passing `overlayId` as the second argument to `overlay.open()` or `overlay.openAsync()` when opening an overlay:
 

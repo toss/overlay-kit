@@ -1,5 +1,5 @@
 ---
-updated: 2026-05-20
+updated: 2026-09-03
 scope: /
 parent: https://overlay-kit.slash.page
 ---
@@ -13,7 +13,7 @@ overlay-kit is a React library for declaratively managing overlays — modals, p
 - An npm package: `overlay-kit`. Install with `npm install overlay-kit`.
 - One context provider, `<OverlayProvider>`, mounted exactly once at the React root.
 - One imperative object, `overlay`, with six methods: `open`, `openAsync`, `close`, `closeAll`, `unmount`, `unmountAll`.
-- Two hooks: `useCurrentOverlay` (returns the top overlay's id), `useOverlayData` (returns the full overlay registry).
+- Two hooks: `useCurrentOverlay` (returns the current overlay id and falls back through open overlays in registration order), `useOverlayData` (returns the full overlay registry).
 - UI-library agnostic. There is no built-in dialog UI — you supply the component, overlay-kit manages mounting, async results, and lifecycle. Verified integrations: Material UI, Chakra UI v3, Ant Design. Any React-based UI library works.
 
 ## Canonical facts

@@ -12,7 +12,15 @@ import { Sandpack } from '@/components';
 
 ## useCurrentOverlay
 
-현재 가장 위에 떠 있는 오버레이의 ID를 반환해요.
+오버레이를 열면 해당 오버레이의 ID를 반환해요.
+
+닫은 오버레이를 같은 ID로 다시 열면 현재 오버레이가 되지만, 기존 등록 순서는 유지돼요.
+
+닫거나 제거한 오버레이는 반환하지 않아요.
+
+이때 등록 순서상 마지막 ID를 반환해요.
+
+열린 오버레이가 없으면 `null`을 반환해요.
 
 오버레이의 ID는 오버레이를 열 때 `overlay.open()` 또는 `overlay.openAsync()`의
 두 번째 인자로 다음처럼 `overlayId`를 넘겨 직접 지정할 수 있어요:

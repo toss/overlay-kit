@@ -6,7 +6,7 @@ overlay-kit is published as the [`overlay-kit`](https://www.npmjs.com/package/ov
 
 - `<OverlayProvider>`: a context provider mounted once at the React root that determines where overlays render.
 - `overlay.open`, `overlay.openAsync`, `overlay.close`, `overlay.closeAll`, `overlay.unmount`, `overlay.unmountAll`: imperative API for opening and disposing overlays from inside or outside React (e.g., HTTP client hooks).
-- `useCurrentOverlay`, `useOverlayData`: hooks that expose the current top overlay id and the full registry of mounted overlays.
+- `useCurrentOverlay`, `useOverlayData`: hooks that expose the current overlay id and the full registry of mounted overlays.
 
 The library is UI-library agnostic. There is no built-in dialog UI — you supply the component, overlay-kit manages mounting, async results, and lifecycle. Documentation is bilingual (English at `/en`, Korean at `/ko`); English is the default locale and the canonical content surfaced here. The project is MIT-licensed and developed openly in the [toss/overlay-kit](https://github.com/toss/overlay-kit) GitHub repository.
 
@@ -15,7 +15,7 @@ The library is UI-library agnostic. There is no built-in dialog UI — you suppl
 - [Getting Started](https://overlay-kit.slash.page/en/docs/guides/introduction): install, OverlayProvider setup, and a complete `overlay.open` / `overlay.openAsync` walkthrough.
 - [Think in overlay-kit](https://overlay-kit.slash.page/en/docs/guides/think-in-overlay-kit): rationale for the Declarative Overlay Pattern, imperative vs declarative comparison, and core design principles (Co-location, Minimum API).
 - [Code Comparison](https://overlay-kit.slash.page/en/docs/guides/code-comparison): before/after of overlay code with and without overlay-kit.
-- [Hooks](https://overlay-kit.slash.page/en/docs/guides/hooks): `useCurrentOverlay` returns the top overlay's id; `useOverlayData` returns the full `{ id, componentKey, isOpen, controller }` registry.
+- [Hooks](https://overlay-kit.slash.page/en/docs/guides/hooks): `useCurrentOverlay` returns the current overlay id and, after close or unmount, falls back through remaining open overlays in registration order; `useOverlayData` returns the full `{ id, componentKey, isOpen, controller }` registry.
 - [Testing](https://overlay-kit.slash.page/en/docs/guides/testing): Jest/Vitest + React Testing Library recipes for closing overlays, multiple overlays, async results, `closeAll`/`unmountAll`, and hook-based state assertions.
 - [FAQ](https://overlay-kit.slash.page/en/docs/guides/faq): common questions about `open` vs `openAsync`, `close` vs `unmount`, supported UI libraries, TypeScript support, and animation handling.
 - [Opening Overlays](https://overlay-kit.slash.page/en/docs/more/basic): expanded examples of `overlay.open`, `overlay.openAsync`, and memory-release patterns (`onExit`, `setTimeout`).

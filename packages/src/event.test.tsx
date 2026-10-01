@@ -1,6 +1,6 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import React, { useEffect, type PropsWithChildren } from 'react';
+import React, { useEffect, useState, type PropsWithChildren } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { OverlayProvider, overlay, useCurrentOverlay, useOverlayData } from './utils/create-overlay-context';
 
@@ -482,6 +482,58 @@ describe('overlay object', () => {
 
     // Unmount second overlay
     overlay.unmount(overlayIdMap.second);
+    await waitFor(() => {
+      expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
+    });
+  });
+
+  it('should only open overlay in the last mounted OverlayProvider when multiple are present', async () => {
+    const overlayContent = 'multiple-providers-overlay-content';
+
+    function Component() {
+      useEffect(() => {
+        overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayContent}</div>);
+      }, []);
+      return <div>Component</div>;
+    }
+
+    render(
+      <OverlayProvider>
+        <OverlayProvider>
+          <Component />
+        </OverlayProvider>
+      </OverlayProvider>
+    );
+
+    await waitFor(() => {
+      const overlayElements = screen.getAllByTestId('overlay-1');
+      expect(overlayElements).toHaveLength(1);
+    });
+  });
+
+  it('should fall back to previous OverlayProvider after the last one unmounts', async () => {
+    const overlayContent = 'fallback-provider-overlay-content';
+
+    function App() {
+      const [showSecond, setShowSecond] = useState(true);
+
+      return (
+        <OverlayProvider>
+          <button onClick={() => setShowSecond(false)}>remove</button>
+          {showSecond && <OverlayProvider />}
+        </OverlayProvider>
+      );
+    }
+
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('button', { name: 'remove' }));
+
+    act(() => {
+      overlay.open(({ isOpen }) => isOpen && <div data-testid="overlay-1">{overlayContent}</div>);
+    });
+
     await waitFor(() => {
       expect(screen.getByTestId('overlay-1')).toBeInTheDocument();
     });

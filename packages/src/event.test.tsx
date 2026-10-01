@@ -457,6 +457,308 @@ describe('overlay object', () => {
     );
   });
 
+  describe('openAsync with defaultValue option', () => {
+    it('resolves with close(value) when called internally (backward compatible)', async () => {
+      const overlayDialogContent = 'openasync-dialog-content';
+      const overlayTriggerContent = 'openasync-trigger-content';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean>(
+                ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>,
+                { defaultValue: false }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+      await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(true);
+      });
+    });
+
+    it('resolves with defaultValue when closed externally via overlay.close()', async () => {
+      const overlayDialogContent = 'openasync-external-close-dialog';
+      const overlayTriggerContent = 'openasync-external-close-trigger';
+      const testOverlayId = 'test-external-close-overlay';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-content">{overlayDialogContent}</div>,
+                { overlayId: testOverlayId, defaultValue: false }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      // Wait for overlay to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-content')).toBeInTheDocument();
+      });
+
+      // Close externally
+      act(() => {
+        overlay.close(testOverlayId);
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(false);
+      });
+    });
+
+    it('resolves with defaultValue when closed via overlay.closeAll()', async () => {
+      const overlayTriggerContent = 'openasync-closeall-trigger';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<string>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-closeall">Dialog</div>,
+                { defaultValue: 'cancelled' }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      // Wait for overlay to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-closeall')).toBeInTheDocument();
+      });
+
+      // Close all overlays
+      act(() => {
+        overlay.closeAll();
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith('cancelled');
+      });
+    });
+
+    it('stays pending without defaultValue option when closed externally (backward compatible)', async () => {
+      const overlayTriggerContent = 'openasync-no-ondismiss-trigger';
+      const testOverlayId = 'test-no-ondismiss-overlay';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-no-ondismiss">Dialog</div>,
+                { overlayId: testOverlayId }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      // Wait for overlay to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-no-ondismiss')).toBeInTheDocument();
+      });
+
+      // Close externally
+      act(() => {
+        overlay.close(testOverlayId);
+      });
+
+      // Wait a bit and verify mockFn was NOT called (Promise stays pending)
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      expect(mockFn).not.toHaveBeenCalled();
+    });
+
+    it('prevents double resolution when close is called after external close', async () => {
+      const overlayTriggerContent = 'openasync-double-resolve-trigger';
+      const testOverlayId = 'test-double-resolve-overlay';
+      const mockFn = vi.fn();
+      let closeRef: ((value: string) => void) | null = null;
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<string>(
+                ({ isOpen, close }) => {
+                  closeRef = close;
+                  return isOpen && <div data-testid="overlay-double-resolve">Dialog</div>;
+                },
+                { overlayId: testOverlayId, defaultValue: 'dismissed' }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      // Wait for overlay to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-double-resolve')).toBeInTheDocument();
+      });
+
+      // Close externally first
+      act(() => {
+        overlay.close(testOverlayId);
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith('dismissed');
+      });
+
+      // Try to close internally after (should not call mockFn again)
+      act(() => {
+        closeRef?.('internal-value');
+      });
+
+      // mockFn should still only be called once
+      expect(mockFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('resolves with defaultValue when unmounted externally via overlay.unmount()', async () => {
+      const overlayTriggerContent = 'openasync-unmount-trigger';
+      const testOverlayId = 'test-unmount-overlay';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-unmount">Dialog</div>,
+                { overlayId: testOverlayId, defaultValue: false }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-unmount')).toBeInTheDocument();
+      });
+
+      act(() => {
+        overlay.unmount(testOverlayId);
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(false);
+      });
+    });
+
+    it('resolves with defaultValue when unmounted via overlay.unmountAll()', async () => {
+      const overlayTriggerContent = 'openasync-unmountall-trigger';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<string>(
+                ({ isOpen }) => isOpen && <div data-testid="overlay-unmountall">Dialog</div>,
+                { defaultValue: 'unmounted' }
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('overlay-unmountall')).toBeInTheDocument();
+      });
+
+      act(() => {
+        overlay.unmountAll();
+      });
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith('unmounted');
+      });
+    });
+
+    it('does not subscribe to events when defaultValue is not provided (no memory leak)', async () => {
+      const overlayTriggerContent = 'openasync-no-leak-trigger';
+      const overlayDialogContent = 'openasync-no-leak-dialog';
+      const mockFn = vi.fn();
+
+      function Component() {
+        return (
+          <button
+            onClick={async () => {
+              const result = await overlay.openAsync<boolean>(
+                ({ isOpen, close }) => isOpen && <button onClick={() => close(true)}>{overlayDialogContent}</button>
+              );
+              mockFn(result);
+            }}
+          >
+            {overlayTriggerContent}
+          </button>
+        );
+      }
+
+      const { user } = renderWithUser(<Component />);
+      await user.click(await screen.findByRole('button', { name: overlayTriggerContent }));
+      await user.click(await screen.findByRole('button', { name: overlayDialogContent }));
+
+      await waitFor(() => {
+        expect(mockFn).toHaveBeenCalledWith(true);
+      });
+    });
+  });
+
   it('unmount function requires the exact id to be provided', async () => {
     const overlayIdMap = {
       first: 'overlay-content-1',

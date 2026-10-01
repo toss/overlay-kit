@@ -80,6 +80,24 @@ const root = createRoot(document.getElementById('root'));
 root.render(<Example />);
 ```
 
+If overlays need access to context from other providers, such as data fetching, routing, theme, or i18n providers, place `OverlayProvider` inside those providers. Overlays are rendered under `OverlayProvider`'s children, so they can only read context provided above `OverlayProvider`.
+
+```tsx filename="Example.tsx"
+export function Example() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <OverlayProvider>
+            <App />
+          </OverlayProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+}
+```
+
 ### Opening Overlays
 
 You can easily open and close overlays using overlay.open. Let's open the `ConfirmDialog` we defined above.

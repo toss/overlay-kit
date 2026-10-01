@@ -80,6 +80,24 @@ const root = createRoot(document.getElementById('root'));
 root.render(<Example />);
 ```
 
+오버레이 안에서 데이터 페칭, 라우팅, 테마, i18n 같은 다른 Provider의 context를 사용해야 한다면 `OverlayProvider`를 해당 Provider 안쪽에 배치하세요. 오버레이는 `OverlayProvider`의 children 아래에 렌더링되기 때문에, `OverlayProvider`보다 위에서 제공한 context만 읽을 수 있어요.
+
+```tsx filename="Example.tsx"
+export function Example() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <OverlayProvider>
+            <App />
+          </OverlayProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </QueryClientProvider>
+  );
+}
+```
+
 ### 오버레이 열기
 
 overlay.open을 사용하면 오버레이를 쉽게 열고 닫을 수 있어요. 위에서 정의한 `ConfirmDialog`를 열어볼게요.

@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { createEmitter } from './emitter';
 
 const emitter = createEmitter();
@@ -23,31 +23,27 @@ function dispatchEvent<Detail>(type: string, detail?: Detail) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createUseExternalEvents<EventHandlers extends Record<string, (params: any) => void>>(prefix: string) {
   function useExternalEvents(events: EventHandlers) {
-    const handlers = Object.entries(events).reduce<Record<string, (event: unknown) => void>>(
-      (prev, [eventKey, eventFn]) => {
-        const currentEventKeys = `${prefix}:${eventKey}`;
-
-        return {
-          ...prev,
-          [currentEventKeys]: function (event: unknown) {
-            eventFn(event);
-          },
-        };
-      },
-      {}
-    );
+    const eventsRef = useRef(events);
+    eventsRef.current = events;
 
     useClientLayoutEffect(() => {
-      Object.entries(handlers).forEach(([eventKey, eventFn]) => {
-        emitter.off(eventKey, eventFn);
-        emitter.on(eventKey, eventFn);
+      const eventKeys = Object.keys(eventsRef.current).map((eventKey) => `${prefix}:${eventKey}`);
+
+      const stableHandlers = eventKeys.map((key, i) => {
+        const handler = (event: unknown) => {
+          const eventFn = Object.values(eventsRef.current)[i];
+          eventFn(event);
+        };
+        emitter.on(key, handler);
+        return [key, handler] as const;
       });
 
-      return () =>
-        Object.entries(handlers).forEach(([eventKey, eventFn]) => {
-          emitter.off(eventKey, eventFn);
+      return () => {
+        stableHandlers.forEach(([key, handler]) => {
+          emitter.off(key, handler);
         });
-    }, [handlers]);
+      };
+    }, []);
   }
 
   function createEvent<EventKey extends keyof EventHandlers>(event: EventKey) {

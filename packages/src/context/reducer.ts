@@ -1,4 +1,4 @@
-import { type OverlayControllerComponent } from './provider/content-overlay-controller';
+import { type OverlayAsyncResult, type OverlayControllerComponent } from './provider/content-overlay-controller';
 
 type OverlayId = string;
 type OverlayItem = {
@@ -14,6 +14,8 @@ type OverlayItem = {
   isOpen: boolean;
   isMounted: boolean;
   controller: OverlayControllerComponent;
+  isAsyncController?: boolean;
+  asyncResult?: OverlayAsyncResult;
 };
 export type OverlayData = {
   current: OverlayId | null;
@@ -24,7 +26,7 @@ export type OverlayData = {
 export type OverlayReducerAction =
   | { type: 'ADD'; overlay: OverlayItem }
   | { type: 'OPEN'; overlayId: string }
-  | { type: 'CLOSE'; overlayId: string }
+  | { type: 'CLOSE'; overlayId: string; asyncResult?: OverlayAsyncResult }
   | { type: 'REMOVE'; overlayId: string }
   | { type: 'CLOSE_ALL' }
   | { type: 'REMOVE_ALL' };
@@ -77,7 +79,7 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
           current: action.overlay.id,
           overlayData: {
             ...state.overlayData,
-            [action.overlay.id]: { ...overlay, isOpen: true },
+            [action.overlay.id]: { ...overlay, isOpen: true, asyncResult: action.overlay.asyncResult },
           },
         };
       }
@@ -122,6 +124,11 @@ export function overlayReducer(state: OverlayData, action: OverlayReducerAction)
     }
     case 'CLOSE': {
       const overlay = state.overlayData[action.overlayId];
+
+      // A callback retained from an earlier openAsync call must not close the reopened overlay.
+      if ('asyncResult' in action && overlay?.asyncResult !== action.asyncResult) {
+        return state;
+      }
 
       // ignore if the overlay don't exist or already closed
       if (overlay == null || !overlay.isOpen) {

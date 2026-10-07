@@ -1,13 +1,20 @@
 import {
+  type OverlayAsyncResult,
   type OverlayAsyncControllerProps,
   type OverlayAsyncControllerComponent,
   type OverlayControllerComponent,
+  type OverlayControllerProps,
 } from './context/provider/content-overlay-controller';
 import { createUseExternalEvents } from './utils';
 import { randomId } from './utils/random-id';
 
 export type OverlayEvent = {
-  open: (args: { controller: OverlayControllerComponent; overlayId: string; componentKey: string }) => void;
+  open: (args: {
+    controller: OverlayControllerComponent;
+    overlayId: string;
+    componentKey: string;
+    asyncResult?: OverlayAsyncResult;
+  }) => void;
   close: (overlayId: string) => void;
   unmount: (overlayId: string) => void;
   closeAll: () => void;
@@ -31,30 +38,14 @@ export function createOverlay(overlayId: string) {
   };
 
   const openAsync = async <T>(controller: OverlayAsyncControllerComponent<T>, options?: OpenOverlayOptions) => {
-    return new Promise<T>((_resolve, _reject) => {
-      open((overlayProps, ...deprecatedLegacyContext) => {
-        /**
-         * @description close the overlay with resolve
-         */
-        const close = (param: T) => {
-          _resolve(param);
-          overlayProps.close();
-        };
-
-        /**
-         * @description close the overlay with reject
-         */
-        const reject = (reason?: unknown) => {
-          _reject(reason);
-          overlayProps.close();
-        };
-
-        /**
-         * @description Passing overridden methods
-         */
-        const props: OverlayAsyncControllerProps<T> = { ...overlayProps, close, reject };
-        return controller(props, ...deprecatedLegacyContext);
-      }, options);
+    return new Promise<T>((resolve, reject) => {
+      createEvent('open')({
+        controller: (props, ...deprecatedLegacyContext) =>
+          controller(props as OverlayControllerProps & OverlayAsyncControllerProps<T>, ...deprecatedLegacyContext),
+        overlayId: options?.overlayId ?? randomId(),
+        componentKey: randomId(),
+        asyncResult: { resolve: (value) => resolve(value as T), reject },
+      });
     });
   };
 

@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import type React from 'react';
+import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { createSafeContext } from './create-safe-context';
 

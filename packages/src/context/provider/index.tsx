@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef, type PropsWithChildren } from 'react';
 import { ContentOverlayController } from './content-overlay-controller';
 import { type OverlayEvent, createOverlay } from '../../event';
 import { randomId } from '../../utils/random-id';

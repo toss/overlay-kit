@@ -1,4 +1,4 @@
-import { type FC, type ActionDispatch, memo, useEffect } from 'react';
+import React, { type FC, type ActionDispatch, memo, useEffect } from 'react';
 import { type OverlayReducerAction } from '../reducer';
 
 export type OverlayControllerProps = {

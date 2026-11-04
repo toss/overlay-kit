@@ -10,6 +10,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  react-compat:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react: ['16.8.0', '16.13.1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+      - run: yarn install --immutable
+      - run: yarn workspace overlay-kit build
+      - name: Test the packed CJS and ESM entry points
+        run: |
+          yarn workspace overlay-kit pack --out "$RUNNER_TEMP/overlay-kit.tgz"
+          test_dir=$(mktemp -d)
+          cp .github/scripts/react-compat.mjs "$test_dir/"
+          cd "$test_dir"
+          printf '%s\n' '{"private": true}' > package.json
+          npm install --ignore-scripts --no-audit --no-fund "$RUNNER_TEMP/overlay-kit.tgz" react@${{ matrix.react }} react-dom@${{ matrix.react }} esbuild@0.24.0
+          node react-compat.mjs
+
   ci:
     runs-on: ubuntu-latest
     strategy:
